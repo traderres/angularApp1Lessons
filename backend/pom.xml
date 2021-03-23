@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>angularApp1</artifactId>
+    <groupId>com.lessons</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>backend</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>backend</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <dependencyManagement>
+    <!-- Set Spring Boot Dependencies -->
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>2.2.1.RELEASE</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+
+    <dependency>
+      <!-- Include the front-end as a dependency so the front-end is compiled *BEFORE* the backend is compiled -->
+      <groupId>${project.groupId}</groupId>
+      <artifactId>frontend</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <!-- Spring Boot Web -->
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+
+      <exclusions>
+        <exclusion>
+          <!-- Remove Tomcat from Spring Boot -->
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+
+        <exclusion>
+          <!-- Remove logging from spring as we will use logback -->
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <!-- Add Dependency for the Undertow App Server -->
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-undertow</artifactId>
+
+      <exclusions>
+        <exclusion>
+          <!-- Remove logging from undertow as we will use logback -->
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <!-- Send logging from Java Common Logging to SLF4J -->
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.5</version>
+    </dependency>
+
+    <dependency>
+      <!-- SLF4J will use Logback-classic as its logging implementation -->
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>5.2.1.RELEASE</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>5.2.1.RELEASE</version>
+    </dependency>
+
+    <dependency>
+      <!-- Implementation for converting objects to JSON -->
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.9.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+
+    <plugins>
+      <plugin>
+        <!-- This plugin provides the tools needed to repackage the Spring Boot JAR into a runnable JAR
+             Run this command to generate the runnable Spring Boot Jar
+                mvn clean package  *or*
+                mvn clean package spring-boot:repackage
+         -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.2.1.RELEASE</version>
+        <configuration>
+          <addResources>true</addResources>
+        </configuration>
+
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+            <configuration>
+              <classifier>exec</classifier>
+            </configuration>
+          </execution>
+        </executions>
+
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

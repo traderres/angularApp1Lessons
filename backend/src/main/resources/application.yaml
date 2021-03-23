@@ -1,0 +1,23 @@
+##########################################################
+# application.yaml   (used for development purposes)
+#
+# NOTE:  Make sure there are no leading spaces on any of these lines
+##########################################################
+name: app1
+server.servlet.context-path: /app1
+server.port: 8080
+
+# Set the Active profile to be dev
+spring.profiles.active: dev
+
+# Disable cors check because we are running in local dev mode
+# NOTE:  order is important.  Make sure disable.cors comes *AFTER* you set the profile
+disable.cors: true
+
+# Tell Spring to disable DataSource Auto Configuration (so you can run a springboot app without a datasource
+spring.autoconfigure:
+  exclude:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+    - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
