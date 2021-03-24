@@ -1,0 +1,65 @@
+<mat-card>
+  <mat-card-title>Add a Report</mat-card-title>
+
+  <mat-card-content>
+
+    <mat-form-field>
+      <mat-label>Enter Report Name</mat-label>
+
+      <!-- Use the matInput for input fields inside <mat-form-field>...</mat-form-field> tags -->
+      <input matInput type="text" name="report.name"  [(ngModel)]="report.name"/>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field>
+      <mat-label>Choose Source</mat-label>
+
+      <!-- Use the matNativeControl for select and input fields inside <mat-form-field>...</mat-form-field> tags -->
+      <select matNativeControl name="report.source" [(ngModel)]="report.source">
+        <option value="0">-Select Source-</option>
+        <option value="100">Israel</option>
+        <option value="101">United Kingdom</option>
+        <option value="102">USA</option>
+      </select>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field>
+      <mat-label>Choose Priority</mat-label>
+
+      <!-- Single Select -->
+      <mat-select name="report.priority" [(ngModel)]="report.priority">
+        <mat-option value="0">-Select Priority-</mat-option>
+        <mat-option value="1">Low</mat-option>
+        <mat-option value="2">Medium</mat-option>
+        <mat-option value="3">High</mat-option>
+        <mat-option value="4">Critical</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br/>
+
+
+    <mat-form-field>
+      <mat-label>Choose Authors</mat-label>
+
+      <!-- Multiple Select -->
+      <mat-select multiple name="report.authors" [(ngModel)]="report.authors">
+        <mat-option value="10">Adam</mat-option>
+        <mat-option value="11">Ben</mat-option>
+        <mat-option value="12">Peter</mat-option>
+        <mat-option value="13">Justin</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br/>
+
+    <!-- Use the pretty material design buttons -->
+    <button type="button" (click)="reset()" style="margin-top: 20px" mat-raised-button>Reset</button>&nbsp;&nbsp;
+    <button type="button" (click)="save()" mat-raised-button color="primary">Save</button>
+  </mat-card-content>
+
+
+  <pre>
+ report={{report | json}}
+            </pre>
+
+</mat-card>
