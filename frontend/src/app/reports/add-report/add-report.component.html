@@ -52,9 +52,19 @@
     </mat-form-field>
     <br/>
 
-    <!-- Use the pretty material design buttons -->
-    <button type="button" (click)="reset()" style="margin-top: 20px" mat-raised-button>Reset</button>&nbsp;&nbsp;
-    <button type="button" (click)="save()" mat-raised-button color="primary">Save</button>
+    <!-- Reset Button -->
+    <button type="button" (click)="reset()" style="margin-top: 20px"
+            mat-raised-button>
+      <i class="fa fa-backspace"></i>
+      Reset
+    </button>
+
+    <!-- Save Button -->
+    <button type="button" (click)="save()" mat-raised-button color="primary">
+      <i class="fa fa-plus"></i>
+      Save
+    </button>
+
   </mat-card-content>
 
 
