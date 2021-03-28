@@ -13,13 +13,27 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ViewReportsComponent } from './reports/view-reports/view-reports.component';
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatIconModule} from "@angular/material/icon";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatListModule} from "@angular/material/list";
+import { NotFoundComponent } from './not-found/not-found.component';
+import {RouterModule, Routes} from "@angular/router";
+
+// Setup the routes.  If no route is found, then take the user to the NotFoundComponent
+const appRoutes: Routes = [
+  { path: 'page/addReport',    component: AddReportComponent },
+  { path: '**',                component: NotFoundComponent  }
+];
+
 
 @NgModule({
   declarations: [
     AppComponent,
     AddReportComponent,
     WelcomeComponent,
-    ViewReportsComponent
+    ViewReportsComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +44,12 @@ import { ViewReportsComponent } from './reports/view-reports/view-reports.compon
     MatSelectModule,
     MatCardModule,
     MatButtonModule,
-    MatInputModule
+    MatInputModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatListModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

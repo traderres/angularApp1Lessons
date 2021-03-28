@@ -72,3 +72,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   url('./assets/fonts/roboto-v20-latin-500italic.ttf') format('truetype'), /* Safari, Android, iOS */
   url('./assets/fonts/roboto-v20-latin-500italic.svg#Roboto') format('svg'); /* Legacy iOS */
 }
+
+.menu-spacer {
+  width: 25px
+}
