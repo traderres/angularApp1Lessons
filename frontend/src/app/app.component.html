@@ -1,12 +1,13 @@
 <div fxFlexFill fxLayout="column">
+
   <div fxFlex="75px">
-    <!-- Header -->
+    <!-- Header is 75 pixels high -->
     <app-header></app-header>
   </div>
 
 
-  <div fxFlex fxLayout="row" fxLayoutGap="10px">
-    <div fxFlex="225px" style="padding: 0" *ngIf="this.isSideNavVisible">
+  <div fxFlex fxLayout="row" fxLayoutGap="0px">
+    <div fxFlex="200px" style="padding: 0" *ngIf="this.isSideNavVisible">
       <!-- Left Side Navigation -->
       <app-navbar></app-navbar>
     </div>

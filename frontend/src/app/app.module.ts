@@ -22,11 +22,17 @@ import {RouterModule, Routes} from "@angular/router";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import { HeaderComponent } from './header/header.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { Chart1Component } from './analytics/chart1/chart1.component';
+import { Chart2Component } from './analytics/chart2/chart2.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
   { path: 'page/addReport',    component: AddReportComponent },
-  { path: '**',                component: NotFoundComponent  }
+  { path: 'page/viewReports',  component: ViewReportsComponent },
+  { path: 'page/chart1',       component: Chart1Component },
+  { path: 'page/chart2',       component: Chart2Component },
+  { path: '',                  component: WelcomeComponent},
+  { path: '**',                component: NotFoundComponent}
 ];
 
 
@@ -38,7 +44,9 @@ const appRoutes: Routes = [
     ViewReportsComponent,
     NotFoundComponent,
     HeaderComponent,
-    NavbarComponent
+    NavbarComponent,
+    Chart1Component,
+    Chart2Component
   ],
   imports: [
     BrowserModule,
