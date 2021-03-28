@@ -1,5 +1,5 @@
-Angular App1 Lessons
---------------------
+Angular App1 Lesson 6a
+----------------------
 
 
 ```
@@ -7,7 +7,7 @@ To Get started From Project Setup
  1. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson1b/update_dependencies
+    unix> git checkout lesson6a/navbar-simple
 
  2. Verify that the webapp works
     a. Compile the project (into an executable JAR)
@@ -19,11 +19,9 @@ To Get started From Project Setup
     c. Connect to the webapp at
        http://localhost:8080/app1
  
-
- 3. Open the project in IntelliJ Ultimate
-
- 4. Setup Debugging (so you can debug TypeScript and Java code)
+ 3. Setup Debugging in IntelliJ
     https://github.com/traderres/webClass/blob/master/learnAngular/lessons/lesson01_debug_existing_webapp.txt
+
 ```
 
 
