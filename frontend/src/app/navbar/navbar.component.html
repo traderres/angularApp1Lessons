@@ -1,17 +1,51 @@
 <mat-sidenav-container autosize>
-  <mat-sidenav class="navbar" style="width:200px"
-               mode="side" opened="true"
-               [fixedInViewport]="true"
-               [fixedTopGap]="75"
-               [fixedBottomGap]="0">
-    <mat-nav-list>
-      <h3 mat-subheader>Reports</h3>
-      <a mat-list-item [routerLink]="'page/addReport'">Add Report</a>
-      <a mat-list-item [routerLink]="'page/viewReports'">View Reports</a>
-      <mat-divider>&nbsp;</mat-divider>
+  <mat-sidenav class="navbar" style="width:200px" mode="side" opened="true"
+               [fixedInViewport]="true" [fixedTopGap]="75" [fixedBottomGap]="0">
+    <mat-nav-list style="margin-top: 0; padding-top: 0">
 
-      <h3 mat-subheader>Analytics</h3>
-      <a mat-list-item [routerLink]="'page/totalLogins'">Total Logins</a>
+      <!-- Menu Group 1 -->
+      <div class='navHeader' [ngClass]="{'toggled': reportsToggled == true}"
+           (click)="reportsToggled = !reportsToggled">
+        <i class="fa fa-file-alt navHeaderIcon"></i>
+        <span class="navHeaderTitle">Reports</span>
+      </div>
+
+      <div class='navGroup' data-ng-class="{'toggled': reportsToggled}">
+
+        <!-- View Reports -->
+        <mat-list-item class="navItem" [routerLink]="'page/viewReports'" >
+          <a title="View Reports">View Reports</a>
+          <div fxFlex fxLayoutAlign="end end">
+            <a [routerLink]="'page/viewReports'" target="_blank">
+              <i class="fas fa-external-link-alt navItemIcon" title="Open View
+ Reports in a new window"></i>
+            </a>
+          </div>
+        </mat-list-item>
+
+        <!-- Add Report -->
+        <mat-list-item class="navItem" [routerLink]="'page/addReport'">
+          <a title="Add Report">Add Report</a>
+          <div fxFlex fxLayoutAlign="end end">
+            <a [routerLink]="'page/addReport'" target="_blank">
+              <i class="fas fa-external-link-alt navItemIcon" title="Open Add Report in
+a new window"></i>
+            </a>
+          </div>
+        </mat-list-item>
+
+        <!-- Audit History -->
+        <mat-list-item class="navItem" [routerLink]="'page/auditHistory'" >
+          <a title="Audit History">Audit History</a>
+          <div fxFlex fxLayoutAlign="end end">
+            <a [routerLink]="'page/auditHistory'" target="_blank">
+              <i class="fas fa-external-link-alt navItemIcon" title="Open Audit History
+in a new window"></i>
+            </a>
+          </div>
+        </mat-list-item>
+      </div>  <!-- End of navMenuGroup -->
+
     </mat-nav-list>
   </mat-sidenav>
 </mat-sidenav-container>
