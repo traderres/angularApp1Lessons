@@ -1,0 +1,17 @@
+<mat-sidenav-container autosize>
+  <mat-sidenav class="navbar" style="width:200px"
+               mode="side" opened="true"
+               [fixedInViewport]="true"
+               [fixedTopGap]="75"
+               [fixedBottomGap]="0">
+    <mat-nav-list>
+      <h3 mat-subheader>Reports</h3>
+      <a mat-list-item [routerLink]="'page/addReport'">Add Report</a>
+      <a mat-list-item [routerLink]="'page/viewReports'">View Reports</a>
+      <mat-divider>&nbsp;</mat-divider>
+
+      <h3 mat-subheader>Analytics</h3>
+      <a mat-list-item [routerLink]="'page/totalLogins'">Total Logins</a>
+    </mat-nav-list>
+  </mat-sidenav>
+</mat-sidenav-container>

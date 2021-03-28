@@ -19,6 +19,9 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import { NotFoundComponent } from './not-found/not-found.component';
 import {RouterModule, Routes} from "@angular/router";
+import {FlexLayoutModule} from "@angular/flex-layout";
+import { HeaderComponent } from './header/header.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -33,7 +36,9 @@ const appRoutes: Routes = [
     AddReportComponent,
     WelcomeComponent,
     ViewReportsComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    HeaderComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +54,7 @@ const appRoutes: Routes = [
     MatIconModule,
     MatSidenavModule,
     MatListModule,
+    FlexLayoutModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [],

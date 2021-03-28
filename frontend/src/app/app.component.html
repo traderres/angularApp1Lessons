@@ -1,41 +1,20 @@
-<div>
-  <!-- Top Menubar -->
-  <mat-toolbar color="primary">
-    <mat-toolbar-row style="padding-left: 0">
-      <button mat-icon-button>
-        <mat-icon (click)="sidenav.toggle()">
-          <!-- hamburger icon that shows/hides the navigation bar -->
-          <i class="fas fa-bars"></i>
-        </mat-icon>
-      </button>
+<div fxFlexFill fxLayout="column">
+  <div fxFlex="75px">
+    <!-- Header -->
+    <app-header></app-header>
+  </div>
 
-      <h1>{{title}}</h1>
-      <span class="menu-spacer"></span>
-      <div>
-        <!-- Top Menubar Buttons -->
-        <a mat-button [routerLink]="'page/addReport'">Add Report</a>
-        <a mat-button [routerLink]="'page/viewReports'">View Reports</a>
-      </div>
-      <span class="menu-spacer"></span>
 
-    </mat-toolbar-row>
-  </mat-toolbar>
+  <div fxFlex fxLayout="row" fxLayoutGap="10px">
+    <div fxFlex="225px" style="padding: 0" *ngIf="this.isSideNavVisible">
+      <!-- Left Side Navigation -->
+      <app-navbar></app-navbar>
+    </div>
 
-  <!-- Side Navigation Bar -->
-  <mat-sidenav-container>
-    <!-- On Page load, the side navigation is already opened -->
-    <mat-sidenav #sidenav mode="side" opened="true">
-      <mat-nav-list>
-        <a mat-list-item [routerLink]="'page/addReport'">Add Report</a>
-        <a mat-list-item [routerLink]="'page/viewReports'">View Reports</a>
-      </mat-nav-list>
-    </mat-sidenav>
+    <div fxFlex>
+      <!-- Main Viewing Area -->
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 
-    <mat-sidenav-content>
-      <div style="height: 88vh;">
-        <!-- Main Viewing Area -->
-        <router-outlet></router-outlet>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
 </div>
