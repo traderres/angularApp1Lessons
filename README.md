@@ -1,5 +1,5 @@
-Angular App1 Lessons 3
-----------------------
+Angular App1 Lesson 3
+---------------------
 
 
 ```
