@@ -1,34 +1,44 @@
-
 <div class="header">
+
   <div fxFlex fxLayout="row" fxLayoutGap="0">
 
-    <div fxFlex>
-      <!-- Left Side of the Header -->
-      <div fxFlex fxLayout="row" fxLayoutGap="0">
-        <div fxFlex="45px">
-          <!-- Navbar Toggle Button -->
-          <button type="button" (click)="toggle()">
-            <i class="fa fa-bars"></i>
-          </button>
-        </div>
+    <!-- Left Side of the Header -->
+    <div fxFlex fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="0">
 
-        <div fxFlex fxFlexAlign="start start">
-          <!-- Application Title -->
-          <h1 style="display: inline" class="app1Logo">Angular App1</h1>
-        </div>
-      </div>
+      <!-- Search Hourglass -->
+      <a class="button" (click)="toggleAppNavbar()">
+        <i class="fa fa-search"></i>
+      </a>
+
+      <!-- Separator -->
+      &nbsp;&nbsp;&nbsp;&nbsp;
+
+      <!-- App Navbar -->
+      <a  class="button" (click)="toggleAppNavbar()">
+        Sections
+        <i class="fa fa-bars"></i>
+      </a>
     </div>
 
-    <div fxFlex  fxLayoutAlign="center center" style="border: 1px solid blue">
-      <!-- Center Part of the Header -->
-      Center
+
+    <!-- Center Part of the Header -->
+    <div fxFlex  fxLayoutAlign="center center">
+
+      <!-- Application Title -->
+      <h1 class="app1Logo clickable" [routerLink]="'/'">
+        Angular App1
+      </h1>
     </div>
 
-    <div fxFlex fxLayoutAlign="end end" style="border: 1px solid white">
-      <!-- Right Part of the Header -->
-      Right
+    <!-- Right Side of the Header -->
+    <div fxFlex fxLayoutAlign="end center">
+
+      <!-- User Menu -->
+      <a class="button" (click)="toggleUserNavbar()">
+        <span class="username">John.Smith</span>&nbsp;
+        <span class="fa fa-user"></span>
+      </a>
     </div>
 
   </div>
-
 </div>

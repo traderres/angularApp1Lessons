@@ -14,8 +14,12 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {   }
 
-  public toggle(): void {
+  public toggleAppNavbar(): void {
     // Send a message to the navbarService (to tell it to toggle)
-    this.navbarService.toggleNavbar();
+    this.navbarService.toggleAppNavbar();
+  }
+
+  public toggleUserNavbar(): void {
+    this.navbarService.toggleUserNavbar();
   }
 }

@@ -76,3 +76,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .menu-spacer {
   width: 25px
 }
+
+.clickable {
+  cursor: pointer;
+}

@@ -1,0 +1,27 @@
+<div class="navbar">
+  <mat-nav-list style="margin-top: 0; padding-top: 0">
+
+    <!-- View Reports -->
+    <mat-list-item class="navItem" [routerLink]="'page/viewReports'" routerLinkActive="active">
+      <a title="View Reports">View Reports</a>
+      <div fxFlex fxLayoutAlign="end end">
+        <a [routerLink]="'page/viewReports'" target="_blank">
+          <i class="fas fa-external-link-alt navItemIcon" title="Open View Reports in a new
+window"></i>
+        </a>
+      </div>
+    </mat-list-item>
+
+    <!-- Add Report -->
+    <mat-list-item class="navItem" [routerLink]="'page/addReport'" routerLinkActive="active">
+      <a title="Add Report">Add Report</a>
+      <div fxFlex fxLayoutAlign="end end">
+        <a [routerLink]="'page/addReport'" target="_blank">
+          <i class="fas fa-external-link-alt navItemIcon" title="Open Add Report in a new
+window"></i>
+        </a>
+      </div>
+    </mat-list-item>
+
+  </mat-nav-list>
+</div>

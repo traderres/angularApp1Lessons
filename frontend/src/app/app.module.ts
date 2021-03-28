@@ -24,6 +24,7 @@ import { HeaderComponent } from './header/header.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { Chart1Component } from './analytics/chart1/chart1.component';
 import { Chart2Component } from './analytics/chart2/chart2.component';
+import { UserNavbarComponent } from './user-navbar/user-navbar.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -46,7 +47,8 @@ const appRoutes: Routes = [
     HeaderComponent,
     NavbarComponent,
     Chart1Component,
-    Chart2Component
+    Chart2Component,
+    UserNavbarComponent
   ],
   imports: [
     BrowserModule,
