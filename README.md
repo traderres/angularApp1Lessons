@@ -19,7 +19,6 @@ To Get started From Project Setup
     c. Connect to the webapp at
        http://localhost:8080/app1
  
-
  3. Setup Debugging in IntelliJ
     https://github.com/traderres/webClass/blob/master/learnAngular/lessons/lesson01_debug_existing_webapp.txt
 
