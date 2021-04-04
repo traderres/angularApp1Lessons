@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddReportComponent } from './reports/add-report/add-report.component';
-import {MatFormFieldModule} from "@angular/material/form-field";
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from "@angular/material/form-field";
 import {FormsModule} from "@angular/forms";
 import {MatSelectModule} from "@angular/material/select";
 import {MatCardModule} from "@angular/material/card";
@@ -67,7 +67,9 @@ const appRoutes: Routes = [
     FlexLayoutModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'standard' } }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

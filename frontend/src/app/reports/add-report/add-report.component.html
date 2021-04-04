@@ -2,69 +2,84 @@
   <mat-card-title>Add a Report</mat-card-title>
 
   <mat-card-content>
+    <form #form="ngForm" novalidate autocomplete="off">
 
-    <mat-form-field>
-      <mat-label>Enter Report Name</mat-label>
+      <mat-form-field>
+        <mat-label>Enter Report Name</mat-label>
 
-      <!-- Use the matInput for input fields inside <mat-form-field>...</mat-form-field> tags -->
-      <input matInput type="text" name="report.name"  [(ngModel)]="report.name"/>
-    </mat-form-field>
-    <br/>
+        <!-- Use the matInput for input fields inside <mat-form-field>...</mat-form-field> tags -->
+        <input matInput type="text" name="report.name"  [(ngModel)]="report.name" required />
 
-    <mat-form-field>
-      <mat-label>Choose Source</mat-label>
+        <mat-error>
+          <!-- This mat-error tag is displayed if this form field is invalid AND touched -->
+          Report Name is required
+        </mat-error>
 
-      <!-- Use the matNativeControl for select and input fields inside <mat-form-field>...</mat-form-field> tags -->
-      <select matNativeControl name="report.source" [(ngModel)]="report.source">
-        <option value="0">-Select Source-</option>
-        <option value="100">Israel</option>
-        <option value="101">United Kingdom</option>
-        <option value="102">USA</option>
-      </select>
-    </mat-form-field>
-    <br/>
+      </mat-form-field>
+      <br/>
 
-    <mat-form-field>
-      <mat-label>Choose Priority</mat-label>
+      <mat-form-field>
+        <mat-label>Choose Source</mat-label>
 
-      <!-- Single Select -->
-      <mat-select name="report.priority" [(ngModel)]="report.priority">
-        <mat-option value="0">-Select Priority-</mat-option>
-        <mat-option value="1">Low</mat-option>
-        <mat-option value="2">Medium</mat-option>
-        <mat-option value="3">High</mat-option>
-        <mat-option value="4">Critical</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <br/>
+        <!-- Use the matNativeControl for select and input fields inside <mat-form-field>...</mat-form-field> tags -->
+        <select matNativeControl name="report.source" [(ngModel)]="report.source">
+          <option [value]=null>-Select Source-</option>
+          <option [value]=100>Israel</option>
+          <option [value]=101>United Kingdom</option>
+          <option [value]=102>USA</option>
+        </select>
+      </mat-form-field>
+      <br/>
+
+      <mat-form-field>
+        <mat-label>Choose Priority</mat-label>
+
+        <!-- Single Select -->
+        <mat-select name="report.priority" [(ngModel)]="report.priority" required>
+          <mat-option [value]=null>-Select Priority-</mat-option>
+          <mat-option [value]=1>Low</mat-option>
+          <mat-option [value]=2>Medium</mat-option>
+          <mat-option [value]=3>High</mat-option>
+          <mat-option [value]=4>Critical</mat-option>
+        </mat-select>
+
+        <mat-error>
+          <!-- This mat-error tag is displayed if this form field is invalid AND touched -->
+          Priority is required
+        </mat-error>
+
+      </mat-form-field>
+      <br/>
 
 
-    <mat-form-field>
-      <mat-label>Choose Authors</mat-label>
+      <mat-form-field>
+        <mat-label>Choose Authors</mat-label>
 
-      <!-- Multiple Select -->
-      <mat-select multiple name="report.authors" [(ngModel)]="report.authors">
-        <mat-option value="10">Adam</mat-option>
-        <mat-option value="11">Ben</mat-option>
-        <mat-option value="12">Peter</mat-option>
-        <mat-option value="13">Justin</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <br/>
+        <!-- Multiple Select -->
+        <mat-select multiple name="report.authors" [(ngModel)]="report.authors">
+          <mat-option value="10">Adam</mat-option>
+          <mat-option value="11">Ben</mat-option>
+          <mat-option value="12">Peter</mat-option>
+          <mat-option value="13">Justin</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br/>
 
-    <!-- Reset Button -->
-    <button type="button" (click)="reset()" style="margin-top: 20px"
-            mat-raised-button>
-      <i class="fa fa-backspace"></i>
-      Reset
-    </button>
+      <!-- Reset Button -->
+      <button type="button" (click)="reset(form)" style="margin-top: 20px"
+              mat-raised-button>
+        <i class="fa fa-backspace"></i>
+        Reset
+      </button>
 
-    <!-- Save Button -->
-    <button type="button" (click)="save()" mat-raised-button color="primary">
-      <i class="fa fa-plus"></i>
-      Save
-    </button>
+      <!-- Save Button -->
+      <button type="button" (click)="save(form)" mat-raised-button color="primary"
+        [disabled]="this.formSubmitted && form.invalid">
+        <i class="fa fa-plus"></i>
+        Save
+      </button>
 
+    </form>
   </mat-card-content>
 
 

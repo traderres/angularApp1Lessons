@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {ReportService} from "../../services/report.service";
+import {NgForm} from "@angular/forms";
 
 export class Report {
-  name: string;
-  priority: number;
-  source: number;
-  authors: string;
+  name: string | null;
+  priority: number | null;
+  source: number | null;
+  authors: string | null
 }
 
 @Component({
@@ -16,34 +17,42 @@ export class Report {
 export class AddReportComponent implements OnInit {
 
   public report: Report;
+  public formSubmitted: boolean = false;
 
   // Inject the ReportService into this component
   constructor(private reportService: ReportService) { }
 
   ngOnInit() {
     this.report = new Report();
-    this.report.name = "";
-    this.report.priority = 0;
-    this.report.source = 0;
-    this.report.authors = "";
+    this.report.name = null;
+    this.report.priority = null;
+    this.report.source = null;
+    this.report.authors = null;
 
     // Use the ReportService
     this.reportService.showMessage('Init called');
   }
 
-  public reset() {
-    this.report.name = "";
-    this.report.priority = 0;
-    this.report.source = 0;
-    this.report.authors = "";
+  public reset(aForm:  NgForm): void {
+    // Reset the form back to pristine/untouched condition
+    aForm.resetForm();
 
-    this.reportService.showMessage('User pressed RESET');
+    this.formSubmitted = false;
   }
 
-  public save() {
-    console.log('save() started  this.report=' , this.report);
+  public save(aForm: NgForm): void {
+    this.formSubmitted = true;
 
+    // Mark all form fields as touched -- so that error validation displays
+    aForm.form.markAllAsTouched();
 
-    this.reportService.showMessage('User pressed SAVE');
+    if (aForm.valid) {
+      // Invoke a service to save the record
+      console.log("Save record.");
+
+      // Reset the form
+      aForm.resetForm();
+      this.formSubmitted = false;
+    }
   }
 }
