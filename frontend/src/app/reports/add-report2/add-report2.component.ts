@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidatorUtils} from "../../validators/validator-utils";
+import {MessageService} from "../../services/message.service";
 
 @Component({
   selector: 'app-add-report2',
@@ -10,7 +11,7 @@ import {ValidatorUtils} from "../../validators/validator-utils";
 export class AddReport2Component implements OnInit {
   public myForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private messageService: MessageService,private formBuilder: FormBuilder) { }
 
   public ngOnInit(): void {
 
@@ -53,7 +54,9 @@ export class AddReport2Component implements OnInit {
     }
 
     // User enter valid data
-    console.log('Valid data:  report_name=' +
-      this.myForm.controls.report_name.value);
+    console.log('Valid data:  report_name=' + this.myForm.controls.report_name.value);
+
+    // Send a message
+    this.messageService.sendMessage("Successfully saved this report");
   }
 }
