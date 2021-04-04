@@ -6,7 +6,9 @@ export class Report {
   name: string | null;
   priority: number | null;
   source: number | null;
-  authors: string | null
+  authors: string | null;
+  start_date: Date | null;
+  end_date: Date | null;
 }
 
 @Component({
@@ -18,6 +20,7 @@ export class AddReportComponent implements OnInit {
 
   public report: Report;
   public formSubmitted: boolean = false;
+  public defaultReportStartDate: Date = this.getFirstDayOfPreviousMonth();
 
   // Inject the ReportService into this component
   constructor(private reportService: ReportService) { }
@@ -28,16 +31,21 @@ export class AddReportComponent implements OnInit {
     this.report.priority = null;
     this.report.source = null;
     this.report.authors = null;
+    this.report.start_date = this.getFirstDayOfPreviousMonth();
+    this.report.end_date = null;
+
 
     // Use the ReportService
     this.reportService.showMessage('Init called');
   }
 
   public reset(aForm:  NgForm): void {
+    this.formSubmitted = false;
+
     // Reset the form back to pristine/untouched condition
     aForm.resetForm();
 
-    this.formSubmitted = false;
+    this.report.start_date = this.getFirstDayOfPreviousMonth();
   }
 
   public save(aForm: NgForm): void {
@@ -55,4 +63,11 @@ export class AddReportComponent implements OnInit {
       this.formSubmitted = false;
     }
   }
+
+  private getFirstDayOfPreviousMonth(): Date {
+    let now = new Date();
+    let firstDayPrevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    return firstDayPrevMonth;
+  }
+
 }

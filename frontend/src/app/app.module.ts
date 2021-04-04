@@ -25,6 +25,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { Chart1Component } from './analytics/chart1/chart1.component';
 import { Chart2Component } from './analytics/chart2/chart2.component';
 import { UserNavbarComponent } from './user-navbar/user-navbar.component';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -65,6 +67,8 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatListModule,
     FlexLayoutModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [

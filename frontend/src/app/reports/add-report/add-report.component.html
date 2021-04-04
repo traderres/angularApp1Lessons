@@ -65,6 +65,41 @@
       </mat-form-field>
       <br/>
 
+      <mat-form-field style="margin-top: 20px;">
+        <mat-label>Report Start Date</mat-label>
+
+        <div class="date_container">
+          <input  matInput name="start.date" [(ngModel)]="report.start_date"
+                  [matDatepicker]="startDatePicker" required>
+          <mat-datepicker-toggle [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker [startAt]="this.defaultReportStartDate"></mat-datepicker>
+        </div>
+
+        <mat-error>
+          <!-- This mat-error tag is displayed if this form field is invalid AND touched -->
+          Report Start Date is Required
+        </mat-error>
+
+      </mat-form-field>
+
+      <mat-form-field style="margin-left: 40px">
+        <mat-label>Report End Date</mat-label>
+
+        <div class="date_container">
+          <input  matInput name="end.date" [(ngModel)]="report.end_date"
+                  [matDatepicker]="endDatePicker" required>
+          <mat-datepicker-toggle [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </div>
+
+        <mat-error>
+          <!-- This mat-error tag is displayed if this form field is invalid AND touched -->
+          Report End Date is Required
+        </mat-error>
+
+      </mat-form-field>
+      <br/>
+
       <!-- Reset Button -->
       <button type="button" (click)="reset(form)" style="margin-top: 20px"
               mat-raised-button>

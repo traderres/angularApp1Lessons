@@ -80,3 +80,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .clickable {
   cursor: pointer;
 }
+
+.date_container {
+  float: left;
+  display: flex;
+  align-items: center;
+}
