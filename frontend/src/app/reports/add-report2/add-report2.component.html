@@ -1,0 +1,87 @@
+<mat-card>
+  <form novalidate autocomplete="off" [formGroup]="myForm" >
+
+    <mat-card-title>Add a Report 2</mat-card-title>
+
+    <mat-card-content>
+
+      <mat-form-field>
+        <mat-label>Enter Report Name</mat-label>
+
+        <!-- Report Name -->
+        <input matInput type="text" formControlName="report_name" />
+
+        <mat-error>
+          Report Name is required
+        </mat-error>
+      </mat-form-field>
+      <br/>
+
+      <mat-form-field>
+        <mat-label>Choose Source</mat-label>
+
+        <!-- Source -->
+        <mat-select formControlName="source">
+        <mat-option [value]=null>-Select Source-</mat-option>
+          <mat-option [value]=100>Israel</mat-option>
+          <mat-option [value]=101>United Kingdom</mat-option>
+          <mat-option [value]=102>USA</mat-option>
+        </mat-select>
+
+        <mat-error>
+          Priority is required
+        </mat-error>
+      </mat-form-field>
+      <br/>
+
+      <mat-form-field>
+        <mat-label>Choose Priority</mat-label>
+
+        <!-- Priority -->
+        <mat-select formControlName="priority">
+
+        <mat-option [value]=null>-Select Priority-</mat-option>
+          <mat-option [value]=1>Low</mat-option>
+          <mat-option [value]=2>Medium</mat-option>
+          <mat-option [value]=3>High</mat-option>
+          <mat-option [value]=4>Critical</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br/>
+
+
+      <mat-form-field>
+        <mat-label>Choose Authors</mat-label>
+
+        <!-- Authors -->
+        <mat-select multiple formControlName="authors">
+
+        <mat-option [value]=10>Adam</mat-option>
+          <mat-option [value]=11>Ben</mat-option>
+          <mat-option [value]=12>Peter</mat-option>
+          <mat-option [value]=13>Justin</mat-option>
+        </mat-select>
+
+        <mat-error>
+          Authors are required
+        </mat-error>
+      </mat-form-field>
+      <br/>
+
+      <!-- Reset and Save Buttons -->
+      <button type="button" (click)="reset()" style="margin-top: 20px"
+              mat-raised-button>Reset</button>
+      &nbsp;&nbsp;
+      <button type="button" (click)="save()" mat-raised-button color="primary">Save</button>
+    </mat-card-content>
+
+  </form>
+</mat-card>
+
+<pre>
+myForm.valid={{this.myForm.valid}}
+  myForm.controls.report_name.errors={{this.myForm.controls?.report_name?.errors | json}}
+  myForm.controls.priority.errors={{this.myForm.controls?.priority?.errors | json}}
+  myForm.controls.source.errors={{this.myForm.controls?.source?.errors | json}}
+  myForm.controls.authors.errors={{this.myForm.controls?.authors?.errors | json}}
+</pre>

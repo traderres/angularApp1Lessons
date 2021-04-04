@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddReportComponent } from './reports/add-report/add-report.component';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from "@angular/material/form-field";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSelectModule} from "@angular/material/select";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
@@ -27,10 +27,12 @@ import { Chart2Component } from './analytics/chart2/chart2.component';
 import { UserNavbarComponent } from './user-navbar/user-navbar.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import { AddReport2Component } from './reports/add-report2/add-report2.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
   { path: 'page/addReport',    component: AddReportComponent },
+  { path: 'page/addReport2',    component: AddReport2Component },
   { path: 'page/viewReports',  component: ViewReportsComponent },
   { path: 'page/chart1',       component: Chart1Component },
   { path: 'page/chart2',       component: Chart2Component },
@@ -50,7 +52,8 @@ const appRoutes: Routes = [
     NavbarComponent,
     Chart1Component,
     Chart2Component,
-    UserNavbarComponent
+    UserNavbarComponent,
+    AddReport2Component
   ],
   imports: [
     BrowserModule,
@@ -67,6 +70,7 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatListModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
     MatDatepickerModule,
     MatNativeDateModule,
     RouterModule.forRoot(appRoutes)
