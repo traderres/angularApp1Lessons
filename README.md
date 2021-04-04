@@ -1,4 +1,4 @@
-Angular App1 Lesson 7d
+Angular App1 Lesson 7e
 ----------------------
 
 
@@ -7,7 +7,7 @@ To Get started From Project Setup
  1. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson7d/set-style-of-invalid-fields
+    unix> git checkout lesson7e/show-icon-after-valid-fields
 
  2. Verify that the webapp works
     a. Compile the project (into an executable JAR)
