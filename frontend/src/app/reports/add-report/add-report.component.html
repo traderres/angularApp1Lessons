@@ -8,7 +8,7 @@
         <mat-label>Enter Report Name</mat-label>
 
         <!-- Use the matInput for input fields inside <mat-form-field>...</mat-form-field> tags -->
-        <input matInput type="text" name="report.name"  [(ngModel)]="report.name" required />
+        <input matInput type="text" name="report.name"  [(ngModel)]="report.name" required #name="ngModel" />
 
         <mat-error>
           <!-- This mat-error tag is displayed if this form field is invalid AND touched -->

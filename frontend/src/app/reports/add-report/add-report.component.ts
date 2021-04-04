@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ReportService} from "../../services/report.service";
 import {NgForm} from "@angular/forms";
 
@@ -16,7 +16,8 @@ export class Report {
   templateUrl: './add-report.component.html',
   styleUrls: ['./add-report.component.css']
 })
-export class AddReportComponent implements OnInit {
+export class AddReportComponent implements OnInit, AfterViewInit {
+  @ViewChild('name',  { read: ElementRef }) reportNameTextbox: ElementRef;
 
   public report: Report;
   public formSubmitted: boolean = false;
@@ -37,6 +38,11 @@ export class AddReportComponent implements OnInit {
 
     // Use the ReportService
     this.reportService.showMessage('Init called');
+  }
+
+  ngAfterViewInit(): void {
+    // Set the focus to the report name textbox
+    setTimeout(() => this.reportNameTextbox.nativeElement.focus(), 0);
   }
 
   public reset(aForm:  NgForm): void {
