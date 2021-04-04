@@ -53,6 +53,10 @@
       <mat-form-field>
         <mat-label>Choose Authors</mat-label>
 
+        <mat-hint *ngIf="myForm.controls?.authors?.pristine">
+          Hint: Select 1 or 2 authors
+        </mat-hint>
+
         <!-- Authors -->
         <mat-select multiple formControlName="authors">
 
@@ -62,9 +66,15 @@
           <mat-option [value]=13>Justin</mat-option>
         </mat-select>
 
-        <mat-error>
+        <mat-error *ngIf="myForm.controls?.authors?.errors?.required">
           Authors are required
         </mat-error>
+
+        <mat-error *ngIf="myForm.controls?.authors?.errors?.custom_error">
+          <!-- Display the custom error set in the custom validator -->
+          {{myForm.controls?.authors?.errors?.custom_error}}
+        </mat-error>
+
       </mat-form-field>
       <br/>
 

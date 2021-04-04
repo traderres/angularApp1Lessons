@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ValidatorUtils} from "../../validators/validator-utils";
 
 @Component({
   selector: 'app-add-report2',
@@ -25,7 +26,11 @@ export class AddReport2Component implements OnInit {
 
       priority:  ['', Validators.required],
 
-      authors:  ['', Validators.required]
+      authors:  ['',
+        [
+          Validators.required,
+          ValidatorUtils.validateMultipleSelect(1,2)
+        ]]
     });
 
   }
