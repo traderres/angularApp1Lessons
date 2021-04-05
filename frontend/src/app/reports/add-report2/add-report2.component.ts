@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidatorUtils} from "../../validators/validator-utils";
 import {MessageService} from "../../services/message.service";
+import {LookupDTO} from "../../models/lookup-dto";
+import {LookupService} from "../../services/lookup.service";
 
 @Component({
   selector: 'app-add-report2',
@@ -11,9 +13,16 @@ import {MessageService} from "../../services/message.service";
 export class AddReport2Component implements OnInit {
   public myForm: FormGroup;
 
-  constructor(private messageService: MessageService,private formBuilder: FormBuilder) { }
+  public priorities: LookupDTO[];
+
+
+  constructor(private messageService: MessageService,
+              private formBuilder: FormBuilder,
+              private lookupService: LookupService) { }
 
   public ngOnInit(): void {
+
+    this.priorities = this.lookupService.getLookupWithType("priority");
 
     this.myForm = this.formBuilder.group({
       report_name: [null,

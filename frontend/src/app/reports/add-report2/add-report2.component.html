@@ -39,12 +39,8 @@
 
         <!-- Priority -->
         <mat-select formControlName="priority">
-
-        <mat-option [value]=null>-Select Priority-</mat-option>
-          <mat-option [value]=1>Low</mat-option>
-          <mat-option [value]=2>Medium</mat-option>
-          <mat-option [value]=3>High</mat-option>
-          <mat-option [value]=4>Critical</mat-option>
+            <mat-option [value]=null>-Select Priority-</mat-option>
+            <mat-option *ngFor="let priority of this.priorities"  value="{{priority.id}}">{{priority.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <br/>
