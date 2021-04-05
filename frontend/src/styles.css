@@ -90,3 +90,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .checkbox-color {
   color: green
 }
+
+.success-snackbar {
+  background: #2e7d32 !important;
+  color: white;
+  white-space: pre-wrap;
+}
+
+.warning-snackbar {
+  background: #ff8f00 !important;
+  color: white;
+  white-space: pre-wrap;
+}
+
+.error-snackbar {
+  background-color: #c62828 !important;
+  color: white;
+  white-space: pre-wrap;
+}

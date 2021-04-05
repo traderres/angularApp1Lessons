@@ -57,6 +57,6 @@ export class AddReport2Component implements OnInit {
     console.log('Valid data:  report_name=' + this.myForm.controls.report_name.value);
 
     // Send a message
-    this.messageService.sendMessage("Successfully saved this report");
+    this.messageService.showErrorMessage("Failed to save your record.  An error occurred.");
   }
 }
