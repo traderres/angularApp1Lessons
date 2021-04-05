@@ -110,6 +110,21 @@
     </dependency>
 
     <dependency>
+      <!-- Add Flyway -->
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+      <version>6.5.7</version>
+    </dependency>
+
+    <dependency>
+      <!-- Database Driver that Flyway will use to talk to the database -->
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.1.4</version>
+    </dependency>
+
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
@@ -145,6 +160,22 @@
         </executions>
 
       </plugin>
+
+
+      <plugin>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-maven-plugin</artifactId>
+        <version>6.5.7</version>
+
+        <configuration>
+          <!-- Set the postgres credentials when running mvn flyway:migrate from command-line -->
+          <user>app1_user</user>
+          <password>secret</password>
+          <url>jdbc:postgresql://localhost:5432/app1_db</url>
+          <schemas>app1_db</schemas>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 
