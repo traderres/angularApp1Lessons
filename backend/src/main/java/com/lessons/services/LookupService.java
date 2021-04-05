@@ -53,10 +53,12 @@ public class LookupService {
             sql = sql + "order by " + aOrderBy;
         }
 
+
+        BeanPropertyRowMapper<LookupDTO> rowMapper = new BeanPropertyRowMapper<>(LookupDTO.class);
+        JdbcTemplate jt = new JdbcTemplate(this.dataSource);
+
         // Execute the SQL, generating a list of LookupDTO objects
         // NOTE:  If no lookup records are found, then returns an empty list
-        BeanPropertyRowMapper rowMapper = new BeanPropertyRowMapper(LookupDTO.class);
-        JdbcTemplate jt = new JdbcTemplate(this.dataSource);
         List<LookupDTO> lookups = jt.query(sql, rowMapper, aLookupType);
 
         // Return the list of LookupDTO objects (or empty list)
