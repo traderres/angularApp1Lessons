@@ -29,7 +29,9 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { AddReport2Component } from './reports/add-report2/add-report2.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import { ErrorDialogComponent } from './errorHandler/error-dialog/error-dialog.component';
+import {ErrorInterceptor} from "./errorHandler/error.interceptor";
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -55,7 +57,8 @@ const appRoutes: Routes = [
     Chart1Component,
     Chart2Component,
     UserNavbarComponent,
-    AddReport2Component
+    AddReport2Component,
+    ErrorDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +83,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
   ],
   providers: [
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'standard' } }
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'standard' } },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
