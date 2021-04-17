@@ -15,7 +15,8 @@ export class AddReport2Component implements OnInit {
 
   public myForm: FormGroup;
   public prioritiesObs: Observable<LookupDTO[]>;
-
+  public authorsObs: Observable<LookupDTO[]>;
+  public reportSourceObs: Observable<LookupDTO[]>;
 
   constructor(private messageService: MessageService,
               private formBuilder: FormBuilder,
@@ -27,6 +28,10 @@ export class AddReport2Component implements OnInit {
     // Get the observable to the List of LookupDTO objects
     // NOTE:  The AsyncPipe will subscribe and unsubscribe automatically
     this.prioritiesObs = this.lookupService.getLookupWithTypeAndOrder("priority", "display_order");
+
+    this.authorsObs = this.lookupService.getLookupWithTypeAndOrder("author", "name");
+
+    this.reportSourceObs = this.lookupService.getLookupWithTypeAndOrder("report_source", "name");
 
 
     this.myForm = this.formBuilder.group({

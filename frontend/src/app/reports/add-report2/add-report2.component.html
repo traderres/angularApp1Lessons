@@ -17,21 +17,30 @@
       </mat-form-field>
       <br/>
 
-      <mat-form-field>
-        <mat-label>Choose Source</mat-label>
+      <ng-container *ngIf="(this.reportSourceObs | async) as report_sources; else loadingReportSources">
+        <!-- Report Sources are loaded -->
+        <mat-form-field style="margin-top: 20px">
+          <mat-label>Choose Source</mat-label>
 
-        <!-- Source -->
-        <mat-select formControlName="source">
-        <mat-option [value]=null>-Select Source-</mat-option>
-          <mat-option [value]=100>Israel</mat-option>
-          <mat-option [value]=101>United Kingdom</mat-option>
-          <mat-option [value]=102>USA</mat-option>
-        </mat-select>
+          <!-- Report Sources Drop Down -->
+          <mat-select formControlName="source">
+            <mat-option [value]=null>-Select Source-</mat-option>
+            <mat-option *ngFor="let source of report_sources"  value="{{source.id}}">{{source.name}}</mat-option>
+          </mat-select>
 
-        <mat-error>
-          Priority is required
-        </mat-error>
-      </mat-form-field>
+          <mat-error>
+            Source is required
+          </mat-error>
+
+        </mat-form-field>
+      </ng-container>
+
+      <ng-template #loadingReportSources>
+        <!-- Report Sources are loading message -->
+        <p style="margin-top: 20px"><i class="fa fa-spin fa-spinner">
+        </i> Loading Report Sources...
+        </p>
+      </ng-template>
       <br/>
 
       <ng-container *ngIf="(this.prioritiesObs | async) as priorities; else loadingPriorities">
@@ -62,32 +71,30 @@
       <br/>
 
 
-      <mat-form-field>
-        <mat-label>Choose Authors</mat-label>
+      <ng-container *ngIf="(this.authorsObs | async) as authors; else loadingAuthors">
+        <!-- Authors are loaded -->
+        <mat-form-field style="margin-top: 20px">
+          <mat-label>Choose Authors</mat-label>
 
-        <mat-hint *ngIf="myForm.controls?.authors?.pristine">
-          Hint: Select 1 or 2 authors
-        </mat-hint>
+          <mat-select multiple formControlName="authors">
+            <mat-option *ngFor="let author of authors"  value="{{author.id}}">{{author.name}}</mat-option>
+          </mat-select>
 
-        <!-- Authors -->
-        <mat-select multiple formControlName="authors">
+          <mat-error *ngIf="myForm.controls?.authors?.errors?.required">
+            Authors are required
+          </mat-error>
 
-        <mat-option [value]=10>Adam</mat-option>
-          <mat-option [value]=11>Ben</mat-option>
-          <mat-option [value]=12>Peter</mat-option>
-          <mat-option [value]=13>Justin</mat-option>
-        </mat-select>
+          <mat-error *ngIf="myForm.controls?.authors?.errors?.custom_error">
+            {{myForm.controls?.authors?.errors?.custom_error}}
+          </mat-error>
 
-        <mat-error *ngIf="myForm.controls?.authors?.errors?.required">
-          Authors are required
-        </mat-error>
+        </mat-form-field>
+      </ng-container>
 
-        <mat-error *ngIf="myForm.controls?.authors?.errors?.custom_error">
-          <!-- Display the custom error set in the custom validator -->
-          {{myForm.controls?.authors?.errors?.custom_error}}
-        </mat-error>
-
-      </mat-form-field>
+      <ng-template #loadingAuthors>
+        <!-- Authors are loading message -->
+        <p style="margin-top: 20px"><i class="fa fa-spin fa-spinner"></i> Loading Authors...</p>
+      </ng-template>
       <br/>
 
       <!-- Reset and Save Buttons -->
