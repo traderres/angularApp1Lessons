@@ -1,28 +1,33 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidatorUtils} from "../../validators/validator-utils";
 import {MessageService} from "../../services/message.service";
 import {LookupDTO} from "../../models/lookup-dto";
 import {LookupService} from "../../services/lookup.service";
-import {Subscription} from "rxjs";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-add-report2',
   templateUrl: './add-report2.component.html',
   styleUrls: ['./add-report2.component.css']
 })
-export class AddReport2Component implements OnInit, OnDestroy {
+export class AddReport2Component implements OnInit {
 
   public myForm: FormGroup;
-  public priorities: LookupDTO[];
-  private lookupSubscription: Subscription;
-  public prioritiesAreLoading: boolean;
+  public prioritiesObs: Observable<LookupDTO[]>;
+
 
   constructor(private messageService: MessageService,
               private formBuilder: FormBuilder,
               private lookupService: LookupService) { }
 
+
   public ngOnInit(): void {
+
+    // Get the observable to the List of LookupDTO objects
+    // NOTE:  The AsyncPipe will subscribe and unsubscribe automatically
+    this.prioritiesObs = this.lookupService.getLookupWithTypeAndOrder("priority", "display_order");
+
 
     this.myForm = this.formBuilder.group({
       report_name: [null,
@@ -43,27 +48,6 @@ export class AddReport2Component implements OnInit, OnDestroy {
         ]]
     });
 
-    this.prioritiesAreLoading = true;
-
-
-    // Invoke the REST end point
-    this.lookupSubscription = this.lookupService.getLookupWithTypeAndOrder("priority", "display_order").subscribe(data => {
-        // The REST call finished successfully
-
-        // Get the data from the REST call
-        this.priorities = data;
-      },
-
-      (err) => {
-        // REST Call call finished with an error
-        console.error(err);
-
-      }).add( () => {
-      // Code to run after the REST call finished
-
-      // Unset the flag (so that the priorities-are-loading spinner disappears)
-      this.prioritiesAreLoading = false;
-    });
 
   }
 
@@ -92,12 +76,5 @@ export class AddReport2Component implements OnInit, OnDestroy {
   }
 
 
-  public ngOnDestroy(): void {
 
-    if (this.lookupSubscription) {
-      // Unsubscribe from this subscription so we don't have a memory leak
-      this.lookupSubscription.unsubscribe();
-    }
-
-  }
 }
