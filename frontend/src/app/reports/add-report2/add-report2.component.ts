@@ -4,7 +4,8 @@ import {ValidatorUtils} from "../../validators/validator-utils";
 import {MessageService} from "../../services/message.service";
 import {LookupDTO} from "../../models/lookup-dto";
 import {LookupService} from "../../services/lookup.service";
-import {Observable} from "rxjs";
+import {Observable, of, Subject} from "rxjs";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-add-report2',
@@ -14,9 +15,12 @@ import {Observable} from "rxjs";
 export class AddReport2Component implements OnInit {
 
   public myForm: FormGroup;
-  public prioritiesObs: Observable<LookupDTO[]>;
   public authorsObs: Observable<LookupDTO[]>;
   public reportSourceObs: Observable<LookupDTO[]>;
+
+  public prioritiesObs: Observable<LookupDTO[] | null>;
+  public loadingPriorityErrorObs = new Subject<boolean>();
+
 
   constructor(private messageService: MessageService,
               private formBuilder: FormBuilder,
@@ -27,7 +31,18 @@ export class AddReport2Component implements OnInit {
 
     // Get the observable to the List of LookupDTO objects
     // NOTE:  The AsyncPipe will subscribe and unsubscribe automatically
-    this.prioritiesObs = this.lookupService.getLookupWithTypeAndOrder("priority", "display_order");
+    this.prioritiesObs = this.lookupService.getLookupWithTypeAndOrder("priority", "display_order").pipe(
+      catchError((error) => {
+        // Log an error in the console here  (otherwise you will NOT see an error in the console)
+        console.error('error loading the list of priorities: ', error);
+
+        // Send a message to the html that there was an error loading priorities
+        this.loadingPriorityErrorObs.next(true);
+
+        // Recover the observable and give it a "falsy" value of null
+        return of(null);
+      })
+    );
 
     this.authorsObs = this.lookupService.getLookupWithTypeAndOrder("author", "name");
 
