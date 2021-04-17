@@ -44,7 +44,16 @@ public class LookupController {
                     .body("The pass-in lookup type does not exist: " + aLookupType);
         }
 
+
         List<LookupDTO> lookupDTOS = lookupService.getLookupsWithType(aLookupType, aOrderBy);
+
+        try {
+            // Sleep for 5 seconds
+            Thread.sleep(5000);
+        }
+        catch(Exception e) {
+            // Do nothing
+        }
 
         // Return the list of LookupDTO objects back to the front-end
         return ResponseEntity

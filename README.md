@@ -1,4 +1,4 @@
-Angular App1 Lesson 9a
+Angular App1 Lesson 9c
 ----------------------
 
 
@@ -10,7 +10,7 @@ To Get started From Project Setup
  2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson9a/loading-data
+    unix> git checkout lesson9c/manual-subscribe
 
  3. Verify that the webapp works
     a. Compile the project (into an executable JAR)

@@ -16,6 +16,7 @@ export class AddReport2Component implements OnInit, OnDestroy {
   public myForm: FormGroup;
   public priorities: LookupDTO[];
   private lookupSubscription: Subscription;
+  public prioritiesAreLoading: boolean;
 
   constructor(private messageService: MessageService,
               private formBuilder: FormBuilder,
@@ -42,9 +43,11 @@ export class AddReport2Component implements OnInit, OnDestroy {
         ]]
     });
 
+    this.prioritiesAreLoading = true;
+
 
     // Invoke the REST end point
-    this.lookupSubscription = this.lookupService.getLookupWithType("priority").subscribe(data => {
+    this.lookupSubscription = this.lookupService.getLookupWithTypeAndOrder("priority", "display_order").subscribe(data => {
         // The REST call finished successfully
 
         // Get the data from the REST call
@@ -58,8 +61,8 @@ export class AddReport2Component implements OnInit, OnDestroy {
       }).add( () => {
       // Code to run after the REST call finished
 
-      // Unset the flag so that the dropdown appears
-      console.log('rest call tear down code');
+      // Unset the flag (so that the priorities-are-loading spinner disappears)
+      this.prioritiesAreLoading = false;
     });
 
   }

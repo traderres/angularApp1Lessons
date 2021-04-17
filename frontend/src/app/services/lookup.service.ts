@@ -20,4 +20,15 @@ export class LookupService {
 
     return this.httpClient.get <LookupDTO[]>(restUrl);
   }
+
+
+  /*
+   * Return a sorted list of LookupDTO objects that correspond to the passed-in type name -- e.g, 'priority'
+   */
+  public getLookupWithTypeAndOrder(aType: string, aOrderBy: string): Observable<LookupDTO[]>  {
+
+    const restUrl = environment.baseUrl + '/api/lookups/' + aType + '/' + aOrderBy;
+
+    return this.httpClient.get <LookupDTO[]>(restUrl);
+  }
 }
