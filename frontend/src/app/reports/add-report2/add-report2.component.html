@@ -2,8 +2,7 @@
 <ng-container *ngIf="
        {
           report_sources: reportSourceObs | async,
-          authors: authorsObs | async,
-          priorities: prioritiesObs | async
+          authors: authorsObs | async
        } as data;">
 
 
@@ -52,7 +51,7 @@
       </ng-template>
       <br/>
 
-      <ng-container *ngIf="(prioritiesObs | async) as priorities; else loadingPrioritiesOrError">
+      <ng-container *ngIf="(this.prioritiesObs.dataObs | async) as priorities; else loadingPrioritiesOrError">
         <!-- Priorities are fully loaded -->
         <mat-form-field style="margin-top: 20px">
           <mat-label>Choose Priority</mat-label>
@@ -69,7 +68,7 @@
       <ng-template #loadingPrioritiesOrError>
         <!-- Either the priorities are loading *OR* there is an error -->
 
-        <div *ngIf="this.loadingPriorityErrorObs | async; else loadingPriorities">
+        <div *ngIf="this.prioritiesObs.errorLoadingObs | async; else loadingPriorities">
           <!-- Priorities Failed to load message -->
           Error loading the list of priorities.  Please try again later.
         </div>
