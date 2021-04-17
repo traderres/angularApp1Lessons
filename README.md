@@ -4,12 +4,15 @@ Angular App1 Lesson 9a
 
 ```
 To Get started From Project Setup
- 1. Clone the project
+ 1. Install Postgres & setup the app1_db database, and app1_user account
+    https://github.com/traderres/webClass/blob/master/learnAngular/lessons/howToInitializePostgresDatabase.txt
+
+ 2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
     unix> git checkout lesson9a/loading-data
 
- 2. Verify that the webapp works
+ 3. Verify that the webapp works
     a. Compile the project (into an executable JAR)
        unix> mvn clean package -Pprod
 
@@ -19,7 +22,7 @@ To Get started From Project Setup
     c. Connect to the webapp at
        http://localhost:8080/app1
  
- 3. Setup Debugging in IntelliJ
+ 4. Setup Debugging in IntelliJ
     https://github.com/traderres/webClass/blob/master/learnAngular/lessons/lesson01_debug_existing_webapp.txt
 
 ```
