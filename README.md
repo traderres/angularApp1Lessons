@@ -1,8 +1,8 @@
-Angular App1 Lessons
---------------------
+Angular App1 Lesson 1b
+----------------------
 
 
-```
+<pre>
 To Get started From Project Setup
  1. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
@@ -22,8 +22,8 @@ To Get started From Project Setup
 
  3. Open the project in IntelliJ Ultimate
 
- 4. Setup Debugging (so you can debug TypeScript and Java code)
-    https://github.com/traderres/webClass/blob/master/learnAngular/lessons/lesson01_debug_existing_webapp.txt
-```
+ 4. <a href="https://github.com/traderres/webClass/blob/master/learnAngular/lessons/lesson01_debug_existing_webapp.txt">Setup Debugging (so you can debug TypeScript and Java code)</a>
+
+</pre>
 
 
