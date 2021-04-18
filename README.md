@@ -1,5 +1,5 @@
-Angular App1 Lesson 9j
-----------------------
+Angular App1 Lesson 10a
+-----------------------
 
 
 <pre>
@@ -9,7 +9,7 @@ To Get started From Project Setup
  2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson9j/loading-cache
+    unix> git checkout lesson10a/create-rest-call
 
  3. Verify that the webapp works
     a. Compile the project (into an executable JAR)
