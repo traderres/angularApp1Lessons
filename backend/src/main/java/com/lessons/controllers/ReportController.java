@@ -32,7 +32,6 @@ public class ReportController {
         // Adding a report record to the system
         reportService.addReport(aAddReportDTO);
 
-
         // Return a response code of 200
         return ResponseEntity.status(HttpStatus.OK).body("");
     }

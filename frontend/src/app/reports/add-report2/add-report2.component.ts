@@ -5,7 +5,8 @@ import {MessageService} from "../../services/message.service";
 import {LookupDTO} from "../../models/lookup-dto";
 import {LookupService} from "../../services/lookup.service";
 import {Observable} from "rxjs";
-import {LoadingWrapper} from "../../utilities/loading-wrapper";
+import {ReportDTO} from "../../models/report-dto";
+import {ReportService} from "../../services/report.service";
 
 @Component({
   selector: 'app-add-report2',
@@ -23,7 +24,8 @@ export class AddReport2Component implements OnInit {
 
   constructor(private messageService: MessageService,
               private formBuilder: FormBuilder,
-              private lookupService: LookupService) { }
+              private lookupService: LookupService,
+              private reportService: ReportService) { }
 
 
   public ngOnInit(): void {
@@ -69,7 +71,6 @@ export class AddReport2Component implements OnInit {
   }
 
   public save(): void {
-    console.log('User pressed save.');
 
     // Mark all fields as touched so the user can see any errors
     this.myForm.markAllAsTouched();
@@ -79,11 +80,22 @@ export class AddReport2Component implements OnInit {
       return;
     }
 
-    // User enter valid data
-    console.log('Valid data:  report_name=' + this.myForm.controls.report_name.value);
+    // Build the ReportDTO object
+    let reportDTO: ReportDTO = new ReportDTO();
+    reportDTO.name = this.myForm.controls.report_name.value;
 
-    // Send a message
-    this.messageService.showErrorMessage("Failed to save your record.  An error occurred.");
+    // Invoke a service to add a report record
+    this.reportService.add(reportDTO).subscribe(response => {
+        // REST call succeeded
+        this.messageService.showSuccessMessage("Successfully added a new report.");
+
+        // Reset the form
+        this.myForm.reset();
+      },
+     ).add(  () => {
+        // REST call finally block
+        console.log('REST call finally block');
+    });
   }
 
 
