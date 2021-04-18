@@ -1,5 +1,5 @@
-Angular App1 Lessons
---------------------
+Angular App1 Lesson 1b
+----------------------
 
 
 <pre>
@@ -19,11 +19,8 @@ To Get started From Project Setup
     c. Connect to the webapp at
        http://localhost:8080/app1
  
-
- 3. Open the project in IntelliJ Ultimate
-
- 4. <a href="https://github.com/traderres/webClass/blob/master/learnAngular/lessons/lesson01_debug_existing_webapp.txt">Setup Debugging (so you can debug TypeScript and Java code)</a>
+ 3. Setup Debugging in IntelliJ Ultimate
+    a. Open the project in IntelliJ
+    b. <a href="https://github.com/traderres/webClass/blob/master/learnAngular/lessons/lesson01_debug_existing_webapp.txt">Setup debugging (so you can debug TypeScript and Java code)</a>
 
 </pre>
-
-
