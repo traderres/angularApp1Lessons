@@ -1,1 +1,23 @@
-<p>view-reports works!</p>
+<ng-container *ngIf="(this.allReportsObs | async) as allReports">
+  <!-- The REST call has come back with data.  So, display the page -->
+  <mat-card>
+
+    <mat-card-title>View All Reports</mat-card-title>
+
+    <mat-card-content>
+
+        <!-- Loop through all of the reports -->
+        <ng-container *ngFor="let report of allReports" >
+
+          <p>
+             {{report.id}} {{report.name}} {{report.priority}} {{report.start_date}} {{report.end_date}}
+          </p>
+
+        </ng-container>
+
+    </mat-card-content>
+
+
+  </mat-card>
+
+</ng-container>

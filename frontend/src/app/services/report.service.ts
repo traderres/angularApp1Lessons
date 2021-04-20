@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {ReportDTO} from "../models/report-dto";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
+import {GetReportDTO} from "../models/get-report-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +32,36 @@ export class ReportService {
     console.log('Here is the message: ' + aMessage);
   }
 
+
+  /*
+   * Returns an observable that holds an array of GetReportDTO objects
+   */
+  public getAllReports(): Observable<GetReportDTO[]> {
+    let data: GetReportDTO[] = [
+      {
+        id: 1,
+        name: 'Report 1',
+        priority: 'Low',
+        start_date: '01/05/2020',
+        end_date: '12/31/2020'
+      },
+      {
+        id: 2,
+        name: 'Report 2',
+        priority: 'Critical',
+        start_date: '11/17/2020',
+        end_date: '05/11/2021'
+      },
+      {
+        id: 3,
+        name: 'Report 3',
+        priority: 'High',
+        start_date: '11/09/2019',
+        end_date: '04/25/2021'
+      }
+    ]
+
+    return of(data);
+  }
 
 }

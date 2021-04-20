@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {ReportService} from "../../services/report.service";
+import {GetReportDTO} from "../../models/get-report-dto";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-view-reports',
@@ -7,9 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewReportsComponent implements OnInit {
 
-  constructor() { }
+  public allReportsObs: Observable<GetReportDTO[]>;
 
-  ngOnInit(): void {
+  constructor(private reportService: ReportService) { }
+
+  public ngOnInit(): void {
+    // Get an observable to the REST call that will retrieve all reports
+    // NOTE:  The Async Pipe will subscribe and unsubscribe from this automatically
+    this.allReportsObs = this.reportService.getAllReports();
   }
 
 }
