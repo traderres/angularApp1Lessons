@@ -1,0 +1,9 @@
+.odd-row {
+  background-color: #e8f4fe;
+  padding: 8px;
+}
+
+.even-row {
+  background-color: inherit;
+  padding: 8px;
+}
