@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GetReportDTO {
     private Integer id;
     private String  name;
-    private Integer priority;
+    private String priority;
 
     @JsonProperty("start_date")
     private String  startDate;
@@ -29,11 +29,11 @@ public class GetReportDTO {
         this.name = name;
     }
 
-    public Integer getPriority() {
+    public String getPriority() {
         return priority;
     }
 
-    public void setPriority(Integer priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 

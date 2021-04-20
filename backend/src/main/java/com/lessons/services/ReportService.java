@@ -63,8 +63,10 @@ public class ReportService {
      */
     public List<GetReportDTO> getAllReports() {
         // Construct the SQL to get all reports
-        String sql = "select id, name, priority, to_char(start_date, 'mm/dd/yyyy') as start_date, to_char(end_date, 'mm/dd/yyyy') as end_date " +
-                     "from reports " +
+        String sql = "select r.id, r.name, l.name as priority, \n" +
+                     "       to_char(start_date, 'mm/dd/yyyy') as start_date, to_char(end_date, 'mm/dd/yyyy') as end_date \n" +
+                     "from reports r \n" +
+                     "join lookup l on (r.priority = l.id) \n" +
                      "order by id";
 
         // Use the rowMapper to convert the results into a list of GetReportDTO objects
