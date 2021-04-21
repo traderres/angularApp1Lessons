@@ -7,20 +7,28 @@
 
         <mat-card-content>
 
-            <!-- Loop through all of the reports -->
-            <ng-container *ngFor="let report of allReports;  let index = index" >
+              <table style="margin-top: 20px; width: 675px">
+                <tr>
+                  <!-- Table Header -->
+                  <th style="width: 50px">ID</th>
+                  <th style="width: 250px">Name</th>
+                  <th style="width: 125px">Priority</th>
+                  <th style="width: 100px">Start Date</th>
+                  <th style="width: 100px">End Date</th>
+                </tr>
 
-              <div fxLayout="row" fxLayoutGap="0"   fxLayoutAlign="center center"
-                   [ngClass]="{ 'odd-row':     0 === index % 2,
-                                'even-row':    1 === index % 2 }">
-
-                  <p>
-                     {{report.id}} {{report.name}} {{report.priority}} {{report.start_date}} {{report.end_date}}
-                  </p>
-
-              </div>
-
-            </ng-container>
+                  <!-- Loop through all of the reports -->
+                  <ng-container *ngFor="let report of allReports;  let index = index" >
+                    <tr   [ngClass]="{ 'odd-row':     0 === index % 2,
+                                       'even-row':    1 === index % 2 }">
+                        <td>{{report.id}}</td>
+                        <td>{{report.name}}</td>
+                        <td>{{report.priority}}</td>
+                        <td>{{report.start_date}}</td>
+                        <td>{{report.end_date}}</td>
+                    </tr>
+                  </ng-container>
+              </table>
 
         </mat-card-content>
 
