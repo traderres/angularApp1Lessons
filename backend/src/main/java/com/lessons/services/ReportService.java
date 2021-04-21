@@ -63,11 +63,14 @@ public class ReportService {
      */
     public List<GetReportDTO> getAllReports() {
         // Construct the SQL to get all reports
+        // NOTE:  We do a left join to get all records from reports
+        //        If a report record has null  for priority, then priority is null
+        //        If a report record has a priority it, then get the name for that priority
         String sql = "select r.id, r.name, l.name as priority, \n" +
-                     "       to_char(start_date, 'mm/dd/yyyy') as start_date, to_char(end_date, 'mm/dd/yyyy') as end_date \n" +
-                     "from reports r \n" +
-                     "join lookup l on (r.priority = l.id) \n" +
-                     "order by id";
+                "       to_char(start_date, 'mm/dd/yyyy') as start_date, to_char(end_date, 'mm/dd/yyyy') as end_date \n" +
+                "from reports r \n" +
+                "LEFT JOIN lookup l on (r.priority = l.id) \n" +
+                "order by id";
 
         // Use the rowMapper to convert the results into a list of GetReportDTO objects
         BeanPropertyRowMapper<GetReportDTO> rowMapper = new BeanPropertyRowMapper<>(GetReportDTO.class);
