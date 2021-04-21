@@ -37,31 +37,11 @@ export class ReportService {
    * Returns an observable that holds an array of GetReportDTO objects
    */
   public getAllReports(): Observable<GetReportDTO[]> {
-    let data: GetReportDTO[] = [
-      {
-        id: 1,
-        name: 'Report 1',
-        priority: 'Low',
-        start_date: '01/05/2020',
-        end_date: '12/31/2020'
-      },
-      {
-        id: 2,
-        name: 'Report 2',
-        priority: 'Critical',
-        start_date: '11/17/2020',
-        end_date: '05/11/2021'
-      },
-      {
-        id: 3,
-        name: 'Report 3',
-        priority: 'High',
-        start_date: '11/09/2019',
-        end_date: '04/25/2021'
-      }
-    ]
+    // Construct the URL of the REST call
+    const restUrl = environment.baseUrl + '/api/reports/all';
 
-    return of(data);
+    // Return an observable
+    return this.httpClient.get <GetReportDTO[]>(restUrl);
   }
 
 }
