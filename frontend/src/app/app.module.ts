@@ -32,12 +32,14 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { ErrorDialogComponent } from './errorHandler/error-dialog/error-dialog.component';
 import {ErrorInterceptor} from "./errorHandler/error.interceptor";
+import { EditReportComponent } from './reports/edit-report/edit-report.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
   { path: 'page/addReport',    component: AddReportComponent },
   { path: 'page/addReport2',    component: AddReport2Component },
   { path: 'page/viewReports',  component: ViewReportsComponent },
+  { path: 'page/editReport/:id', component: EditReportComponent },
   { path: 'page/chart1',       component: Chart1Component },
   { path: 'page/chart2',       component: Chart2Component },
   { path: '',                  component: WelcomeComponent},
@@ -58,7 +60,8 @@ const appRoutes: Routes = [
     Chart2Component,
     UserNavbarComponent,
     AddReport2Component,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    EditReportComponent
   ],
   imports: [
     BrowserModule,
