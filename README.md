@@ -1,4 +1,4 @@
-Angular App1 Lesson 11d
+Angular App1 Lesson 11e
 -----------------------
 
 
@@ -9,7 +9,7 @@ To Get started From Project Setup
  2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson11d/better-look-feel
+    unix> git checkout lesson11e/angular-flex
 
  3. Verify that the webapp works
     a. Compile the project (into an executable JAR)

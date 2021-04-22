@@ -7,28 +7,78 @@
 
         <mat-card-content>
 
-              <table style="margin-top: 20px; width: 675px">
-                <tr>
-                  <!-- Table Header -->
-                  <th style="width: 50px">ID</th>
-                  <th style="width: 250px">Name</th>
-                  <th style="width: 125px">Priority</th>
-                  <th style="width: 100px">Start Date</th>
-                  <th style="width: 100px">End Date</th>
-                </tr>
+              <div fxFlex fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start stretch" >
 
-                  <!-- Loop through all of the reports -->
-                  <ng-container *ngFor="let report of allReports;  let index = index" >
-                    <tr   [ngClass]="{ 'odd-row':     0 === index % 2,
-                                       'even-row':    1 === index % 2 }">
-                        <td>{{report.id}}</td>
-                        <td>{{report.name}}</td>
-                        <td>{{report.priority}}</td>
-                        <td>{{report.start_date}}</td>
-                        <td>{{report.end_date}}</td>
-                    </tr>
-                  </ng-container>
-              </table>
+                <!-- Show table headers -->
+                <div fxLayout="row" fxLayoutGap="0"  >
+
+                  <div fxFlex="15%" fxLayoutAlign="center" >
+                    <!-- Report ID -->
+                    <span class="header-cell">ID</span>
+                  </div>
+
+                  <div fxFlex="25%" fxLayoutAlign="center">
+                    <!-- Report Name -->
+                    <span class="header-cell">Name</span>
+                  </div>
+
+                  <div fxFlex="10%" fxLayoutAlign="center">
+                    <!-- Report Priority -->
+                    <span class="header-cell">Priority</span>
+                  </div>
+
+                  <div fxFlex="15%" fxLayoutAlign="center">
+                    <!-- Report Start Date -->
+                    <span class="header-cell">Start Date</span>
+                  </div>
+
+                  <div fxFlex="15%" fxLayoutAlign="center">
+                    <!-- Report Start Date -->
+                    <span class="header-cell">End Date</span>
+                  </div>
+
+                </div>    <!-- End of div that holds the fxFlex for this *HEADER ROW* -->
+
+
+
+                <!-- Loop through all of the reports -->
+                <ng-container *ngFor="let report of allReports;  let index = index">
+
+                  <!-- Start a new row -->
+                  <div fxLayout="row" fxLayoutGap="0"
+                       [ngClass]="{ 'odd-row':     0 === index % 2,
+                                   'even-row': 1 === index % 2 }"         >
+
+                    <div fxFlex="15%"  fxLayoutAlign="center">
+                      <!-- Report ID -->
+                      <span class="table-cell">{{report.id}}</span>
+                    </div>
+
+                    <div fxFlex="25%" fxLayoutAlign="center">
+                      <!-- Report Name -->
+                      <span class="table-cell">{{report.name}}</span>
+                    </div>
+
+                    <div fxFlex="10%" fxLayoutAlign="center">
+                      <!-- Report Priority -->
+                      <span class="table-cell">{{report.priority}}</span>
+                    </div>
+
+                    <div fxFlex="15%" fxLayoutAlign="center">
+                      <!-- Report Start Date -->
+                      <span class="table-cell">{{report.start_date}}</span>
+                    </div>
+
+                    <div fxFlex="15%" fxLayoutAlign="center">
+                      <!-- Report Start Date -->
+                      <span class="table-cell">{{report.end_date}}</span>
+                    </div>
+
+                  </div>    <!-- End of div that holds the fxFlex for this *DATA ROW* -->
+
+                </ng-container>   <!-- End of looping through allReports -->
+
+          </div>
 
         </mat-card-content>
 
