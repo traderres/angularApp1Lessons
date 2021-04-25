@@ -2,11 +2,14 @@ package com.lessons.services;
 
 import com.lessons.models.AddReportDTO;
 import com.lessons.models.GetReportDTO;
+import com.lessons.models.GetUpdateReportDTO;
+import com.lessons.models.SetUpdateReportDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -82,4 +85,78 @@ public class ReportService {
         // Return the list of GetReportDTO objects
         return listOfReports;
     }
+
+    /**
+     * @param aReportId holds the ID that uniquely identifies thie report in the database
+     * @return TRUE if the ID is found in the reports table.  False otherwise.
+     */
+    public boolean doesReportIdExist(Integer aReportId) {
+        if (aReportId == null) {
+            return false;
+        }
+
+        String sql = "select id from reports where id=?";
+        JdbcTemplate jt = new JdbcTemplate(this.dataSource);
+        SqlRowSet rs = jt.queryForRowSet(sql, aReportId);
+        if (rs.next() ) {
+            // I found the record in the database.  So, return true.
+            return true;
+        }
+        else {
+            // I did not find this ID in the database.  So, return false.
+            return false;
+        }
+    }
+
+
+    /**
+     * Update the Report record in the database
+     *
+     * @param aUpdateReportDTO holds the information from the front-end with new report info
+     */
+    public void updateReport(SetUpdateReportDTO aUpdateReportDTO) {
+        // Construct the SQL to update this record
+        String sql = "UPDATE reports set name=:name, priority=:priority WHERE id=:id";
+
+        // Create a parameter map
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("name",     aUpdateReportDTO.getReportName() );
+        paramMap.put("priority", aUpdateReportDTO.getPriority() );
+        paramMap.put("id",       aUpdateReportDTO.getId() );
+
+        // Execute the SQL and get the number of rows affected
+        NamedParameterJdbcTemplate np = new NamedParameterJdbcTemplate(this.dataSource);
+        int rowsUpdated = np.update(sql, paramMap);
+
+        if (rowsUpdated != 1) {
+            throw new RuntimeException("I expected to update one report record.  Instead, I updated " + rowsUpdated + " records.  This should never happen.");
+        }
+    }
+
+    /**
+     * @param aReportId holds the ID that uniquely identifies a report in the database
+     * @return GetUpdateReportDTO object that holds information to show in the "Edit Report" page
+     */
+    public GetUpdateReportDTO getInfoForUpdateReport(Integer aReportId) {
+        // Construct the SQL to get information about this record
+        String sql = "select name, priority from reports where id=?";
+
+        // Execute the SQL, generating a read-only SqlRowSet
+        JdbcTemplate jt = new JdbcTemplate(this.dataSource);
+        SqlRowSet rs = jt.queryForRowSet(sql, aReportId);
+
+        if (! rs.next() ) {
+            throw new RuntimeException("Error in getInfoForUpdateReport():  I did not find any records in the database for this reportId " + aReportId);
+        }
+
+        // Get the values out of the SqlRowSet object
+        String reportName = rs.getString("name");
+        Integer priority = (Integer) rs.getObject("priority");
+
+        // Build and return the DTO object
+        GetUpdateReportDTO dto = new GetUpdateReportDTO(aReportId, priority, reportName);
+        return dto;
+    }
+
+
 }
