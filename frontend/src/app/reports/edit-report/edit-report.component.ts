@@ -8,6 +8,8 @@ import {GetUpdateReportDTO} from "../../models/get-update-report-dto";
 import {ReportService} from "../../services/report.service";
 import {Observable} from "rxjs";
 import {tap} from "rxjs/operators";
+import {SetUpdateReportDTO} from "../../models/set-update-report-dto";
+import {MessageService} from "../../services/message.service";
 
 @Component({
   selector: 'app-edit-report',
@@ -23,7 +25,8 @@ export class EditReportComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private errorService: ErrorService,
               private formBuilder: FormBuilder,
-              private reportService: ReportService) {
+              private reportService: ReportService,
+              private messageService: MessageService) {
   }
 
 
@@ -75,5 +78,25 @@ export class EditReportComponent implements OnInit {
     this.myForm.controls.priority.setValue(     aData.priority );
   }
 
+  /*
+   * Save the information to the back-end
+   */
+  public save(): void {
+
+    // Create a DTO object to send to the back-end
+    let dto: SetUpdateReportDTO = new SetUpdateReportDTO();
+    dto.report_name = this.myForm.controls.report_name.value;
+    dto.priority    = this.myForm.controls.priority.value;
+    dto.id          = this.reportId;
+
+    this.reportService.setEditReportInfo(dto).subscribe( (response) => {
+      // The REST call came back successfully
+      this.messageService.showSuccessMessage('Successfully updated the report.');
+    }).add( () => {
+      // The REST Call finally block
+
+    });
+
+  }  // end of save()
 
 }

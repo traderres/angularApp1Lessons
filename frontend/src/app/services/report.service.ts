@@ -5,6 +5,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {GetReportDTO} from "../models/get-report-dto";
 import {GetUpdateReportDTO} from "../models/get-update-report-dto";
+import {SetUpdateReportDTO} from "../models/set-update-report-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,7 @@ export class ReportService {
 
 
   /*
-   * Returns an observable that holds an array of GetUpdateReportDTO objects
+   * Returns an observable that holds the GetUpdateReportDTO object
    * NOTE:  This method is used by the "Edit Report" page to get info to load
    */
   public getEditReportInfo(aReportId: number): Observable<GetUpdateReportDTO> {
@@ -56,6 +57,18 @@ export class ReportService {
 
     // Return an observable
     return this.httpClient.get <GetUpdateReportDTO>(restUrl);
+  }
+
+  /*
+   * Returns an observable with nothing
+   * NOTE:  This method is used by the "Edit Report" page to save info
+   */
+  public setEditReportInfo(aData: SetUpdateReportDTO): Observable<string> {
+    // Construct the URL of the REST call
+    const restUrl = environment.baseUrl + '/api/reports/update/set';
+
+    // Return an observable
+    return this.httpClient.post(restUrl, aData, {responseType: 'text'});
   }
 
 }
