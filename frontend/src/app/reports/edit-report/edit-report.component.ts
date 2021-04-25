@@ -3,6 +3,8 @@ import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../errorHandler/error.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {isNumeric} from "rxjs/internal-compatibility";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ValidatorUtils} from "../../validators/validator-utils";
 
 @Component({
   selector: 'app-edit-report',
@@ -12,9 +14,11 @@ import {isNumeric} from "rxjs/internal-compatibility";
 export class EditReportComponent implements OnInit {
 
   public reportId: number;
+  public myForm: FormGroup;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              private formBuilder: FormBuilder) {
   }
 
 
@@ -35,6 +39,20 @@ export class EditReportComponent implements OnInit {
 
     // Convert the rawId into a numeric value (using the plus sign trick)
     this.reportId = +rawId;
+
+    // Initialize the reactive form
+    this.myForm = this.formBuilder.group({
+      report_name: [null,
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(100)
+        ]],
+
+      source: ['',  null],
+
+      priority:  ['', Validators.required]
+    });
   }
 
 
