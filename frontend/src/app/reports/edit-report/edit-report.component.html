@@ -41,6 +41,11 @@
           <!-- Save Button -->
           <button mat-raised-button color="primary" (click)="this.save()">Save</button>
 
+          <div *ngIf="this.saveWhileEditingInProgress" style="margin-top: 20px; display: block">
+              <!-- Save-while-editing is in progress -->
+              <span class="save-while-editing-label">Saving...</span>
+          </div>
+
         </mat-card-content>
       </form>
     </mat-card>

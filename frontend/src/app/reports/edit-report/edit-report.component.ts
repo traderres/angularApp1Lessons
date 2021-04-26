@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ErrorService} from "../../errorHandler/error.service";
 import {HttpErrorResponse} from "@angular/common/http";
@@ -6,8 +6,8 @@ import {isNumeric} from "rxjs/internal-compatibility";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {GetUpdateReportDTO} from "../../models/get-update-report-dto";
 import {ReportService} from "../../services/report.service";
-import {Observable} from "rxjs";
-import {tap} from "rxjs/operators";
+import {Observable, Subscription} from "rxjs";
+import {debounceTime, tap} from "rxjs/operators";
 import {SetUpdateReportDTO} from "../../models/set-update-report-dto";
 import {MessageService} from "../../services/message.service";
 
@@ -16,11 +16,13 @@ import {MessageService} from "../../services/message.service";
   templateUrl: './edit-report.component.html',
   styleUrls: ['./edit-report.component.css']
 })
-export class EditReportComponent implements OnInit {
+export class EditReportComponent implements OnInit, OnDestroy {
 
   public reportId: number;
   public myForm: FormGroup;
   public formInfoObs: Observable<GetUpdateReportDTO>
+  public saveWhileEditingInProgress: boolean = false;
+  private formChangeSubscription: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
               private errorService: ErrorService,
@@ -68,6 +70,23 @@ export class EditReportComponent implements OnInit {
         // The REST call came back.  Get the data before it hits the HTML page
         this.populateFormFields(aData);
       }));
+
+
+    // Automatically save 5 seconds after any form change
+    this.formChangeSubscription = this.myForm.valueChanges
+      .pipe(
+        debounceTime(5000)        // Wait 5 seconds after a form change
+      ).subscribe( () => {
+        // User made some changes to the form.  Save the data asynchronously
+        this.saveCurrentFormAsync();
+      });
+  }
+
+  public ngOnDestroy(): void {
+    if (this.formChangeSubscription != null) {
+      // Unsubscribe to avoid memory leaks
+      this.formChangeSubscription.unsubscribe();
+    }
   }
 
   /*
@@ -98,5 +117,30 @@ export class EditReportComponent implements OnInit {
     });
 
   }  // end of save()
+
+
+  /*
+   * Save the information to the back-end but to not show any popups
+   */
+  public saveCurrentFormAsync(): void {
+
+    this.saveWhileEditingInProgress = true;
+
+    // Create a DTO object to send to the back-end
+    let dto: SetUpdateReportDTO = new SetUpdateReportDTO();
+    dto.report_name = this.myForm.controls.report_name.value;
+    dto.priority    = this.myForm.controls.priority.value;
+    dto.id          = this.reportId;
+
+    this.reportService.setEditReportInfo(dto).subscribe( (response) => {
+      // The REST call came back successfully
+
+    }).add( () => {
+      // The REST Call finally block
+      this.saveWhileEditingInProgress = false;
+    });
+
+  }  // end of saveCurrentFormAsync()
+
 
 }
