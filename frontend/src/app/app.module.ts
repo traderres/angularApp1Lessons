@@ -33,13 +33,14 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { ErrorDialogComponent } from './errorHandler/error-dialog/error-dialog.component';
 import {ErrorInterceptor} from "./errorHandler/error.interceptor";
 import { EditReportComponent } from './reports/edit-report/edit-report.component';
+import {CanDeactivateGuard} from "./guards/can-deactivate.guard";
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
   { path: 'page/addReport',    component: AddReportComponent },
   { path: 'page/addReport2',    component: AddReport2Component },
   { path: 'page/viewReports',  component: ViewReportsComponent },
-  { path: 'page/editReport/:id', component: EditReportComponent },
+  { path: 'page/editReport/:id', component: EditReportComponent, canDeactivate: [CanDeactivateGuard] },
   { path: 'page/chart1',       component: Chart1Component },
   { path: 'page/chart2',       component: Chart2Component },
   { path: '',                  component: WelcomeComponent},
@@ -87,7 +88,8 @@ const appRoutes: Routes = [
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'standard' } },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    CanDeactivateGuard
   ],
   bootstrap: [AppComponent]
 })
