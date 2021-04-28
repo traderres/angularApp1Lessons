@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, UrlTree} from "@angular/router";
+import {ActivatedRoute, NavigationStart, Router, UrlTree} from "@angular/router";
 import {ErrorService} from "../../errorHandler/error.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {isNumeric} from "rxjs/internal-compatibility";
@@ -24,12 +24,15 @@ export class EditReportComponent implements OnInit, OnDestroy, CanComponentDeact
   public formInfoObs: Observable<GetUpdateReportDTO>
   public saveWhileEditingInProgress: boolean = false;
   private formChangeSubscription: Subscription;
+  private routerSubscription: Subscription;
+
 
   constructor(private activatedRoute: ActivatedRoute,
               private errorService: ErrorService,
               private formBuilder: FormBuilder,
               private reportService: ReportService,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private router: Router) {
   }
 
 
@@ -81,12 +84,27 @@ export class EditReportComponent implements OnInit, OnDestroy, CanComponentDeact
         // User made some changes to the form.  Save the data asynchronously
         this.saveCurrentFormAsync();
       });
+
+
+    this.routerSubscription = this.router.events.subscribe(event =>{
+      if (event instanceof NavigationStart){
+        // Run some code asynchronously
+        // NOTE:  The user will continue navigating
+        console.log('user leaving page -- so save data');
+        this.saveCurrentFormAsync();
+      }
+    });
+
   }
 
   public ngOnDestroy(): void {
     if (this.formChangeSubscription != null) {
       // Unsubscribe to avoid memory leaks
       this.formChangeSubscription.unsubscribe();
+    }
+
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 
@@ -186,15 +204,17 @@ export class EditReportComponent implements OnInit, OnDestroy, CanComponentDeact
   public canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> |
     boolean | UrlTree {
 
-    if (! this.myForm.dirty) {
-      // The user did *NOT CHANGE* any form field values.
-      // So, let the router proceed to the next page
-      return true;
-    }
-
-    // Return an observable<boolean> so the router will *SUBSCRIBE AND WAIT*
-    //  for the REST call to finish
-    return this.saveDataReturnObservable();
+    return true;
+    //
+    // if (! this.myForm.dirty) {
+    //   // The user did *NOT CHANGE* any form field values.
+    //   // So, let the router proceed to the next page
+    //   return true;
+    // }
+    //
+    // // Return an observable<boolean> so the router will *SUBSCRIBE AND WAIT*
+    // //  for the REST call to finish
+    // return this.saveDataReturnObservable();
   }
 
 
