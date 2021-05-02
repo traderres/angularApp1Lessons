@@ -3,13 +3,40 @@
 
   <mat-card-content>
 
-    <input type="file" name="file" ng2FileSelect [uploader]="uploader" />
+    <div style="text-align: center; display: block; margin-top: 10px">
 
-    <button type="button" class="btn btn-success btn-s"
-            (click)="uploader.uploadAll()"
-            [disabled]="!uploader.getNotUploadedItems().length" >
-      Upload a file
-    </button>
+      <!-- Upload Button -->
+      <label for="file-upload" class="custom-file-upload">
+        <i class="fas fa-cloud-upload-alt"></i>&nbsp;&nbsp;Select File to Upload
+      </label>
+      <input id="file-upload" type="file" name="file" ng2FileSelect
+             [uploader]="uploader"
+             (onFileSelected)="this.onFileSelected($event)" />
+
+      <!-- Show information about selected file -->
+      <div *ngIf="this.selectedFileToUpload != null"  style="margin-top: 10px;">
+        Ready to upload <b>{{this.selectedFileToUpload.file.name}}</b>
+      </div>
+
+      <!-- Page Buttons -->
+      <div style="display: block; margin-top: 25px">
+
+        <!-- Clear Button -->
+        <button type="button" mat-raised-button
+                [disabled]="this.uploader.queue.length == 0" (click)="this.clearAll()">
+          Reset
+        </button>
+
+        <!-- Begin Upload Button -->
+        <button type="button" mat-raised-button style="margin-left: 15px" color="primary"
+                [disabled]="this.uploader.queue.length == 0"
+                (click)="this.uploader.uploadAll()">
+          Upload File
+        </button>
+      </div>
+
+    </div>
+
 
     <!-- Upload Progress Bar -->
     <mat-progress-bar *ngIf="uploader.progress > 0"
