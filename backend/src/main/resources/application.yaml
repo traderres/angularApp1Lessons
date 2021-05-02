@@ -22,6 +22,22 @@ spring.autoconfigure:
     - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 
 
+
+##########################################################
+# File Upload Settings
+##########################################################
+spring.servlet.multipart.enabled: true
+
+# Set the maximum file upload size for one file    (-1 is unlimited)
+spring.servlet.multipart.max-file-size: 300MB
+
+# Set the maximum request size
+# If a user uploads 5 files of 1 MB, then the entire request size is 5 MB   (-1 is unlimited)
+spring.servlet.multipart.max-request-size: 400MB
+
+
+
+
 # Tell Spring to not run flyway automatically
 # NOTE:  In the DataSourceConfig, java code is used to run a flyway migrate
 spring.flyway.enabled: false

@@ -12,10 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -124,6 +122,37 @@ public class ReportController {
         // Return the object back to the front-end
         // NOTE:  Jackson will convert the list of java objects to JSON for us
         return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+
+
+    /**
+     * REST endpoint /api/reports/upload
+     * @param aMultipartFile
+     * @return
+     */
+    @RequestMapping(value = "/api/reports/upload",   method = RequestMethod.POST)
+    public ResponseEntity<?> uploadFile(
+            @RequestParam(value = "file", required = true)
+                    MultipartFile aMultipartFile)
+    {
+        logger.debug("uploadFileWithParams() started. ");
+
+        String uploadedFilename = aMultipartFile.getOriginalFilename();
+        long uploadedFileSize = aMultipartFile.getSize();
+
+        logger.debug("Submitted file name is {}", uploadedFilename );
+        logger.debug("Submitted file is {} bytes",uploadedFileSize );
+
+        // Create a message
+        String returnedMessage = "You uploaded the file called " +
+                uploadedFilename + " with a size of " + uploadedFileSize + " bytes";
+
+        // Return a text message back to the front-end
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(returnedMessage);
+
     }
 
 
