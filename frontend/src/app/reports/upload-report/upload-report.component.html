@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-card-title>Upload Report</mat-card-title>
+
+  <mat-card-content>
+
+    <input type="file" name="file" ng2FileSelect [uploader]="uploader" />
+
+    <button type="button" class="btn btn-success btn-s"
+            (click)="uploader.uploadAll()"
+            [disabled]="!uploader.getNotUploadedItems().length" >
+      Upload a file
+    </button>
+
+  </mat-card-content>
+</mat-card>
+
+

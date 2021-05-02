@@ -33,6 +33,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { ErrorDialogComponent } from './errorHandler/error-dialog/error-dialog.component';
 import {ErrorInterceptor} from "./errorHandler/error.interceptor";
 import { EditReportComponent } from './reports/edit-report/edit-report.component';
+import {FileUploadModule} from "ng2-file-upload";
+import { UploadReportComponent } from './reports/upload-report/upload-report.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -40,6 +42,7 @@ const appRoutes: Routes = [
   { path: 'page/addReport2',    component: AddReport2Component },
   { path: 'page/viewReports',  component: ViewReportsComponent },
   { path: 'page/editReport/:id', component: EditReportComponent },
+  { path: 'page/uploadReport', component: UploadReportComponent },
   { path: 'page/chart1',       component: Chart1Component },
   { path: 'page/chart2',       component: Chart2Component },
   { path: '',                  component: WelcomeComponent},
@@ -61,7 +64,8 @@ const appRoutes: Routes = [
     UserNavbarComponent,
     AddReport2Component,
     ErrorDialogComponent,
-    EditReportComponent
+    EditReportComponent,
+    UploadReportComponent
   ],
   imports: [
     BrowserModule,
@@ -83,6 +87,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    FileUploadModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [
