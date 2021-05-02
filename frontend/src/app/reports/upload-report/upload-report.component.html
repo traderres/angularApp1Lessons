@@ -11,6 +11,11 @@
       Upload a file
     </button>
 
+    <!-- Upload Progress Bar -->
+    <mat-progress-bar *ngIf="uploader.progress > 0"
+                      style="margin-top: 5px" [value]="uploader.progress"></mat-progress-bar>
+
+
   </mat-card-content>
 </mat-card>
 
