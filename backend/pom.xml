@@ -138,6 +138,14 @@
     </dependency>
 
     <dependency>
+      <!-- AsyncHttpClient Client implementation           -->
+      <!--    (used to make outgoing REST calls out to ES) -->
+      <groupId>com.ning</groupId>
+      <artifactId>async-http-client</artifactId>
+      <version>1.9.40</version>
+    </dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>

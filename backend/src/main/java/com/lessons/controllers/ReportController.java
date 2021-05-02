@@ -4,6 +4,7 @@ import com.lessons.models.AddReportDTO;
 import com.lessons.models.GetReportDTO;
 import com.lessons.models.GetUpdateReportDTO;
 import com.lessons.models.SetUpdateReportDTO;
+import com.lessons.services.ElasticSearchService;
 import com.lessons.services.ReportService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,6 +22,9 @@ import java.util.List;
 @Controller("com.lessons.controllers.ReportController")
 public class ReportController {
     private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
+
+    @Resource
+    private ElasticSearchService elasticSearchService;
 
     @Resource
     private ReportService reportService;
@@ -131,10 +135,9 @@ public class ReportController {
      * @param aMultipartFile
      * @return
      */
-    @RequestMapping(value = "/api/reports/upload",   method = RequestMethod.POST)
+    @RequestMapping(value = "/api/reports/upload", method = RequestMethod.POST)
     public ResponseEntity<?> uploadFile(
-            @RequestParam(value = "file", required = true)
-                    MultipartFile aMultipartFile)
+            @RequestParam(value = "file", required = true) MultipartFile aMultipartFile) throws Exception
     {
         logger.debug("uploadFileWithParams() started. ");
 
@@ -144,15 +147,82 @@ public class ReportController {
         logger.debug("Submitted file name is {}", uploadedFilename );
         logger.debug("Submitted file is {} bytes",uploadedFileSize );
 
-        // Create a message
-        String returnedMessage = "You uploaded the file called " +
-                uploadedFilename + " with a size of " + uploadedFileSize + " bytes";
 
-        // Return a text message back to the front-end
+        // Construct the JSON for a bulk update
+        // NOTE:  You must have the \n at the end of each data line (including the last one)
+        String jsonBulkInsert = "" +
+                "{ \"index\": { \"_index\": \"reports\" }}\n" +
+                "{ \"priority\": \"low\", \"description\": \"he really likes o'reilly\"}\n" +
+                "{ \"index\": { \"_index\": \"reports\" }}\n" +
+                "{ \"priority\": \"LOW\",  \"description\": \"depending on the kind query, you might want to go different ways with it\"}\n";
+
+        // Add 2 records to the Reports mapping and *wait* for ES to refresh
+        elasticSearchService.bulkUpdate(jsonBulkInsert, true);
+
+        // Return a message back to the front-end
+        String returnedMessage = "You uploaded the file called " + uploadedFilename + " with a size of " + uploadedFileSize + " bytes";
+
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.TEXT_PLAIN)
                 .body(returnedMessage);
+    }
 
+
+    /**
+     * REST endpoint /api/mapping/create
+     *
+     * This REST endpoint will create the ES mapping
+     * @return ResponseEntity object that holds a 200 status code and a basic string message
+     * @throws Exception if something bad happens
+     */
+    @RequestMapping(value = "/api/mapping/create", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<?> createMapping() throws Exception {
+
+        logger.debug("createMapping() started.");
+
+        // Read the mapping file into a large string
+        String reportsMappingAsJson =
+                elasticSearchService.readInternalFileIntoString("reports.mapping.json");
+
+        // Create a mapping in ElasticSearch
+        elasticSearchService.createIndex("reports" , reportsMappingAsJson);
+
+        // Return a simple message back to the front-end as a string
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.TEXT_PLAIN)
+                .body("Successfully Created the mapping reports");
+    }
+
+
+    /**
+     * REST endpoint /api/mapping/add
+     *
+     * @return ResponseEntity object that holds a 200 status code and a basic string message
+     * @throws Exception if something bad happens
+     */
+    @RequestMapping(value = "/api/mapping/add", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<?> addRecords() throws Exception {
+
+        logger.debug("addRecords() started.");
+
+        // Construct the JSON for a bulk update
+        // NOTE:  You must have the \n at the end of each data line (including the last one)
+        String jsonBulkInsert = "" +
+                "{ \"index\": { \"_index\": \"reports\" }}\n" +
+                "{ \"priority\": \"low\", \"description\": \"he really likes o'reilly\"}\n" +
+                "{ \"index\": { \"_index\": \"reports\"  }}\n" +
+                "{ \"priority\": \"LOW\",  \"description\": \"depending on the kind query, you might want to go different ways with it\"}\n";
+
+
+        // Add 2 records to the Reports mapping and *wait* for ES to refresh
+        elasticSearchService.bulkUpdate(jsonBulkInsert, true);
+
+        // Return a simple message back to the front-end
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.TEXT_PLAIN)
+                .body("Successfully added some records.  Here is what was added:  " + jsonBulkInsert);
     }
 
 
