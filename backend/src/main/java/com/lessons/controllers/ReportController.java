@@ -1,11 +1,11 @@
 package com.lessons.controllers;
 
-import com.lessons.models.AddReportDTO;
-import com.lessons.models.GetReportDTO;
-import com.lessons.models.GetUpdateReportDTO;
-import com.lessons.models.SetUpdateReportDTO;
+import com.lessons.models.*;
+import com.lessons.services.AsyncService;
 import com.lessons.services.ElasticSearchService;
+import com.lessons.services.JobService;
 import com.lessons.services.ReportService;
+import com.lessons.workers.FileWorker;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +28,12 @@ public class ReportController {
 
     @Resource
     private ReportService reportService;
+
+    @Resource
+    private JobService jobService;
+
+    @Resource
+    private AsyncService asyncService;
 
     /*************************************************************************
      * POST /api/reports/add
@@ -132,39 +138,31 @@ public class ReportController {
 
     /**
      * REST endpoint /api/reports/upload
-     * @param aMultipartFile
-     * @return
+     * @param aMultipartFile holds uploaded file InputStream and meta data
+     * @return the jobId and a 200 status code
      */
     @RequestMapping(value = "/api/reports/upload", method = RequestMethod.POST)
     public ResponseEntity<?> uploadFile(
             @RequestParam(value = "file", required = true) MultipartFile aMultipartFile) throws Exception
     {
-        logger.debug("uploadFileWithParams() started. ");
+        logger.debug("uploadFile() started. ");
 
+        String loggedInUserName = "John Smith";
         String uploadedFilename = aMultipartFile.getOriginalFilename();
-        long uploadedFileSize = aMultipartFile.getSize();
 
-        logger.debug("Submitted file name is {}", uploadedFilename );
-        logger.debug("Submitted file is {} bytes",uploadedFileSize );
+        // Add a record to the jobs table
+        Integer jobId = jobService.addJobRecord(loggedInUserName, uploadedFilename);
 
+        // Create the worker thread that will process this NISS file (xlsx file)
+        FileWorker fileWorker = new FileWorker(jobId, aMultipartFile.getInputStream(), this.jobService);
 
-        // Construct the JSON for a bulk update
-        // NOTE:  You must have the \n at the end of each data line (including the last one)
-        String jsonBulkInsert = "" +
-                "{ \"index\": { \"_index\": \"reports\" }}\n" +
-                "{ \"priority\": \"low\", \"description\": \"he really likes o'reilly\"}\n" +
-                "{ \"index\": { \"_index\": \"reports\" }}\n" +
-                "{ \"priority\": \"LOW\",  \"description\": \"depending on the kind query, you might want to go different ways with it\"}\n";
+        // Execute the worker thread in the background
+        // NOTE:  This code runs in a separate thread
+        asyncService.submit(fileWorker);
 
-        // Add 2 records to the Reports mapping and *wait* for ES to refresh
-        elasticSearchService.bulkUpdate(jsonBulkInsert, true);
-
-        // Return a message back to the front-end
-        String returnedMessage = "You uploaded the file called " + uploadedFilename + " with a size of " + uploadedFileSize + " bytes";
-
+        // Return a response of 200 and the job number
         return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.TEXT_PLAIN)
-                .body(returnedMessage);
+                             .body(jobId);
     }
 
 

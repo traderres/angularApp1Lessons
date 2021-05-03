@@ -21,3 +21,19 @@ input[type="file"] {
   background: #2579af;
   white-space: nowrap;
 }
+
+
+.mat-progress-bar {
+  height: 15px;
+}
+
+.error-message {
+  font-size: 15px;
+  font-weight: 500;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:host ::ng-deep .mat-progress-bar .mat-progress-bar-fill {
+    /* Fix the bug with the mat-progress-bar's animation being choppy */
+    transition: transform 100ms linear;
+}
