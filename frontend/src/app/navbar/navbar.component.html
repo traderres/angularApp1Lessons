@@ -101,6 +101,16 @@ window"></i>
         </div>
       </mat-list-item>
 
+
+      <!-- Help -->
+      <mat-list-item class="navItem" (click)="this.downloadHelpFile()">
+        <a title="Show Help File">Help</a>
+        <div fxFlex fxLayoutAlign="end end">
+          <a (click)="this.downloadHelpFile()" target="_blank">
+            <i class="fas fa-external-link-alt navItemIcon" title="Show Help File in new window"></i>
+          </a>
+        </div>
+      </mat-list-item>
     </div>  <!-- End of Menu Group 2 Items -->
 
   </mat-nav-list>

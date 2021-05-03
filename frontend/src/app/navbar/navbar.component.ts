@@ -32,5 +32,8 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-
+  public downloadHelpFile(): void {
+    // Open the help.pdf in another tab
+    window.open('./assets/help.pdf', "_blank");
+  }
 }
