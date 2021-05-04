@@ -24,7 +24,7 @@
       }
     },
     "max_result_window": 500000,
-    "refresh_interval": "2s",
+    "refresh_interval": "1s",
     "max_ngram_diff": "25"
   },
 
@@ -35,7 +35,12 @@
 
       "id": {
         "type": "integer",
-        "ignore_malformed": false
+        "ignore_malformed": false,
+        "fields": {
+          "raw": {
+            "type": "keyword"
+          }
+        }
       },
 
       "description": {

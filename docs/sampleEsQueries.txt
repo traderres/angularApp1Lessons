@@ -1,0 +1,66 @@
+Sample ES Queries
+-----------------
+
+If you have Kibana listening on port 5601, then you want to run these queries in the Kibana console at this url:
+   http://localhost:5601/app/kibana#/dev_tools/console
+
+
+
+
+# Searching one specific field
+POST reports/_search
+  {
+      "query": {
+          "query_string": {
+            "query": "priority:low"
+          }
+      },
+     "track_total_hits": true
+  }
+
+
+# Searching multiple string fields
+POST reports/_search
+  {
+      "query": {
+        "query_string": {
+            "fields": ["id.raw", "description","display_name","priority" ],
+            "query": "medium"
+          }
+      },
+     "track_total_hits": true
+  }
+
+
+# Get the mapping
+GET reports/_mapping
+
+
+
+# Delete all records in the reports mapping
+POST  /reports/_delete_by_query
+  {
+      "query": {
+          "match_all": {}
+      }
+  }
+
+
+
+# Run an aggregate query on the priority
+POST /reports/_search
+ {
+      "query": {
+          "match_all": {}
+      },
+      "size": 0,
+      "aggs": {
+        "group_by_priority": {
+          "terms": {
+            "field": "priority.sort"
+          }
+        }
+      }
+}
+
+

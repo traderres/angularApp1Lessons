@@ -50,11 +50,15 @@ public class ElasticSearchService {
     }
 
     private void initializeMapping() throws Exception {
-        // Read the mapping file into a large string
-        String reportsMappingAsJson = readInternalFileIntoString("reports.mapping.json");
+        if (! doesIndexExist("reports")) {
+            // Create the reports ES mapping
 
-        // Create a mapping in ElasticSearch
-        createIndex("reports" , reportsMappingAsJson);
+            // Read the mapping file into a large string
+            String reportsMappingAsJson = readInternalFileIntoString("reports.mapping.json");
+
+            // Create a mapping in ElasticSearch
+            createIndex("reports", reportsMappingAsJson);
+        }
     }
 
 

@@ -29,7 +29,7 @@ public class AppTest
                                                             "The O'reilly group is still investigating this for CUI",
                                                             "Unknown Report",
                                                             "The ark is a source of unspeakable power and it has to be researched.",
-                                                            "And, it will be researched.  I assure you, Dr. Jones.  We have top men working on it now.  Top men.");
+                                                            "\"And, it will be researched.  I assure you, Dr. Jones.  We have top men working on it now.  Top men.\"");
 
 
     private final List<String> randomPriorities = Arrays.asList("Low", "Medium", "High", "Critical");
@@ -105,6 +105,7 @@ public class AppTest
     private String getRandomPriorityString() {
         int randomPriorityIndex = ThreadLocalRandom.current().nextInt(0, this.randomPriorities.size());
         String rndPriorityString = this.randomPriorities.get(randomPriorityIndex);
+        logger.debug("rndPriority={}", rndPriorityString);
         return rndPriorityString;
     }
 

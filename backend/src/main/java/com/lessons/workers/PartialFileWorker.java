@@ -30,7 +30,7 @@ public class PartialFileWorker implements Callable<Boolean> {
 
     @Override
     public Boolean call() throws Exception {
-        final int BULK_RECORD_SIZE = 1000;
+        final int BULK_RECORD_SIZE = 5000;
         int recordNumber = 0;
 
         CSVParser csvParser = null;
@@ -39,7 +39,10 @@ public class PartialFileWorker implements Callable<Boolean> {
         StringReader stringReader = new StringReader(this.fileContents);
 
         try {
-            csvParser = new CSVParser(stringReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
+            csvParser = new CSVParser(stringReader, CSVFormat.DEFAULT.withFirstRecordAsHeader()
+                                                                     .withIgnoreHeaderCase()
+                                                                     .withTrim()
+                                                                     .withQuote('"'));
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
@@ -52,6 +55,8 @@ public class PartialFileWorker implements Callable<Boolean> {
                                                     csvRecord.get("description"),
                                                     csvRecord.get("display_name"),
                                                     csvRecord.get("priority")  );
+
+                String priority = csvRecord.get("priority");
 
                 // Convert the ReportRecordDTO to a JSON string
                 jsonForThisCsvLine = objectMapper.writeValueAsString(reportRecordDTO);

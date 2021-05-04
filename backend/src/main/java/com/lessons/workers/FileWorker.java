@@ -132,7 +132,7 @@ public class FileWorker implements Callable<String> {
 
         try {
 
-            final int TOTAL_RECORDS_PER_THREAD = 5000;
+            final int TOTAL_RECORDS_PER_THREAD = 10000;
 
             int totalRecordsInFileContents = 0;
             StringBuilder fileContentsForThread = new StringBuilder();
