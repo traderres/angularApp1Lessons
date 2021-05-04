@@ -105,7 +105,6 @@ public class AppTest
     private String getRandomPriorityString() {
         int randomPriorityIndex = ThreadLocalRandom.current().nextInt(0, this.randomPriorities.size());
         String rndPriorityString = this.randomPriorities.get(randomPriorityIndex);
-        logger.debug("rndPriority={}", rndPriorityString);
         return rndPriorityString;
     }
 
