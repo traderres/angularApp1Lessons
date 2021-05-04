@@ -56,8 +56,6 @@ public class PartialFileWorker implements Callable<Boolean> {
                                                     csvRecord.get("display_name"),
                                                     csvRecord.get("priority")  );
 
-                String priority = csvRecord.get("priority");
-
                 // Convert the ReportRecordDTO to a JSON string
                 jsonForThisCsvLine = objectMapper.writeValueAsString(reportRecordDTO);
 
