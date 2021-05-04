@@ -59,7 +59,7 @@ public class AppTest
             outputFile.delete();
         }
 
-        // Create a StringBuilder capabable of holding 100 million bytes
+        // Create a StringBuilder capable of holding 100 million bytes
         StringBuilder fileContents = new StringBuilder(100_000_000);
 
         // Add the header
