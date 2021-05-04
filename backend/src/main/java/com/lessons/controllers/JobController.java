@@ -29,8 +29,6 @@ public class JobController {
     @RequestMapping(value = "/api/jobs/status/{jobId}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> getJobStatus(@PathVariable(value="jobId") Integer aJobId) {
 
-        logger.debug("getJobStatus() started.  aJobId={}", aJobId);
-
         if (! this.jobService.doesJobExist(aJobId)) {
             // The job id is not found in the database
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -40,8 +38,6 @@ public class JobController {
 
         // Get the status information for this job
         JobStatusDTO jobStatusDTO = jobService.getJobStatus(aJobId);
-
-        logger.debug("getJobStatus() returns.  aJobId={}  state={}", aJobId, jobStatusDTO.getState());
 
         // Return the JobStatusDTO back to the front-end and a 200 status code
         return ResponseEntity

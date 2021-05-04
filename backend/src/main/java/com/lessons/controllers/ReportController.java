@@ -154,7 +154,7 @@ public class ReportController {
         Integer jobId = jobService.addJobRecord(loggedInUserName, uploadedFilename);
 
         // Create the worker thread that will process this NISS file (xlsx file)
-        FileWorker fileWorker = new FileWorker(jobId, aMultipartFile.getInputStream(), this.jobService);
+        FileWorker fileWorker = new FileWorker(jobId, "reports",  aMultipartFile.getInputStream(), this.jobService, this.elasticSearchService);
 
         // Execute the worker thread in the background
         // NOTE:  This code runs in a separate thread
