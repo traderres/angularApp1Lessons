@@ -43,7 +43,7 @@ public class ElasticSearchService {
 
         this.objectMapper = new ObjectMapper();
 
-        // Create the reports mapping
+        // Create the reports mapping (if they do not exist)
         initializeMapping();
 
         logger.debug("init() finished.  elasticSearchUrl={}", this.elasticSearchUrl);

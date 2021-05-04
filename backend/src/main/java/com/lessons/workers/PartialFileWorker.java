@@ -72,7 +72,7 @@ public class PartialFileWorker implements Callable<Boolean> {
                     // I've reached N records.  So, send this bulk request to ElasticSearch
                     this.elasticSearchService.bulkUpdate(bulkJsonRequest.toString(), true);
 
-                    // Clearout the string builder
+                    // Clear out the string builder object
                     recordNumber = 0;
                     bulkJsonRequest.setLength(0);
                 }

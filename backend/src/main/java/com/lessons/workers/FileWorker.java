@@ -41,7 +41,7 @@ public class FileWorker implements Callable<String> {
             throw new RuntimeException("Error in FileWorker constructor.  The passed-in aInputStreamExcelFile is null.");
         }
 
-        // Create a tempFile from the inputStream (so the webapp uses lesses memory)
+        // Create a tempFile from the inputStream (so the web app uses less memory)
         this.tempSourceFile = File.createTempFile("upload.report.", ".tmp");
         FileUtils.copyInputStreamToFile(aInputStream, this.tempSourceFile);
         logger.debug("Created this temp file: {}", this.tempSourceFile);
@@ -79,8 +79,8 @@ public class FileWorker implements Callable<String> {
 
 
     /**
-     * Perform the work in the background and update the Jobs record as it progresses
-     * 1. Loop
+     * Launch lots of PartialFileWorker threads to process this file in parallel
+     *
      * @return a string that is not used
      */
     @Override
@@ -103,7 +103,7 @@ public class FileWorker implements Callable<String> {
             logger.debug("call() finished for jobId={}", this.jobId);
         }
         catch (Exception e) {
-            // This job falied
+            // This job failed
             logger.error("Error in FileWorker.call()", e);
 
             // Mark this job as finished with failure  (so the front-end will know to stop polling)
@@ -142,7 +142,7 @@ public class FileWorker implements Callable<String> {
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(this.tempSourceFile))) {
                 String csvLine;
 
-                // Skip the header line
+                // Read the header line  (each chunk needs a header)
                 String headerLine = bufferedReader.readLine();
                 fileContentsForThread.append(headerLine).append("\n");
 
@@ -161,7 +161,7 @@ public class FileWorker implements Callable<String> {
                     totalRecordsInFileContents++;
 
                     if (totalRecordsInFileContents == TOTAL_RECORDS_PER_THREAD) {
-                        // Submit a new worker to process this chunk of a file
+                        // Create a partial file worker to process this chunk of a file
                         totalThreadsLaunched++;
                         logger.debug("Submitting thread number {} to process {} lines", totalThreadsLaunched, totalRecordsInFileContents);
                         PartialFileWorker partialFileWorker = new PartialFileWorker(fileContentsForThread.toString(),  this.indexName, this.elasticSearchService, this.objectMapper);
