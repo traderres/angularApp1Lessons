@@ -47,13 +47,13 @@
 
         <div *ngIf="this.uploader.progress > 0"  style="margin-top: 20px">
           <!-- Show the "Upload" Progress Bar -->
-          Percentage of the file uploaded: {{uploader.progress | number:'1.0-0'}}% &nbsp;
+          Percentage of the file uploaded: {{uploader.progress | number:'1.0-0'}}%
           <mat-progress-bar  color="accent" [value]="uploader.progress"></mat-progress-bar>
         </div>
 
         <div *ngIf="this.percentProcessed > 0"  style="margin-top: 20px">
           <!-- Show the "File Processing" Progress Bar and keep it present (even if the job state changes from wip to completed -->
-          Percentage of the file Processed: {{percentProcessed | number:'1.0-0'}}% &nbsp;
+          Percentage of the file Processed: {{percentProcessed | number:'1.0-0'}}%
           <mat-progress-bar color="primary" [value]="this.percentProcessed"></mat-progress-bar>
         </div>
 
