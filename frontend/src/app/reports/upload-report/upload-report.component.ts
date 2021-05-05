@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FileItem, FileUploader, ParsedResponseHeaders} from "ng2-file-upload";
 import {environment} from "../../../environments/environment";
 import {MessageService} from "../../services/message.service";
@@ -14,12 +14,13 @@ const backendUploadUrl = environment.baseUrl + '/api/reports/upload';
   styleUrls: ['./upload-report.component.css']
 })
 export class UploadReportComponent implements OnInit {
+  @ViewChild('selectedFile') selectedFile: ElementRef;
 
-  public PROCESSING_NOT_STARTED       : number = 1;
-  public PROCESSING_IN_PROGRESS       : number = 2;
-  public PROCESSING_FINISHED_SUCCESS  : number = 3;
-  public PROCESSING_FINISHED_FAILURE  : number = 4;
-  public PROCESSING_UPLOAD_IN_PROGRESS           : number = 5;
+  public PROCESSING_NOT_STARTED        : number = 1;
+  public PROCESSING_IN_PROGRESS        : number = 2;
+  public PROCESSING_FINISHED_SUCCESS   : number = 3;
+  public PROCESSING_FINISHED_FAILURE   : number = 4;
+  public PROCESSING_UPLOAD_IN_PROGRESS : number = 5;
 
   public  selectedFileToUpload:  FileItem | null = null;
   private lastFileItemAddedToQueue: FileItem;
@@ -120,6 +121,11 @@ export class UploadReportComponent implements OnInit {
     this.pageState = this.PROCESSING_NOT_STARTED;
     this.pollingAttempts = 0;
     this.percentProcessed = 0;
+
+    // -- Fixes the problem in which a user selects the same file twice
+    if (this.selectedFile) {
+      this.selectedFile.nativeElement.value = '';
+    }
   }
 
 
