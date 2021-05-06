@@ -3,19 +3,14 @@
   <div fxFlex fxLayout="row" fxLayoutGap="0">
 
     <!-- Left Side of the Header -->
-    <div fxFlex fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="0">
+    <div fxFlex fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="10px">
 
-      <!-- Search Hourglass -->
-      <a class="button" (click)="toggleAppNavbar()">
-        <i class="fa fa-search"></i>
-      </a>
+      <!-- App Logo -->
+      <img class="appLogo clickable" [routerLink]="'/'" src="./assets/images/logo.png" height="47px" alt="Application Logo" title="Application Logo">
 
-      <!-- Separator -->
-      &nbsp;&nbsp;&nbsp;&nbsp;
 
       <!-- App Navbar -->
       <a  class="button" (click)="toggleAppNavbar()">
-        Sections
         <i class="fa fa-bars"></i>
       </a>
     </div>
