@@ -1,4 +1,4 @@
-Angular App1 Lesson 15a
+Angular App1 Lesson 15b
 -----------------------
 
 
@@ -9,7 +9,7 @@ To Get started From Project Setup
  2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson15a/add-new-font
+    unix> git checkout lesson15b/add-image
 
  3. Verify that the webapp works
     a. Compile the project (into an executable JAR)
