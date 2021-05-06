@@ -1,14 +1,12 @@
 package com.lessons.controllers;
 
 import com.lessons.models.*;
-import com.lessons.services.AsyncService;
-import com.lessons.services.ElasticSearchService;
-import com.lessons.services.JobService;
-import com.lessons.services.ReportService;
+import com.lessons.services.*;
 import com.lessons.workers.FileWorker;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller("com.lessons.controllers.ReportController")
@@ -34,6 +36,9 @@ public class ReportController {
 
     @Resource
     private AsyncService asyncService;
+
+    @Resource
+    private ExcelService excelService;
 
     /*************************************************************************
      * POST /api/reports/add
@@ -221,6 +226,95 @@ public class ReportController {
                 .status(HttpStatus.OK)
                 .contentType(MediaType.TEXT_PLAIN)
                 .body("Successfully added some records.  Here is what was added:  " + jsonBulkInsert);
+    }
+
+
+
+    /*
+     * Download Report REST Endpoint that returns a string as a file
+     * GET /api/reports/download/{reportId}
+     */
+    @RequestMapping(value = "/api/reports/download/{reportId}", method = RequestMethod.GET)
+    public  ResponseEntity<?>  downloadFileFromString(@PathVariable(value="reportId") Integer aReportId) {
+        logger.debug("downloadFileFromString started.");
+
+        // Create a string (that will hold the downloaded text file contents)
+        String fileContents = "Report is here and it's a really long reports....";
+
+        // Set the default file name (that the browser will save as....)
+        String defaultFileName = "something.txt";
+
+        // Create an HttpHeaders object  (this holds your list of headers)
+        HttpHeaders headers = new HttpHeaders();
+
+        // Set a header with the default name to save this file as
+        // -- So, the browser will do a Save As….
+        headers.setContentDispositionFormData("attachment", defaultFileName);
+
+
+        // Return the ResponseEntity object with the special headers
+        // -- This will cause the browser to do a Save File As.... operation
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(headers)
+                .body(fileContents.getBytes(StandardCharsets.UTF_8));
+    }
+
+
+    /*
+     * Download Report REST Endpoint that returns an existing file to the front-end
+     * GET /api/reports/download/file/{reportId}
+     */
+    @RequestMapping(value = "/api/reports/download/file/{reportId}", method = RequestMethod.GET)
+    public  ResponseEntity<?>  downloadFileLocatedInFileSystem(@PathVariable(value="reportId") Integer aReportId) throws Exception {
+        logger.debug("downloadFileLocatedInFileSystem started.");
+
+        // Get the a string that holds all of the bytes of an *EXISTING FILE* in the file system
+        String filePath = "/tmp/stuff2.txt";
+        String fileContents = new String(Files.readAllBytes(Paths.get(filePath)));
+
+        // Set the default file name (that the browser will save as....)
+        String defaultFileName = "stuff2";
+
+        // Create an HttpHeaders object  (this holds your list of headers)
+        HttpHeaders headers = new HttpHeaders();
+
+        // Set a header with the default name to save this file as
+        // -- So, the browser will do a Save As….
+        headers.setContentDispositionFormData("attachment", defaultFileName);
+
+
+        // Return the ResponseEntity object with the special headers
+        // -- This will cause the browser to do a Save File As.... operation
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(headers)
+                .body(fileContents.getBytes(StandardCharsets.UTF_8));
+    }
+
+
+
+    @RequestMapping(value = "/api/reports/download/excel/{reportId}", method = RequestMethod.GET)
+    public ResponseEntity<?> downloadExcelFile(@PathVariable(value="reportId") Integer aReportId) throws Exception {
+        logger.debug("downloadExcelFile() started.");
+
+        // Generate an excel file as a byte array
+        byte[] excelFileAsByteArray = excelService.generateExcelFileAsByteArray();
+
+        // Set a header to tell the browser to prompt the user to save as 'something.xlsx'
+        // -- So, the browser will do a Save As….
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDispositionFormData("attachment", "something.xlsx");
+
+        // Set a header with the length of the file
+        // -- so the browser will know total file size is -- and be able to show download %
+        headers.setContentLength(excelFileAsByteArray.length);
+
+        // Return the byte-array back to the front-end
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(headers)
+                .body(excelFileAsByteArray);
     }
 
 

@@ -56,7 +56,12 @@
                     <div fxFlex="15%"  fxLayoutAlign="center">
                       <!-- Edit Report Button -->
                       <button mat-raised-button (click)="this.goToEditReport(report.id)">Edit</button>
+
+                      <button mat-icon-button (click)="this.download(report.id)"  title="Download File">
+                        <i class="fa fa-download"></i>
+                      </button>
                     </div>
+
 
                     <div fxFlex="15%"  fxLayoutAlign="center">
                       <!-- Report ID -->

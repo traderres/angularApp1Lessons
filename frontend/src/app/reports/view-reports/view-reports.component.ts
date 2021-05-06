@@ -3,6 +3,7 @@ import {ReportService} from "../../services/report.service";
 import {GetReportDTO} from "../../models/get-report-dto";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-view-reports',
@@ -25,6 +26,11 @@ export class ViewReportsComponent implements OnInit {
   public goToEditReport(aReportId: number): void {
     // Take the user to the Edit Report page and pass-in the reportId
     this.router.navigate(['page/editReport/',   aReportId]).then();
+  }
+
+  public download(aFileId: number): void {
+    const url = environment.baseUrl + `/api/reports/download/excel/${aFileId}`;
+    window.open(url);
   }
 
 }
