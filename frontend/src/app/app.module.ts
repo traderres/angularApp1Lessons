@@ -36,6 +36,8 @@ import { EditReportComponent } from './reports/edit-report/edit-report.component
 import {FileUploadModule} from "ng2-file-upload";
 import { UploadReportComponent } from './reports/upload-report/upload-report.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import { LongViewInnerReportComponent } from './reports/long-view-inner-report/long-view-inner-report.component';
+import { LongViewOuterReportComponent } from './reports/long-view-outer-report/long-view-outer-report.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -46,6 +48,7 @@ const appRoutes: Routes = [
   { path: 'page/uploadReport', component: UploadReportComponent },
   { path: 'page/chart1',       component: Chart1Component },
   { path: 'page/chart2',       component: Chart2Component },
+  { path: 'page/longReport',     component: LongViewOuterReportComponent },
   { path: '',                  component: WelcomeComponent},
   { path: '**',                component: NotFoundComponent}
 ];
@@ -66,7 +69,9 @@ const appRoutes: Routes = [
     AddReport2Component,
     ErrorDialogComponent,
     EditReportComponent,
-    UploadReportComponent
+    UploadReportComponent,
+    LongViewInnerReportComponent,
+    LongViewOuterReportComponent
   ],
   imports: [
     BrowserModule,
