@@ -57,6 +57,10 @@
                       <!-- Edit Report Button -->
                       <button mat-raised-button (click)="this.goToEditReport(report.id)">Edit</button>
 
+                      <button mat-icon-button (click)="this.goToLongView(report.id)"  title="Go to Long View">
+                        <i class="fa fa-file-alt"></i>
+                      </button>
+
                       <button mat-icon-button (click)="this.download(report.id)"  title="Download File">
                         <i class="fa fa-download"></i>
                       </button>

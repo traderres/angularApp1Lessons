@@ -28,6 +28,11 @@ export class ViewReportsComponent implements OnInit {
     this.router.navigate(['page/editReport/',   aReportId]).then();
   }
 
+  public goToLongView(aReportId: number): void {
+    // Take the user to the Long View page and pass-in the reportId
+    this.router.navigate(['page/longView/',   aReportId]).then();
+  }
+
   public download(aFileId: number): void {
     const url = environment.baseUrl + `/api/reports/download/excel/${aFileId}`;
     window.open(url);
