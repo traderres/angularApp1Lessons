@@ -10,4 +10,10 @@ mat-card {
   right: 10px;
   bottom: 10px;
   overflow-y: auto;
+
+  padding: 5px;    /* Reduce the mat-card padding so the chart uses-up more of the space in the card */
+}
+
+.chart-content {
+  height: 100%;     /* Needed to ensure the chart fills uses all of the height */
 }

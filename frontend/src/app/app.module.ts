@@ -41,6 +41,7 @@ import { LongViewOuterReportComponent } from './reports/long-view-outer-report/l
 import { LongViewInternalNavReportComponent } from './reports/long-view-internal-nav-report/long-view-internal-nav-report.component';
 import { DashboardComponent } from './analytics/dashboard/dashboard.component';
 import {MatGridListModule} from "@angular/material/grid-list";
+import { HighchartsChartModule } from 'highcharts-angular';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -88,6 +89,7 @@ const appRoutes: Routes = [
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
+    HighchartsChartModule,
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,
