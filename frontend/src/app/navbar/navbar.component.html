@@ -89,6 +89,17 @@ window"></i>
     <!-- Menu Group 2 Items -->
     <div class='navGroup' [ngClass]="{'navGroupClosed': analyticsGroupClosed == true}">
 
+      <!-- Dashboard -->
+      <mat-list-item class="navItem" [routerLink]="'page/dashboard'" routerLinkActive="active">
+        <a title="Dashboard">Dashboard</a>
+        <div fxFlex fxLayoutAlign="end end">
+          <a [routerLink]="'page/dashboard'" target="_blank">
+            <i class="fas fa-external-link-alt navItemIcon" title="Open 'Dashboard' in a new window"></i>
+          </a>
+        </div>
+      </mat-list-item>
+
+
       <!-- Chart 1 -->
       <mat-list-item class="navItem" [routerLink]="'page/chart1'" routerLinkActive="active">
         <a title="Chart 1">Chart 1</a>

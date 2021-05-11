@@ -1,0 +1,99 @@
+<div class="grid-container">
+
+  <div fxFlexFill fxLayout="column">
+
+    <div fxFlex fxLayout="row" fxLayoutGap="0">
+
+      <!-- Left Side of the Top Row -->
+      <div fxFlex fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="0">
+        <h1 class="mat-h1">Dashboard</h1>
+      </div>
+
+
+      <!-- Right Side of the Top Row -->
+      <div fxFlex fxLayoutAlign="end center">
+
+      </div>
+
+    </div>  <!-- End of top row -->
+
+
+    <!-- Start of the second row -->
+    <div fxFlex  fxLayout="column" fxLayoutGap="0">
+
+      <!-- Setup the 1st row of graphs.  Each graph is 300px tall -->
+      <mat-grid-list [cols]="this.totalColumns" rowHeight="300px">
+
+        <mat-grid-tile colspan="1" rowspan="1">
+          <mat-card>
+            <mat-card-content class="iev-card-content">
+
+              <!-- Chart 1 -->
+              Chart 1
+
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1" rowspan="1">
+          <mat-card>
+            <mat-card-content class="iev-card-content">
+
+              <!-- Chart 2 -->
+              Chart 2
+
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1" rowspan="1">
+          <mat-card>
+            <mat-card-content class="iev-card-content">
+
+              <!-- Chart 3 -->
+              Chart 3
+
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1" rowspan="1">
+          <mat-card>
+            <mat-card-content class="iev-card-content">
+
+              <!-- Chart 4 -->
+              Chart 4
+
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1" rowspan="1">
+          <mat-card>
+            <mat-card-content class="iev-card-content">
+
+              <!-- Chart 5 -->
+              Chart 5
+
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1" rowspan="1">
+          <mat-card>
+            <mat-card-content class="iev-card-content">
+
+              <!-- Chart 6 -->
+              Chart 6
+
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+    </div> <!-- End of 2nd row -->
+
+  </div> <!-- End of Angular flex column -->
+
+</div>  <!-- End of grid container -->

@@ -7,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  public reportsNavGroupClosed: boolean = true;
-  public analyticsGroupClosed: boolean = true;
+  public reportsNavGroupClosed: boolean = true;   // Close Reports  section on page load
+  public analyticsGroupClosed:  boolean = false;   // Open Analytics section on page load
 
   constructor() { }
 

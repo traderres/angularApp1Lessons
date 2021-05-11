@@ -39,12 +39,15 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import { LongViewInnerReportComponent } from './reports/long-view-inner-report/long-view-inner-report.component';
 import { LongViewOuterReportComponent } from './reports/long-view-outer-report/long-view-outer-report.component';
 import { LongViewInternalNavReportComponent } from './reports/long-view-internal-nav-report/long-view-internal-nav-report.component';
+import { DashboardComponent } from './analytics/dashboard/dashboard.component';
+import {MatGridListModule} from "@angular/material/grid-list";
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
   { path: 'page/addReport',    component: AddReportComponent },
   { path: 'page/addReport2',    component: AddReport2Component },
   { path: 'page/viewReports',  component: ViewReportsComponent },
+  { path: 'page/dashboard',    component: DashboardComponent },
   { path: 'page/longView/:id',  component: LongViewInternalNavReportComponent },
   { path: 'page/editReport/:id', component: EditReportComponent },
   { path: 'page/uploadReport', component: UploadReportComponent },
@@ -74,7 +77,8 @@ const appRoutes: Routes = [
     UploadReportComponent,
     LongViewInnerReportComponent,
     LongViewOuterReportComponent,
-    LongViewInternalNavReportComponent
+    LongViewInternalNavReportComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -87,6 +91,8 @@ const appRoutes: Routes = [
     MatCardModule,
     MatButtonModule,
     MatInputModule,
+    MatListModule,
+    MatGridListModule,
     MatSnackBarModule,
     MatToolbarModule,
     MatIconModule,
