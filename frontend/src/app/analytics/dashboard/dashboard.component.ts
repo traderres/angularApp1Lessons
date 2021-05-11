@@ -17,8 +17,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
 
+    // Listen on an array of size breakpoints
+    // NOTE:  The breakpoints can be min-width or max-width
     this.cardLayoutSubscription = this.breakpointObserver.observe([
-      '(max-width: 799.9px)', '(min-width: 800px)', '(min-width: 1100px)'
+      '(min-width: 1px)', '(min-width: 800px)', '(min-width: 1100px)'
     ]).subscribe( (state: BreakpointState) => {
 
       if (state.breakpoints['(min-width: 1100px)']) {
@@ -29,7 +31,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         console.log("Screen is 800px-1100px.  state=", state);
         this.totalColumns = 2;
       }
-      else if (state.breakpoints['(max-width: 799.9px)']) {
+      else if (state.breakpoints['(min-width: 1px)']) {
         console.log("Screen is 1 to 800px.  state=", state);
         this.totalColumns = 1;
       }
