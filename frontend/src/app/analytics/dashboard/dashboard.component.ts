@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BreakpointObserver, Breakpoints, BreakpointState} from "@angular/cdk/layout";
+import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 import {Subscription} from "rxjs";
 
 @Component({
