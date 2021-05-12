@@ -1,4 +1,4 @@
-Angular App1 Lesson 16d
+Angular App1 Lesson 16e
 -----------------------
 
 
@@ -9,7 +9,7 @@ To Get started From Project Setup
  2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson16d/dashboard/add-line-chart
+    unix> git checkout lesson16e/dashboard/get-data-front-end
 
  3. Verify that the webapp works
     a. Compile the project (into an executable JAR)
