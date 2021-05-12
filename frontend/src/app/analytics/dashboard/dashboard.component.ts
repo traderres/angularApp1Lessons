@@ -116,6 +116,56 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 
+  // Chart 3 is a line chart
+  private chartOptions3: any = {
+    credits: {
+      enabled: false        // Hide the highcharts.com label
+    },
+    title: {
+      text: 'Case Timeliness (Closed Investigations)'
+    },
+    subtitle: {
+      text: ''
+    },
+    yAxis: {
+      title: {
+        text: 'Avg Case Timeliness (Days)'
+      }
+    },
+    xAxis: {
+      type: 'datetime',
+      tickInterval: 30 * 24 * 3600 * 1000,
+      labels: {
+        rotation: 45,
+        step: 1,
+        style: {
+          fontSize: '13px',
+          fontFamily: 'Arial,sans-serif'
+        }
+      },
+      dateTimeLabelFormats: {
+        month: '%b \'%y',
+        year: '%Y'
+      },
+      accessibility: {
+        rangeDescription: 'Range: The last 12 months'
+      }
+    },
+    legend: {
+      align: 'center',
+      verticalAlign: 'bottom'
+    },
+    plotOptions: {
+      series: {
+        label: {
+          connectorAllowed: false
+        }
+      }
+    },
+    series: []
+  }
+
+
   public tileSizes: TileSizeDTO[] = [
       {
         chartNumber: 1,
@@ -249,7 +299,74 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     ];
     Highcharts.chart('chart2', this.chartOptions2);
 
+    // Update chart 3 with hard-coded data
+    this.chartOptions3.series = [{
+      name: 'T3',
+      data: [
+        [Date.UTC(2019, 6, 1), 110],
+        [Date.UTC(2019, 7, 1), 145],
+        [Date.UTC(2019, 8, 1), 135],
+        [Date.UTC(2019, 9, 1), 140],
+        [Date.UTC(2019, 10, 1), 100],
+        [Date.UTC(2019, 11, 1), 110],
+        [Date.UTC(2019, 12, 1), 100],
+        [Date.UTC(2020, 1, 1), 85],
+        [Date.UTC(2020, 2, 1), 70],
+        [Date.UTC(2020, 3, 1), 65],
+        [Date.UTC(2020, 4, 1), 60],
+        [Date.UTC(2020, 5, 1), 60]
 
+      ]
+    }, {
+      name: 'T3R',
+      data: [
+        [Date.UTC(2019, 6, 1), 175],
+        [Date.UTC(2019, 7, 1), 155],
+        [Date.UTC(2019, 8, 1), 100],
+        [Date.UTC(2019, 9, 1), 115],
+        [Date.UTC(2019, 10, 1), 87],
+        [Date.UTC(2019, 11, 1), 90],
+        [Date.UTC(2019, 12, 1), 88],
+        [Date.UTC(2020, 1, 1), 85],
+        [Date.UTC(2020, 2, 1), 86],
+        [Date.UTC(2020, 3, 1), 75],
+        [Date.UTC(2020, 4, 1), 60],
+        [Date.UTC(2020, 5, 1), 45]
+      ]
+    }, {
+      name: 'T5',
+      data: [
+        [Date.UTC(2019, 6, 1), 230],
+        [Date.UTC(2019, 7, 1), 225],
+        [Date.UTC(2019, 8, 1), 205],
+        [Date.UTC(2019, 9, 1), 210],
+        [Date.UTC(2019, 10, 1), 212],
+        [Date.UTC(2019, 11, 1), 185],
+        [Date.UTC(2019, 12, 1), 187],
+        [Date.UTC(2020, 1, 1), 150],
+        [Date.UTC(2020, 2, 1), 105],
+        [Date.UTC(2020, 3, 1), 85],
+        [Date.UTC(2020, 4, 1), 85],
+        [Date.UTC(2020, 5, 1), 70]
+      ]
+    }, {
+      name: 'T5R',
+      data: [
+        [Date.UTC(2019, 6, 1), 240],
+        [Date.UTC(2019, 7, 1), 238],
+        [Date.UTC(2019, 8, 1), 205],
+        [Date.UTC(2019, 9, 1), 200],
+        [Date.UTC(2019, 10, 1), 160],
+        [Date.UTC(2019, 11, 1), 155],
+        [Date.UTC(2019, 12, 1), 148],
+        [Date.UTC(2020, 1, 1), 140],
+        [Date.UTC(2020, 2, 1), 120],
+        [Date.UTC(2020, 3, 1), 85],
+        [Date.UTC(2020, 4, 1), 75],
+        [Date.UTC(2020, 5, 1), 125]
+      ]
+    }];
+    Highcharts.chart('chart3', this.chartOptions3);
 
     // Redraw all of the charts on this page (so they fit perfectly within the mat-card tags
     Highcharts.charts.forEach(function (chart: Chart | undefined) {
