@@ -33,9 +33,6 @@ HC_drillDown(Highcharts);
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild('charContainer1',  { read: ElementRef }) charContainer1: ElementRef;
-
-
   public totalColumns: number;
   private cardLayoutSubscription: Subscription;
   public dataIsLoading: boolean = false;
@@ -84,6 +81,41 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     ]
   };
+
+
+  // Chart 2 is a bar chart2
+
+  private chartOptions2: any = {
+    chart: {
+      type: 'column'   // Uuse type:'bar' for horizontal chart.  Use type:'column' for vertical bar chart
+    },
+    credits: {
+      enabled: false        // Hide the highcharts.com label
+    },
+    title: {
+      text: 'Case Timeliness of Closes Cases (Days)'
+    },
+    xAxis: {
+      categories: ['0-30', '31-60', '61-90', '91-120', '121-150', '151-180', '181-210', '211-240', '241-270', '271-300', '301+']
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Number of Cases'
+      }
+    },
+    legend: {
+      reversed: false
+    },
+    plotOptions: {
+      series: {
+        stacking: 'normal'
+      }
+    },
+    series: []
+  };
+
+
 
   public tileSizes: TileSizeDTO[] = [
       {
@@ -191,6 +223,33 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     ];
     Highcharts.chart('chart1', this.chartOptions1);
+
+
+    // Update chart 2 with hard-coded data
+    this.chartOptions2.series =  [
+      {
+        name: 'T3',
+        legendIndex: 1,
+        data: [300, 5500, 1800, 1600, 1200, 1500, 1000, 800, 500, 400, 1000]
+      },
+      {
+        name: 'T3R',
+        legendIndex: 2,
+        data: [2, 2, 100, 2, 1]
+      },
+      {
+        name: 'T5',
+        legendIndex: 3,
+        data: [25, 500, 551, 600, 400, 300, 200, 500, 100, 100, 1200]
+      },
+      {
+        name: 'T5R',
+        legendIndex: 4,
+        data: [200, 190, 190, 100, 50, 12, 37, 42, 98, 50, 600]
+      }
+    ];
+    Highcharts.chart('chart2', this.chartOptions2);
+
 
 
     // Redraw all of the charts on this page (so they fit perfectly within the mat-card tags
