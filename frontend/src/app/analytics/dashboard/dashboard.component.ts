@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 import {Subscription} from "rxjs";
 
@@ -23,6 +23,7 @@ HC_offlineExport(Highcharts);
 // Turn on the drill-down capabilities
 import HC_drillDown from "highcharts/modules/drilldown";
 import {Chart} from "highcharts";
+import {TileSizeDTO} from "../../models/tile-size-dto";
 HC_drillDown(Highcharts);
 
 @Component({
@@ -31,6 +32,8 @@ HC_drillDown(Highcharts);
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  @ViewChild('charContainer1',  { read: ElementRef }) charContainer1: ElementRef;
 
 
   public totalColumns: number;
@@ -81,6 +84,39 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     ]
   };
+
+  public tileSizes: TileSizeDTO[] = [
+      {
+        chartNumber: 1,
+        rowSpan: 1,
+        colSpan: 1
+      },
+    {
+      chartNumber: 2,
+      rowSpan: 1,
+      colSpan: 1
+    },
+    {
+      chartNumber: 3,
+      rowSpan: 1,
+      colSpan: 1
+    },
+    {
+      chartNumber: 4,
+      rowSpan: 1,
+      colSpan: 1
+    },
+    {
+      chartNumber: 5,
+      rowSpan: 1,
+      colSpan: 1
+    },
+    {
+      chartNumber: 6,
+      rowSpan: 1,
+      colSpan: 1
+    }
+    ];
 
 
   constructor(private breakpointObserver: BreakpointObserver) { }
@@ -166,4 +202,46 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
+  /*
+   * Send a 'resize' event
+   * This will cause HighCharts to resize all charts to fit inside their parent containers
+   */
+  private resizeChartsToFitContainers(): void {
+
+    setTimeout(()=> {
+      // Send a 'resize' event
+      // NOTE:  The window.dispatchEvent() call MUST be in a setTimeout or it will not work
+      window.dispatchEvent(new Event('resize'));
+    }, 1);
+
+  }
+
+
+  public toggleSize(aChartNumber: number) {
+
+    // Reset all other tiles to be 1x1
+    this.tileSizes.forEach( (tile: TileSizeDTO) => {
+      if (tile.chartNumber != aChartNumber) {
+        tile.rowSpan = 1;
+        tile.colSpan = 1;
+      }
+    })
+
+    // Get the indexNumber in the array from the chartNumber
+    let indexNumber: number = aChartNumber - 1;
+
+    if (this.tileSizes[indexNumber].rowSpan == 1) {
+      // This tile is already 1x1.  So, change it to 2x2
+      this.tileSizes[indexNumber].rowSpan = 2;
+      this.tileSizes[indexNumber].colSpan = 2;
+    }
+    else {
+      // This tile is already 2x2.  So, change it to 1x1
+      this.tileSizes[indexNumber].rowSpan = 1;
+      this.tileSizes[indexNumber].colSpan = 1;
+    }
+
+    // Resize the charts to fit their parent containers
+    this.resizeChartsToFitContainers();
+  }
 }
