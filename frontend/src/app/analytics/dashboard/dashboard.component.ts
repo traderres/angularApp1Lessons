@@ -84,7 +84,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   // Chart 2 is a bar chart2
-
   private chartOptions2: any = {
     chart: {
       type: 'column'   // Uuse type:'bar' for horizontal chart.  Use type:'column' for vertical bar chart
