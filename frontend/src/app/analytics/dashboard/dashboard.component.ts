@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 import {Subscription} from "rxjs";
 
@@ -32,9 +32,6 @@ HC_drillDown(Highcharts);
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
-
-  @ViewChild('charContainer1',  { read: ElementRef }) charContainer1: ElementRef;
-
 
   public totalColumns: number;
   private cardLayoutSubscription: Subscription;
