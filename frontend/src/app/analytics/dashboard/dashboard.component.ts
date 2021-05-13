@@ -256,30 +256,29 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dataIsLoading = true;
 
     this.dashboardService.getAllChartData().subscribe( (aData: DashboardDataDTO) => {
-      // The REST call came back with data
+        // The REST call came back with data
 
-      // Set the data for chart 1 and *render* chart 1
-      this.chartOptions1.series[0].data = aData.chartData1;
-      Highcharts.chart('chart1', this.chartOptions1);
+        // Set the data for chart 1 and *render* chart 1
+        this.chartOptions1.series[0].data = aData.chartData1;
+        Highcharts.chart('chart1', this.chartOptions1);
 
-      this.chartOptions2.series = aData.chartData2;
-      Highcharts.chart('chart2', this.chartOptions2);
+        this.chartOptions2.series = aData.chartData2;
+        Highcharts.chart('chart2', this.chartOptions2);
 
-      this.chartOptions3.series = aData.chartData3;
-      Highcharts.chart('chart3', this.chartOptions3);
+        this.chartOptions3.series = aData.chartData3;
+        Highcharts.chart('chart3', this.chartOptions3);
 
     }).add(  () => {
-      // REST call finally block
-      this.dataIsLoading = false;
+        // REST call finally block
+
+      // Redraw all charts on this page (so they fit perfectly in the <mat-card> tags)
+      Highcharts.charts.forEach(function (chart: Chart | undefined) {
+          chart?.reflow();
+        });
+
+        this.dataIsLoading = false;
     });
 
-
-    // Redraw all of the charts on this page (so they fit perfectly within the mat-card tags
-    Highcharts.charts.forEach(function (chart: Chart | undefined) {
-      chart?.reflow();
-    });
-
-    this.dataIsLoading = false;
   }
 
 
