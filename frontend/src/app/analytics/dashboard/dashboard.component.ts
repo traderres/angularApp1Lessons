@@ -80,7 +80,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       {
         name: "Browsers",
         colorByPoint: true,
-        data: []
+        data: [],
+
+        point:{
+          events:{
+            click: (event: any) => {
+              this.logPointInfo(event)
+            }
+          }
+        }
+
       }
     ],
     exporting: {
@@ -105,6 +114,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
 
+  public logPointInfo(event: any): void {
+    console.log('name=' + event.point.name + '  x=' + event.point.x + '  y=' + event.point.y + '  percent=' + event.point.percentage);
+  }
 
   // Chart 2 is a bar chart2
   private chartOptions2: any = {
