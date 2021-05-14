@@ -16,4 +16,5 @@ mat-card {
 
 .chart-content {
   height: 100%;     /* Needed to ensure the chart fills uses all of the height */
+  overflow: hidden; /* Hide the horizontal and vertical scroll bars */
 }

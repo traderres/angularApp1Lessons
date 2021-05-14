@@ -26,6 +26,7 @@ import {Chart} from "highcharts";
 import {TileSizeDTO} from "../../models/tile-size-dto";
 import {DashboardService} from "../../services/dashboard.service";
 import {DashboardDataDTO} from "../../models/dashboard-data-dto";
+import {Router} from "@angular/router";
 HC_drillDown(Highcharts);
 
 @Component({
@@ -81,8 +82,28 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         colorByPoint: true,
         data: []
       }
-    ]
+    ],
+    exporting: {
+      buttons: {
+        contextButton: {
+          menuItems:  [
+            'viewFullscreen',
+            'printChart',
+            'separator',
+            'downloadPNG',
+            'downloadJPEG',
+            'downloadPDF',
+            'downloadSVG',
+            'separator',
+            'downloadCSV',
+            'downloadXLS'
+          ]
+        }
+      }
+    }
+
   };
+
 
 
   // Chart 2 is a bar chart2
@@ -113,10 +134,41 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         stacking: 'normal'
       }
     },
-    series: []
+
+    series: [],
+    exporting: {
+      buttons: {
+        contextButton: {
+          menuItems:  [
+            'viewFullscreen',
+            'printChart',
+            'separator',
+            'downloadPNG',
+            'downloadJPEG',
+            'downloadPDF',
+            'downloadSVG',
+            'separator',
+            'downloadCSV',
+            'downloadXLS',
+            'separator',
+            {
+              text: 'Go to Home Page',
+              onclick: () => {
+                this.goToWelcomePage()
+              }
+            }
+          ]
+        }
+      }
+    }
   };
 
 
+  public goToWelcomePage(): void {
+
+    // Navigate to the Welcome Page
+    this.router.navigate(["/"]).then();
+  }
 
   // Chart 3 is a line chart
   private chartOptions3: any = {
@@ -164,8 +216,26 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     },
+    tooltip: {
+
+      formatter: function (): any {
+        // @ts-ignore
+        let date = new Date(this.x);
+
+        // Get the formatted date as mm/dd/yyyy
+        // NOTE:  We must add 1 to the date.getMonth() as January has value of zero
+        let formattedDate: string = String(date.getMonth() + 1).padStart(2, "0") + '/' +
+                                    String(date.getDay()).padStart(2, "0") + '/' +
+                                    date.getFullYear();
+
+        // @ts-ignore
+        return '<span style="color:{this.color}">' + this.series.name + '</span>: <b>' + this.y + '</b> on ' + formattedDate + '<br/>';
+      }
+
+    },
     series: []
   }
+
 
 
   public tileSizes: TileSizeDTO[] = [
@@ -203,7 +273,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   constructor(private breakpointObserver: BreakpointObserver,
-              private dashboardService: DashboardService) { }
+              private dashboardService: DashboardService,
+              private router: Router) { }
 
 
   public ngOnInit(): void {
