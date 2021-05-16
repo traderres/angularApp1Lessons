@@ -58,29 +58,17 @@ export class UsaMapComponent implements OnInit, OnDestroy, AfterViewInit {
     colorAxis: {
       min: 0
     },
-    series: [
-      {
-        type: "map",
-        name: "Total Pending Items",
-        states: {
-          hover: {
-            color: "#BADA55"
-          }
-        },
-        dataLabels: {
-          enabled: true,
-          format: "{point.name}<br>{point.value:,.0f}"    // Format the point.value with commas
-        },
-        allAreas: false,
-        data: []
-      }
-    ],
-
     exporting: {
       buttons: {
         contextButton: {
           menuItems:  [
             'viewFullscreen',
+            {
+              text: 'Reset Zoom',
+              onclick: () => {
+                this.reloadData();
+              }
+            },
             'printChart',
             'separator',
             'downloadPNG',
@@ -117,10 +105,29 @@ export class UsaMapComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   public reloadData(): void {
+
     // Tell the template page that data is loading (so it will show the spinners)
     this.dataIsLoading = true;
 
     // Update the Map with the state information
+    this.mapOptions.series = [
+      {
+        type: "map",
+        name: "Total Pending Items",
+        states: {
+          hover: {
+            color: "#BADA55"
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          format: "{point.name}<br>{point.value:,.0f}"    // Format the point.value with commas
+        },
+        allAreas: false,
+        data: []
+      }
+    ];
+
     this.mapOptions.series[0].data =  [
       ['us-ma', 0],
       ['us-wa', 1],
@@ -190,7 +197,6 @@ export class UsaMapComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.dataIsLoading = false;
   }
-
 
 
 }
