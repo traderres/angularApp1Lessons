@@ -42,6 +42,7 @@ import { LongViewInternalNavReportComponent } from './reports/long-view-internal
 import { DashboardComponent } from './analytics/dashboard/dashboard.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import { HighchartsChartModule } from 'highcharts-angular';
+import { UsaMapComponent } from './analytics/usa-map/usa-map.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -49,6 +50,7 @@ const appRoutes: Routes = [
   { path: 'page/addReport2',    component: AddReport2Component },
   { path: 'page/viewReports',  component: ViewReportsComponent },
   { path: 'page/dashboard',    component: DashboardComponent },
+  { path: 'page/usa-map',      component: UsaMapComponent },
   { path: 'page/longView/:id',  component: LongViewInternalNavReportComponent },
   { path: 'page/editReport/:id', component: EditReportComponent },
   { path: 'page/uploadReport', component: UploadReportComponent },
@@ -79,7 +81,8 @@ const appRoutes: Routes = [
     LongViewInnerReportComponent,
     LongViewOuterReportComponent,
     LongViewInternalNavReportComponent,
-    DashboardComponent
+    DashboardComponent,
+    UsaMapComponent
   ],
   imports: [
     AppRoutingModule,
