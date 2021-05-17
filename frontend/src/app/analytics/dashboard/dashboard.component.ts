@@ -327,6 +327,13 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       // Unsubscribe from the subscription (to avoid memory leaks)
       this.cardLayoutSubscription.unsubscribe();
     }
+
+    // Destroy all charts
+    Highcharts.charts.forEach(function (chart: Chart | undefined) {
+      if (chart) {
+        chart.destroy();
+      }
+    });
   }
 
   public ngAfterViewInit(): void {

@@ -19,6 +19,7 @@ HC_exportData(Highcharts);
 
 // Do client-side exporting (so that calls do *NOT* go to https://export.highcharts.com/ but does not work on all browsers
 import HC_offlineExport from 'highcharts/modules/offline-exporting';
+import {Chart} from "highcharts";
 HC_offlineExport(Highcharts);
 
 
@@ -100,7 +101,13 @@ export class UsaMapComponent implements OnInit, OnDestroy, AfterViewInit {
     this.reloadData();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
+    // Destroy all charts
+    Highcharts.charts.forEach(function (chart: Chart | undefined) {
+      if (chart) {
+        chart.destroy();
+      }
+    });
   }
 
 
