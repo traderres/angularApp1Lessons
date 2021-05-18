@@ -109,13 +109,22 @@ window"></i>
         </div>
       </mat-list-item>
 
+      <!-- Drill Down Bar Chart -->
+      <mat-list-item class="navItem" [routerLink]="'page/bar-drill-down'" routerLinkActive="active">
+        <a title="Drill Down Chart">Drill Down Chart</a>
+        <div fxFlex fxLayoutAlign="end end">
+          <a [routerLink]="'page/bar-drill-down'" target="_blank">
+            <i class="fas fa-external-link-alt navItemIcon" title="Open 'Drill Down Chart' in a new window"></i>
+          </a>
+        </div>
+      </mat-list-item>
+
       <!-- Chart 1 -->
       <mat-list-item class="navItem" [routerLink]="'page/chart1'" routerLinkActive="active">
         <a title="Chart 1">Chart 1</a>
         <div fxFlex fxLayoutAlign="end end">
           <a [routerLink]="'page/chart1'" target="_blank">
-            <i class="fas fa-external-link-alt navItemIcon" title="Open Chart 1 in a new
- window"></i>
+            <i class="fas fa-external-link-alt navItemIcon" title="Open Chart 1 in a new window"></i>
           </a>
         </div>
       </mat-list-item>
@@ -125,8 +134,7 @@ window"></i>
         <a title="Chart 2">Chart 2</a>
         <div fxFlex fxLayoutAlign="end end">
           <a [routerLink]="'page/chart2'" target="_blank">
-            <i class="fas fa-external-link-alt navItemIcon" title="Open Chart 2 in a new
-window"></i>
+            <i class="fas fa-external-link-alt navItemIcon" title="Open Chart 2 in a new window"></i>
           </a>
         </div>
       </mat-list-item>
