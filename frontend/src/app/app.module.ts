@@ -52,7 +52,7 @@ const appRoutes: Routes = [
   { path: 'page/viewReports',  component: ViewReportsComponent },
   { path: 'page/dashboard',    component: DashboardComponent },
   { path: 'page/usa-map',      component: UsaMapComponent },
-  { path: 'page/bar-drill-down',   component: ChartDrillDownComponent },
+  { path: 'page/chart-drill-down',   component: ChartDrillDownComponent },
   { path: 'page/longView/:id',  component: LongViewInternalNavReportComponent },
   { path: 'page/editReport/:id', component: EditReportComponent },
   { path: 'page/uploadReport', component: UploadReportComponent },
