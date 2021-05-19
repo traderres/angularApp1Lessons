@@ -6,8 +6,7 @@
       <a title="View Reports">View Reports</a>
       <div fxFlex fxLayoutAlign="end end">
         <a [routerLink]="'page/viewReports'" target="_blank">
-          <i class="fas fa-external-link-alt navItemIcon" title="Open View Reports in a new
-window"></i>
+          <i class="fas fa-external-link-alt navItemIcon" title="Open View Reports in a new window"></i>
         </a>
       </div>
     </mat-list-item>
@@ -17,10 +16,19 @@ window"></i>
       <a title="Add Report">Add Report</a>
       <div fxFlex fxLayoutAlign="end end">
         <a [routerLink]="'page/addReport'" target="_blank">
-          <i class="fas fa-external-link-alt navItemIcon" title="Open Add Report in a new
-window"></i>
+          <i class="fas fa-external-link-alt navItemIcon" title="Open Add Report in a new window"></i>
         </a>
       </div>
+    </mat-list-item>
+
+    <!-- Show Banner -->
+    <mat-list-item class="navItem" (click)="this.bannerService.showBanner()" *ngIf="! this.bannerIsVisible">
+      <a title="Show Banner" (click)="this.bannerService.showBanner()">Show Banner</a>
+    </mat-list-item>
+
+    <!-- Hide Banner -->
+    <mat-list-item class="navItem" (click)="this.bannerService.hideBanner()" *ngIf="this.bannerIsVisible" >
+      <a title="Hide Banner" (click)="this.bannerService.hideBanner()">Hide Banner</a>
     </mat-list-item>
 
   </mat-nav-list>

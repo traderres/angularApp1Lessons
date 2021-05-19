@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {BannerService} from "../services/banner.service";
 
 @Component({
   selector: 'app-banner',
@@ -9,7 +8,7 @@ import {BannerService} from "../services/banner.service";
 export class BannerComponent implements OnInit {
 
 
-  constructor(public bannerService: BannerService) { }
+  constructor() { }
 
   ngOnInit(): void {
   }

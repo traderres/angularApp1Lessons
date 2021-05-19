@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {BannerService} from "../services/banner.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-user-navbar',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserNavbarComponent implements OnInit {
 
-  constructor() { }
+  public bannerIsVisible: boolean;
+  private bannerSubscription: Subscription;
 
-  ngOnInit(): void {
+  constructor(public bannerService: BannerService) { }
+
+  public ngOnInit(): void {
+
+    this.bannerSubscription = this.bannerService.getStateAsObservable().subscribe( (aCurrentValue: boolean) => {
+      // We received a message from the banner service with the value
+      this.bannerIsVisible = aCurrentValue;
+    })
+
   }
 
 }
