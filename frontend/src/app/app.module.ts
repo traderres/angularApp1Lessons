@@ -44,6 +44,7 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import { HighchartsChartModule } from 'highcharts-angular';
 import { UsaMapComponent } from './analytics/usa-map/usa-map.component';
 import {ChartDrillDownComponent} from "./analytics/chart-drill-down/chart-drill-down.component";
+import { BannerComponent } from './banner/banner.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -85,7 +86,8 @@ const appRoutes: Routes = [
     LongViewInternalNavReportComponent,
     DashboardComponent,
     UsaMapComponent,
-    ChartDrillDownComponent
+    ChartDrillDownComponent,
+    BannerComponent
   ],
   imports: [
     AppRoutingModule,

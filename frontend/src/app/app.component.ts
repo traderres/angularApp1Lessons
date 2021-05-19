@@ -6,6 +6,7 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ErrorDialogComponent} from "./errorHandler/error-dialog/error-dialog.component";
 import {ErrorDialogFormData} from "./errorHandler/error-dialog-form-data";
 import {HttpErrorResponse} from "@angular/common/http";
+import {BannerService} from "./services/banner.service";
 
 @Component({
   selector: 'app-root',
@@ -18,19 +19,31 @@ export class AppComponent implements OnInit, OnDestroy {
   public isAppNavVisible = true;       // The left nav starts out as visible
   public isUserNavVisible = false;    // The right nav starts out as not visible
   private showNavSubscription: Subscription;
+  private bannerSubscription: Subscription;
 
   private errorSubscription: Subscription;
   private errorDialogIsOpen = false;
   private errorDialogRef: MatDialogRef<ErrorDialogComponent, any>;
+  public showBannerOnPage: boolean;
 
 
   constructor(private navbarService: NavbarService,
               private errorService: ErrorService,
+              private bannerService: BannerService,
               private matDialog: MatDialog)
   { }
 
 
   public ngOnInit(): void {
+
+
+    this.bannerSubscription =
+      this.bannerService.getStateAsObservable().subscribe( (aShowBanner: boolean) => {
+          // We received a message from the Banner Service
+          // If we receive false, then set the flag to false
+          // If we receive true,  then set the flag to true
+          this.showBannerOnPage = aShowBanner;
+      });
 
     // This app-component will listen for messages from the navbarService
     this.showNavSubscription =
@@ -85,6 +98,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (this.errorSubscription) {
       this.errorSubscription.unsubscribe();
+    }
+
+    if (this.bannerSubscription) {
+      this.bannerSubscription.unsubscribe();
     }
 
   }
