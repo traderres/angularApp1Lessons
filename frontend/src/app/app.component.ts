@@ -7,11 +7,23 @@ import {ErrorDialogComponent} from "./errorHandler/error-dialog/error-dialog.com
 import {ErrorDialogFormData} from "./errorHandler/error-dialog-form-data";
 import {HttpErrorResponse} from "@angular/common/http";
 import {BannerService} from "./services/banner.service";
+import {animate, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [   // :enter is alias to 'void => *'
+        style({opacity:0}),
+        animate(250, style({opacity:1}))
+      ]),
+      transition(':leave', [   // :leave is alias to '* => void'
+        animate(250, style({opacity:0}))
+      ])
+    ])
+  ]
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'AngularApp1';
