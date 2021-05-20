@@ -48,10 +48,10 @@ export class BannerService {
     // Construct the URL for the REST endpoint  (to set the banner preference only)
     const restUrl = environment.baseUrl + '/api/preferences/banner/set/' + aBannerInfo;
 
-    let dto: PreferencesDTO = new PreferencesDTO();
-    dto.showBanner = aBannerInfo;
-
-    return this.httpClient.post(restUrl, dto, {} );
+    // Return an observable to this POST REST call
+    // -- The 2nd {} is the empty json body sent to the REST call
+    // -- The 3rd {} is the empty map of options
+    return this.httpClient.post(restUrl, {}, {} );
   }
 
 
