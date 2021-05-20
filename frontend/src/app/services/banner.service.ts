@@ -38,7 +38,7 @@ export class BannerService {
 
   public getLatestValueFromBackend(): Observable<PreferencesDTO> {
     // Construct the URL for the REST endpoint  (to get all preferences)
-    const restUrl = environment.baseUrl + '/api/preferences/all'
+    const restUrl = environment.baseUrl + '/api/preferences/all';
 
     // NOTE:  The REST call is not invoked you call subscribe() on this observable
     return this.httpClient.get <PreferencesDTO> (restUrl);

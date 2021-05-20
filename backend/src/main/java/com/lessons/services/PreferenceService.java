@@ -59,7 +59,7 @@ public class PreferenceService {
 
         JdbcTemplate jt = new JdbcTemplate(this.dataSource);
 
-        // Execute the sql
+        // Execute the sql to update this record
         int rowsUpdated = jt.update(sql, aBannerValue, aUserid);
 
         if (rowsUpdated == 0) {
