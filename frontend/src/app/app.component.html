@@ -1,5 +1,7 @@
+<ng-container *ngIf="this.bannerObs | async">
+  <!-- The banner info has been loaded.  So, display the rest of the page -->
 
-<div fxFlexFill fxLayout="column">
+  <div fxFlexFill fxLayout="column">
 
   <div fxFlex="50px" *ngIf="this.showBannerOnPage" [@fadeInOut]  [@.disabled]="this.disableAnimations">
     <!-- Banner is 50 pixels high -->
@@ -43,3 +45,5 @@
   </div>
 
 </div>
+
+</ng-container>

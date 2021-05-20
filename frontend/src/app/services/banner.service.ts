@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
+import {environment} from "../../environments/environment";
+import {PreferencesDTO} from "../models/preferences-dto";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +10,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 export class BannerService {
   private bannerStateSubject = new BehaviorSubject<boolean>(true);   // Initialize the banner state to true
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
 
   public getStateAsObservable(): Observable<boolean> {
@@ -15,13 +18,48 @@ export class BannerService {
   }
 
   public hideBanner(): void {
-    // Send a message with false  (to tell anyone listening to hide the banner)
-    this.bannerStateSubject.next(false);
+    this.setLatestValue(false).subscribe( () => {
+      // REST call came back successfully
+
+      // Send a message with false  (to tell anyone listening to hide the banner)
+      this.bannerStateSubject.next(false);
+    })
   }
 
+
   public showBanner(): void {
-    // Send a message with true  (to tell anyone listening to show the banner)
-    this.bannerStateSubject.next(true);
+    this.setLatestValue(true).subscribe( () => {
+      // REST call came back successfully
+
+      // Send a message with false  (to tell anyone listening to hide the banner)
+      this.bannerStateSubject.next(true);
+    })
   }
+
+  public getLatestValueFromBackend(): Observable<PreferencesDTO> {
+    // Construct the URL for the REST endpoint  (to get all preferences)
+    const restUrl = environment.baseUrl + '/api/preferences/all'
+
+    // NOTE:  The REST call is not invoked you call subscribe() on this observable
+    return this.httpClient.get <PreferencesDTO> (restUrl);
+  }
+
+  private setLatestValue(aBannerInfo: boolean): Observable<object> {
+    // Construct the URL for the REST endpoint  (to set the banner preference only)
+    const restUrl = environment.baseUrl + '/api/preferences/banner/set/' + aBannerInfo;
+
+    let dto: PreferencesDTO = new PreferencesDTO();
+    dto.showBanner = aBannerInfo;
+
+    return this.httpClient.post(restUrl, dto, {} );
+  }
+
+
+  public initialize(aBannerInfo: boolean) {
+    // Send out a message that (to anyone listening) with the current value
+    // Anyone who listens later, gets this initial message
+    this.bannerStateSubject.next(aBannerInfo);
+  }
+
 
 }

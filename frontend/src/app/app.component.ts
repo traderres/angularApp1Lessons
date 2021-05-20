@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {NavbarService} from "./services/navbar.service";
 import {ErrorService} from "./errorHandler/error.service";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
@@ -8,6 +8,8 @@ import {ErrorDialogFormData} from "./errorHandler/error-dialog-form-data";
 import {HttpErrorResponse} from "@angular/common/http";
 import {BannerService} from "./services/banner.service";
 import {animate, style, transition, trigger} from "@angular/animations";
+import {tap} from "rxjs/operators";
+import {PreferencesDTO} from "./models/preferences-dto";
 
 @Component({
   selector: 'app-root',
@@ -39,6 +41,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   public showBannerOnPage: boolean;
   public disableAnimations: boolean = true;
 
+  public bannerObs: Observable<PreferencesDTO>
 
   constructor(private navbarService: NavbarService,
               private errorService: ErrorService,
@@ -49,7 +52,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngOnInit(): void {
 
-    this.bannerSubscription =
+    this.bannerObs = this.bannerService.getLatestValueFromBackend().pipe(
+      tap((aData: PreferencesDTO) => {
+        // The REST call came back with some data
+
+        // Initialize the banner service
+        this.bannerService.initialize(aData.showBanner);
+      })
+    );
+
+
+  this.bannerSubscription =
       this.bannerService.getStateAsObservable().subscribe( (aShowBanner: boolean) => {
           // We received a message from the Banner Service
           // If we receive false, then set the flag to false
