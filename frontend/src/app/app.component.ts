@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {NavbarService} from "./services/navbar.service";
 import {ErrorService} from "./errorHandler/error.service";
@@ -25,7 +25,7 @@ import {animate, style, transition, trigger} from "@angular/animations";
     ])
   ]
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   title = 'AngularApp1';
 
   public isAppNavVisible = true;       // The left nav starts out as visible
@@ -37,6 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private errorDialogIsOpen = false;
   private errorDialogRef: MatDialogRef<ErrorDialogComponent, any>;
   public showBannerOnPage: boolean;
+  public disableAnimations: boolean = true;
 
 
   constructor(private navbarService: NavbarService,
@@ -47,7 +48,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   public ngOnInit(): void {
-
 
     this.bannerSubscription =
       this.bannerService.getStateAsObservable().subscribe( (aShowBanner: boolean) => {
@@ -104,6 +104,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
+
+  public ngAfterViewInit(): void {
+
+    setTimeout(() => {
+      // The page has finished loading, so set the flag so that animations proceed
+      // NOTE:  This flag must be set in a setTimeout for this trick to work.
+      this.disableAnimations = false;
+    }, 0);
+
+  }
 
   public ngOnDestroy() {
     this.showNavSubscription.unsubscribe();

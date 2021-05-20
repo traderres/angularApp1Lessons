@@ -1,7 +1,7 @@
 
 <div fxFlexFill fxLayout="column">
 
-  <div fxFlex="50px" *ngIf="this.showBannerOnPage" [@fadeInOut]>
+  <div fxFlex="50px" *ngIf="this.showBannerOnPage" [@fadeInOut]  [@.disabled]="this.disableAnimations">
     <!-- Banner is 50 pixels high -->
     <app-banner fxFlex></app-banner>
   </div>
