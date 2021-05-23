@@ -1,7 +1,9 @@
 package com.lessons.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lessons.config.ElasticSearchResources;
+import com.lessons.models.AutoCompleteDTO;
 import com.lessons.models.ErrorsDTO;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
@@ -15,6 +17,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service("com.lessons.services.ElasticSearchService")
 public class ElasticSearchService {
@@ -229,6 +234,103 @@ public class ElasticSearchService {
 
     }  // end of doesIndexExist()
 
+
+
+    /**
+     * @param aRawQuery holds the raw query text
+     * @return an empty string (if the passed-in string is null
+     */
+    private String cleanupRawQuery(String aRawQuery) {
+        String cleanedQuery = aRawQuery;
+
+        if (cleanedQuery == null) {
+            cleanedQuery = "";
+        }
+
+        return cleanedQuery;
+    }
+
+
+    /**
+     * Run an auto-complete search
+     * @param aAutoCompleteDTO   holds information about the index and what field to search
+     * @return a list of matching strings
+     * @throws Exception if something bad happens
+     */
+    public List<String> runAutoComplete(AutoCompleteDTO aAutoCompleteDTO) throws Exception {
+        if (aAutoCompleteDTO == null) {
+            throw new RuntimeException("Error in runAutoComplete():  The passed-in aAutoCompleteDTO is null.");
+        }
+
+        String cleanedQuery = cleanupRawQuery(aAutoCompleteDTO.getRawQuery());
+
+        // Convert the cleaned query to lowercase (which is required as all ngrams are lowercase)
+        cleanedQuery = cleanedQuery.toLowerCase();
+
+        String jsonRequest =
+                "{\n" +
+                        "  \"_source\": [\"" + aAutoCompleteDTO.getReturnedField() + "\"]," +
+                        "  \"query\": {\n" +
+                        "    \"term\": {\n" +
+                        "       \"" + aAutoCompleteDTO.getSearchedField() + "\": \"" + cleanedQuery + "\"\n" +
+                        "     }\n" +
+                        "  },\n" +
+                        "  \"size\": " + aAutoCompleteDTO.getSize() +"\n" +
+                        "}";
+
+        // Make a synchronous POST call to delete this ES Index
+        Response response = this.asyncHttpClient.preparePost(this.elasticSearchUrl + "/" + aAutoCompleteDTO.getIndexName() + "/_search")
+                .setRequestTimeout(this.ES_REQUEST_TIMEOUT_IN_MILLISECS)
+                .setHeader("accept", "application/json")
+                .setHeader("Content-Type", "application/json")
+                .setBody(jsonRequest)
+                .execute()
+                .get();
+
+        if (response.getStatusCode() != 200) {
+            // ElasticSearch returned a non-200 status response
+            throw new RuntimeException("Error in runAutoComplete():  ES returned a status code of " + response.getStatusCode() + " with an error of: " + response.getResponseBody());
+        }
+
+        // Create an empty array list
+        List<String> matchingStrings = new ArrayList<>();
+
+        // Pull the list of matching values from the JSON Response
+        String jsonResponse = response.getResponseBody();
+
+        // Convert the response JSON string into a map and examine it to see if the request really worked
+        Map<String, Object> mapResponse = objectMapper.readValue(jsonResponse, new TypeReference<Map<String, Object>>() {});
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> outerHits = (Map<String, Object>) mapResponse.get("hits");
+        if (outerHits == null) {
+            throw new RuntimeException("Error in runAutoComplete():  The outer hits value was not found in the JSON response");
+        }
+
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> innerHits = (List<Map<String, Object>>) outerHits.get("hits");
+        if (innerHits == null) {
+            throw new RuntimeException("Error in runAutoComplete():  The inner hits value was not found in the JSON response");
+        }
+
+        if (innerHits.size() > 0) {
+            for (Map<String, Object> hit: innerHits) {
+
+                @SuppressWarnings("unchecked")
+                Map<String, Object> sourceMap = (Map<String, Object>) hit.get("_source");
+                if (sourceMap == null) {
+                    throw new RuntimeException("Error in runAutoComplete():  The source map was null in the JSON response");
+                }
+
+                String match = (String) sourceMap.get(aAutoCompleteDTO.getReturnedField());
+                matchingStrings.add(match);
+            }
+        }
+
+
+        // Return the list of matching strings
+        return matchingStrings;
+    }
 
 
 }
