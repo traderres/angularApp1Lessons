@@ -31,7 +31,7 @@ public class ElasticSearchService {
     private ObjectMapper objectMapper;
 
     @PostConstruct
-    public void init() {
+    public void init() throws Exception {
         logger.debug("init() started.");
 
         // In order to make outgoing calls to ElasticSearch you need 2 things:
@@ -43,8 +43,25 @@ public class ElasticSearchService {
 
         this.objectMapper = new ObjectMapper();
 
+        // Create the reports mapping (if they do not exist)
+        initializeMapping();
+
         logger.debug("init() finished.  elasticSearchUrl={}", this.elasticSearchUrl);
     }
+
+    private void initializeMapping() throws Exception {
+        if (! doesIndexExist("reports")) {
+            // Create the reports ES mapping
+
+            // Read the mapping file into a large string
+            String reportsMappingAsJson = readInternalFileIntoString("reports.mapping.json");
+
+            // Create a mapping in ElasticSearch
+            createIndex("reports", reportsMappingAsJson);
+        }
+    }
+
+
 
     /**
      * Helper to read an entire file into a String -- handy for reading in JSON mapping files
