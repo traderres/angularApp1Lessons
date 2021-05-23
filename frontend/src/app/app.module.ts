@@ -45,6 +45,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { UsaMapComponent } from './analytics/usa-map/usa-map.component';
 import {ChartDrillDownComponent} from "./analytics/chart-drill-down/chart-drill-down.component";
 import { BannerComponent } from './banner/banner.component';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import { SearchBoxComponent } from './search/search-box/search-box.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -87,7 +89,8 @@ const appRoutes: Routes = [
     DashboardComponent,
     UsaMapComponent,
     ChartDrillDownComponent,
-    BannerComponent
+    BannerComponent,
+    SearchBoxComponent
   ],
   imports: [
     AppRoutingModule,
@@ -98,6 +101,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     HighchartsChartModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,

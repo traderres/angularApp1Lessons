@@ -1,0 +1,21 @@
+<div class="searchBoxWrapper fa-border">
+
+  <!-- Search Box -->
+  <input [formControl]="this.searchTextBox"   [matAutocomplete]="autocomplete1"
+         matInput type="text" id="searchBox" placeholder="Enter Criteria..." aria-label="search box" />
+
+
+  <!-- Search Icon -->
+  <span class="searchBoxIcon">
+    <i class="fa fa-search"></i>
+  </span>
+
+
+  <!-- Show Popup autocomplete entries for matching search results -->
+  <mat-autocomplete #autocomplete1="matAutocomplete" panelWidth="auto" >
+    <mat-option *ngFor="let match of this.searchMatchesToShowObs | async" [value]="match">
+      {{match.name}}
+    </mat-option>
+  </mat-autocomplete>
+
+</div>
