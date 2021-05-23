@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lessons.config.ElasticSearchResources;
 import com.lessons.models.AutoCompleteDTO;
+import com.lessons.models.AutoCompleteMatchDTO;
 import com.lessons.models.ErrorsDTO;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
@@ -254,10 +255,10 @@ public class ElasticSearchService {
     /**
      * Run an auto-complete search
      * @param aAutoCompleteDTO   holds information about the index and what field to search
-     * @return a list of matching strings
+     * @return a list of matching AutoCompleteMatchDTO objects (or an empty list if no matches are found)
      * @throws Exception if something bad happens
      */
-    public List<String> runAutoComplete(AutoCompleteDTO aAutoCompleteDTO) throws Exception {
+    public List<AutoCompleteMatchDTO> runAutoComplete(AutoCompleteDTO aAutoCompleteDTO) throws Exception {
         if (aAutoCompleteDTO == null) {
             throw new RuntimeException("Error in runAutoComplete():  The passed-in aAutoCompleteDTO is null.");
         }
@@ -278,7 +279,7 @@ public class ElasticSearchService {
                         "  \"size\": " + aAutoCompleteDTO.getSize() +"\n" +
                         "}";
 
-        // Make a synchronous POST call to delete this ES Index
+        // Make a synchronous POST call to run this ES search
         Response response = this.asyncHttpClient.preparePost(this.elasticSearchUrl + "/" + aAutoCompleteDTO.getIndexName() + "/_search")
                 .setRequestTimeout(this.ES_REQUEST_TIMEOUT_IN_MILLISECS)
                 .setHeader("accept", "application/json")
@@ -293,7 +294,7 @@ public class ElasticSearchService {
         }
 
         // Create an empty array list
-        List<String> matchingStrings = new ArrayList<>();
+        List<AutoCompleteMatchDTO> listOfAutoCompleteMatchDTOs = new ArrayList<>();
 
         // Pull the list of matching values from the JSON Response
         String jsonResponse = response.getResponseBody();
@@ -316,20 +317,30 @@ public class ElasticSearchService {
         if (innerHits.size() > 0) {
             for (Map<String, Object> hit: innerHits) {
 
+                // Get the _id field from the hit map
+                String id = (String) hit.get("_id");
+
                 @SuppressWarnings("unchecked")
                 Map<String, Object> sourceMap = (Map<String, Object>) hit.get("_source");
                 if (sourceMap == null) {
                     throw new RuntimeException("Error in runAutoComplete():  The source map was null in the JSON response");
                 }
 
+                // Get the matching returned field
                 String match = (String) sourceMap.get(aAutoCompleteDTO.getReturnedField());
-                matchingStrings.add(match);
+
+                // Create an AutoCompleteMatchDTO object
+                AutoCompleteMatchDTO matchDTO = new AutoCompleteMatchDTO(id, match);
+
+                // Add the AutoCompleteMatchDTO object to the list
+                // (so the front-end will have an id and name field for this match)
+                listOfAutoCompleteMatchDTOs.add(matchDTO);
             }
         }
 
 
         // Return the list of matching strings
-        return matchingStrings;
+        return listOfAutoCompleteMatchDTOs;
     }
 
 

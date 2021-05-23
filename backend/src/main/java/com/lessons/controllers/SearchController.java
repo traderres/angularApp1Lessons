@@ -1,6 +1,7 @@
 package com.lessons.controllers;
 
 import com.lessons.models.AutoCompleteDTO;
+import com.lessons.models.AutoCompleteMatchDTO;
 import com.lessons.services.ElasticSearchService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class SearchController {
 
     /**
      * REST endpoint /api/search/autocomplete
-     * @return a list of strings (if matches are found)
+     * @return a list of AutoCopmleteMatchDTO objects (or an empty list if no matches were found)
      * @throws Exception if something bad happens
      */
     @RequestMapping(value = "/api/search/autocomplete", method = RequestMethod.POST, produces = "application/json")
@@ -52,20 +53,20 @@ public class SearchController {
                     .body("The searched field is empty or null.");
         }
         else if (aAutoCompleteDTO.getSize() <= 0) {
-            // The passed-in DTO does not have an index name to size:  It must be positive and less than 100
+            // The passed-in DTO has an invalid size:  It must be positive and less than 100
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .contentType(MediaType.TEXT_PLAIN)
                     .body("The size must be a positive number less than or equal to 100");
         }
         else if (aAutoCompleteDTO.getSize() > 100) {
-            // The passed-in DTO does not have an index name to size:  It must be positive and less than 100
+            // The passed-in DTO has an invalid size:  It must be positive and less than 100
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .contentType(MediaType.TEXT_PLAIN)
                     .body("The size must be a positive number less than or equal to 100");
         }
 
-        // Run the auto-complete search and get a list of matching strings
-        List<String> matches = elasticSearchService.runAutoComplete(aAutoCompleteDTO);
+        // Run the search and get a list of matching AutoCompleteMatchDTO objects
+        List<AutoCompleteMatchDTO> matches = elasticSearchService.runAutoComplete(aAutoCompleteDTO);
 
         // Return a list of matches (or an empty list if there are no matches)
         return ResponseEntity
