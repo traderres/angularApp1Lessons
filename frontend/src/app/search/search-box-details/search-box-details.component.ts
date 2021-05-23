@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {isNumeric} from "rxjs/internal-compatibility";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorService} from "../../errorHandler/error.service";
 
@@ -11,7 +10,7 @@ import {ErrorService} from "../../errorHandler/error.service";
 })
 export class SearchBoxDetailsComponent implements OnInit {
 
-  public id: number;
+  public id: string;
 
   constructor(private activatedRoute: ActivatedRoute,
               private errorService: ErrorService) { }
@@ -20,7 +19,7 @@ export class SearchBoxDetailsComponent implements OnInit {
     // Get the raw id from the activatedRoute
     let rawId: string | null = this.activatedRoute.snapshot.paramMap.get("id");
 
-    if (! isNumeric(rawId))  {
+    if (rawId == null)  {
       // No id was passed-in.  So, display an error and stop here
       this.errorService.addError(new HttpErrorResponse({
         statusText: "Invalid Page Parameters",
@@ -31,8 +30,8 @@ export class SearchBoxDetailsComponent implements OnInit {
       return;
     }
 
-    // Convert the rawId into a numeric value (using the plus sign trick)
-    this.id = +rawId;
+    this.id = rawId;
+
 
   } // end of ngOnInit()
 
