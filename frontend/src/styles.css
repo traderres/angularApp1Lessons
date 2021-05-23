@@ -171,3 +171,7 @@ pre {
   font-size: 1em;
   font-weight: 500;
 }
+
+.page-container {
+  margin: 10px;
+}

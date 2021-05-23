@@ -12,10 +12,13 @@
 
 
   <!-- Show Popup autocomplete entries for matching search results -->
-  <mat-autocomplete #autocomplete1="matAutocomplete" panelWidth="auto" >
+  <mat-autocomplete #autocomplete1="matAutocomplete" panelWidth="auto"
+                    (optionSelected)="this.goToDetailsPage($event.option.value)">
+
     <mat-option *ngFor="let match of this.searchMatchesToShowObs | async" [value]="match">
       {{match.name}}
     </mat-option>
+
   </mat-autocomplete>
 
 </div>

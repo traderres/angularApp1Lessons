@@ -47,6 +47,7 @@ import {ChartDrillDownComponent} from "./analytics/chart-drill-down/chart-drill-
 import { BannerComponent } from './banner/banner.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import { SearchBoxComponent } from './search/search-box/search-box.component';
+import { SearchBoxDetailsComponent } from './search/search-box-details/search-box-details.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -58,6 +59,7 @@ const appRoutes: Routes = [
   { path: 'page/chart-drill-down',   component: ChartDrillDownComponent },
   { path: 'page/longView/:id',  component: LongViewInternalNavReportComponent },
   { path: 'page/editReport/:id', component: EditReportComponent },
+  { path: 'page/search/details/:id', component: SearchBoxDetailsComponent },
   { path: 'page/uploadReport', component: UploadReportComponent },
   { path: 'page/chart1',       component: Chart1Component },
   { path: 'page/chart2',       component: Chart2Component },
@@ -90,7 +92,8 @@ const appRoutes: Routes = [
     UsaMapComponent,
     ChartDrillDownComponent,
     BannerComponent,
-    SearchBoxComponent
+    SearchBoxComponent,
+    SearchBoxDetailsComponent
   ],
   imports: [
     AppRoutingModule,

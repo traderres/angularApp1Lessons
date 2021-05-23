@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {AutoCompleteMatchDTO} from "../../models/auto-complete-match-dto";
 import {debounceTime, startWith, switchMap} from "rxjs/operators";
 import {ElasticSearchService} from "../../services/elastic-search.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-search-box',
@@ -15,9 +16,10 @@ export class SearchBoxComponent implements OnInit {
   public searchTextBox: FormControl = new FormControl();
   public searchMatchesToShowObs: Observable<AutoCompleteMatchDTO[]>;
 
-  constructor(private elasticSearchService: ElasticSearchService) { }
+  constructor(private elasticSearchService: ElasticSearchService,
+              private router: Router) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
 
     // Listen for changes on the search text box
     this.searchMatchesToShowObs = this.searchTextBox.valueChanges
@@ -34,5 +36,23 @@ export class SearchBoxComponent implements OnInit {
       );
 
   }  // end of ngOnInit()
+
+  /*
+   * The user selected an auto-complete entry
+   * So, clear the textbox and take the user to the details page
+   */
+  public goToDetailsPage(aMatch: AutoCompleteMatchDTO): void {
+    console.log('aMatch.id='+ aMatch?.id + '  aMatch.name=' + aMatch?.name);
+
+    // Clear the search box
+    this.searchTextBox.setValue('');
+
+    // Navigate to the new page
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=> {
+      // This is needed to ensure that the details page gets reloaded
+      this.router.navigate(['page/search/details/', aMatch.id]).then(() =>{} )
+    });
+
+  }
 
 }
