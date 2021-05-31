@@ -48,6 +48,7 @@ import { BannerComponent } from './banner/banner.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import { SearchBoxComponent } from './search/search-box/search-box.component';
 import { SearchBoxDetailsComponent } from './search/search-box-details/search-box-details.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -64,6 +65,7 @@ const appRoutes: Routes = [
   { path: 'page/chart1',       component: Chart1Component },
   { path: 'page/chart2',       component: Chart2Component },
   { path: 'page/longReport',     component: LongViewOuterReportComponent },
+  { path: 'page/403',     component: ForbiddenComponent },
   { path: '',                  component: WelcomeComponent},
   { path: '**',                component: NotFoundComponent}
 ];
@@ -93,7 +95,8 @@ const appRoutes: Routes = [
     ChartDrillDownComponent,
     BannerComponent,
     SearchBoxComponent,
-    SearchBoxDetailsComponent
+    SearchBoxDetailsComponent,
+    ForbiddenComponent
   ],
   imports: [
     AppRoutingModule,
