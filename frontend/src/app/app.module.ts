@@ -49,10 +49,11 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import { SearchBoxComponent } from './search/search-box/search-box.component';
 import { SearchBoxDetailsComponent } from './search/search-box-details/search-box-details.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import {PageGuard} from "./guards/page.guard";
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
-  { path: 'page/addReport',    component: AddReportComponent },
+  { path: 'page/addReport',    component: AddReportComponent,  canActivate: [PageGuard] },
   { path: 'page/addReport2',    component: AddReport2Component },
   { path: 'page/viewReports',  component: ViewReportsComponent },
   { path: 'page/dashboard',    component: DashboardComponent },
