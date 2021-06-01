@@ -54,23 +54,22 @@ import {PageGuard} from "./guards/page.guard";
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
   { path: 'page/addReport',    component: AddReportComponent,  canActivate: [PageGuard] },
-  { path: 'page/addReport2',    component: AddReport2Component },
-  { path: 'page/viewReports',  component: ViewReportsComponent },
-  { path: 'page/dashboard',    component: DashboardComponent },
-  { path: 'page/usa-map',      component: UsaMapComponent },
-  { path: 'page/chart-drill-down',   component: ChartDrillDownComponent },
-  { path: 'page/longView/:id',  component: LongViewInternalNavReportComponent },
-  { path: 'page/editReport/:id', component: EditReportComponent },
-  { path: 'page/search/details/:id', component: SearchBoxDetailsComponent },
-  { path: 'page/uploadReport', component: UploadReportComponent },
-  { path: 'page/chart1',       component: Chart1Component },
-  { path: 'page/chart2',       component: Chart2Component },
-  { path: 'page/longReport',     component: LongViewOuterReportComponent },
+  { path: 'page/addReport2',    component: AddReport2Component,  canActivate: [PageGuard] },
+  { path: 'page/viewReports',  component: ViewReportsComponent,  canActivate: [PageGuard] },
+  { path: 'page/dashboard',    component: DashboardComponent,  canActivate: [PageGuard] },
+  { path: 'page/usa-map',      component: UsaMapComponent,  canActivate: [PageGuard] },
+  { path: 'page/chart-drill-down',   component: ChartDrillDownComponent,  canActivate: [PageGuard] },
+  { path: 'page/longView/:id',  component: LongViewInternalNavReportComponent ,  canActivate: [PageGuard] },
+  { path: 'page/editReport/:id', component: EditReportComponent ,  canActivate: [PageGuard] },
+  { path: 'page/search/details/:id', component: SearchBoxDetailsComponent ,  canActivate: [PageGuard] },
+  { path: 'page/uploadReport', component: UploadReportComponent ,  canActivate: [PageGuard] },
+  { path: 'page/chart1',       component: Chart1Component,  canActivate: [PageGuard] },
+  { path: 'page/chart2',       component: Chart2Component,  canActivate: [PageGuard] },
+  { path: 'page/longReport',     component: LongViewOuterReportComponent,  canActivate: [PageGuard] },
   { path: 'page/403',     component: ForbiddenComponent },
   { path: '',                  component: WelcomeComponent},
   { path: '**',                component: NotFoundComponent}
 ];
-
 
 @NgModule({
   declarations: [
