@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {BannerService} from "../services/banner.service";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Constants} from "../utilities/constants";
+import {UserService} from "../services/user.service";
+import {UserInfoDTO} from "../models/user-info-dto";
 
 @Component({
   selector: 'app-user-navbar',
@@ -13,15 +15,22 @@ export class UserNavbarComponent implements OnInit {
   public bannerIsVisible: boolean;
   private bannerSubscription: Subscription;
 
-  constructor(public bannerService: BannerService) { }
+  public userInfoObs: Observable<UserInfoDTO>
+
+  constructor(public bannerService: BannerService,
+              private userService: UserService) { }
 
   public ngOnInit(): void {
 
     this.bannerSubscription = this.bannerService.getStateAsObservable().subscribe( (aCurrentValue: boolean) => {
       // We received a message from the banner service with the value
       this.bannerIsVisible = aCurrentValue;
-    })
+    });
 
+
+    // Setup an observable to get the UserInfo
+    // NOTE:  The HTML Template uses an async pipe to subscribe and unsubscribe to this observable
+    this.userInfoObs = this.userService.getUserInfo();
   }
 
 

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Constants} from "../utilities/constants";
+import {UserService} from "../services/user.service";
+import {Observable} from "rxjs";
+import {UserInfoDTO} from "../models/user-info-dto";
 
 @Component({
   selector: 'app-navbar',
@@ -11,9 +14,14 @@ export class NavbarComponent implements OnInit {
   public reportsNavGroupClosed: boolean = true;   // Close Reports  section on page load
   public analyticsGroupClosed:  boolean = false;   // Open Analytics section on page load
 
-  constructor() { }
+  public userInfoObs: Observable<UserInfoDTO>
+
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
+    // Setup an observable to get the UserInfo
+    // NOTE:  The HTML Template uses an async pipe to subscribe and unsubscribe to this observable
+    this.userInfoObs = this.userService.getUserInfo();
   }
 
   public toggleNavGroup(aNavGroupNumber: number) {
