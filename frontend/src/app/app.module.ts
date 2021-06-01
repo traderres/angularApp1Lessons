@@ -50,23 +50,24 @@ import { SearchBoxComponent } from './search/search-box/search-box.component';
 import { SearchBoxDetailsComponent } from './search/search-box-details/search-box-details.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import {PageGuard} from "./guards/page.guard";
+import {Constants} from "./utilities/constants";
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
-  { path: 'page/addReport',    component: AddReportComponent,  canActivate: [PageGuard] },
-  { path: 'page/addReport2',    component: AddReport2Component,  canActivate: [PageGuard] },
-  { path: 'page/viewReports',  component: ViewReportsComponent,  canActivate: [PageGuard] },
-  { path: 'page/dashboard',    component: DashboardComponent,  canActivate: [PageGuard] },
-  { path: 'page/usa-map',      component: UsaMapComponent,  canActivate: [PageGuard] },
-  { path: 'page/chart-drill-down',   component: ChartDrillDownComponent,  canActivate: [PageGuard] },
-  { path: 'page/longView/:id',  component: LongViewInternalNavReportComponent ,  canActivate: [PageGuard] },
-  { path: 'page/editReport/:id', component: EditReportComponent ,  canActivate: [PageGuard] },
-  { path: 'page/search/details/:id', component: SearchBoxDetailsComponent ,  canActivate: [PageGuard] },
-  { path: 'page/uploadReport', component: UploadReportComponent ,  canActivate: [PageGuard] },
-  { path: 'page/chart1',       component: Chart1Component,  canActivate: [PageGuard] },
-  { path: 'page/chart2',       component: Chart2Component,  canActivate: [PageGuard] },
-  { path: 'page/longReport',     component: LongViewOuterReportComponent,  canActivate: [PageGuard] },
-  { path: 'page/403',     component: ForbiddenComponent },
+  { path: Constants.ADD_REPORTS_ROUTE,    component: AddReportComponent,  canActivate: [PageGuard] },
+  { path: Constants.ADD_REPORTS2_ROUTE,    component: AddReport2Component,  canActivate: [PageGuard] },
+  { path: Constants.VIEW_REPORTS_ROUTE,  component: ViewReportsComponent,  canActivate: [PageGuard] },
+  { path: Constants.DASHBOARD_ROUTE,    component: DashboardComponent,  canActivate: [PageGuard] },
+  { path: Constants.USA_MAP_ROUTE,      component: UsaMapComponent,  canActivate: [PageGuard] },
+  { path: Constants.CHART_DRILLDOWN_ROUTE,   component: ChartDrillDownComponent,  canActivate: [PageGuard] },
+  { path: Constants.LONGVIEW_INTERNAL_NAV_REPORT + ':id',  component: LongViewInternalNavReportComponent ,  canActivate: [PageGuard] },
+  { path: Constants.EDIT_REPORT_ROUTE +':id', component: EditReportComponent ,  canActivate: [PageGuard] },
+  { path: Constants.SEARCH_DETAILS_ROUTE + 'id', component: SearchBoxDetailsComponent ,  canActivate: [PageGuard] },
+  { path: Constants.UPLOAD_REPORT_ROUTE, component: UploadReportComponent ,  canActivate: [PageGuard] },
+  { path: Constants.CHART1_ROUTE,       component: Chart1Component,  canActivate: [PageGuard] },
+  { path: Constants.CHART2_ROUTE,       component: Chart2Component,  canActivate: [PageGuard] },
+  { path: Constants.LONGVIEW_REPORT,     component: LongViewOuterReportComponent,  canActivate: [PageGuard] },
+  { path: Constants.FORBIDDEN_ROUTE,     component: ForbiddenComponent },
   { path: '',                  component: WelcomeComponent},
   { path: '**',                component: NotFoundComponent}
 ];

@@ -4,6 +4,7 @@ import {GetReportDTO} from "../../models/get-report-dto";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {environment} from "../../../environments/environment";
+import {Constants} from "../../utilities/constants";
 
 @Component({
   selector: 'app-view-reports',
@@ -25,12 +26,12 @@ export class ViewReportsComponent implements OnInit {
 
   public goToEditReport(aReportId: number): void {
     // Take the user to the Edit Report page and pass-in the reportId
-    this.router.navigate(['page/editReport/',   aReportId]).then();
+    this.router.navigate([Constants.EDIT_REPORT_ROUTE,   aReportId]).then();
   }
 
   public goToLongView(aReportId: number): void {
     // Take the user to the Long View page and pass-in the reportId
-    this.router.navigate(['page/longView/',   aReportId]).then();
+    this.router.navigate([Constants.LONGVIEW_INTERNAL_NAV_REPORT,   aReportId]).then();
   }
 
   public download(aFileId: number): void {

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {UserService} from "../services/user.service";
 import {UserInfoDTO} from "../models/user-info-dto";
 import {map} from "rxjs/operators";
+import {Constants} from "../utilities/constants";
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class PageGuard implements CanActivate {
 
         if (! routeAllowed) {
           // The route was not found in the map or holds False.  So, redirect the user to the Forbidden Page
-          this.router.navigate(['page/403']).then();
+          this.router.navigate([Constants.FORBIDDEN_ROUTE]).then();
 
           // Return false so that the router will not route the user to the new page
           return false;

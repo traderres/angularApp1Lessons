@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BannerService} from "../services/banner.service";
 import {Subscription} from "rxjs";
+import {Constants} from "../utilities/constants";
 
 @Component({
   selector: 'app-user-navbar',
@@ -21,6 +22,13 @@ export class UserNavbarComponent implements OnInit {
       this.bannerIsVisible = aCurrentValue;
     })
 
+  }
+
+
+  public get constants(): typeof Constants {
+    // Get a reference to the enumerated object
+    // -- This is needed so that the html page can use the enum class
+    return Constants;
   }
 
 }

@@ -5,6 +5,7 @@ import {AutoCompleteMatchDTO} from "../../models/auto-complete-match-dto";
 import {debounceTime, startWith, switchMap} from "rxjs/operators";
 import {ElasticSearchService} from "../../services/elastic-search.service";
 import {Router} from "@angular/router";
+import {Constants} from "../../utilities/constants";
 
 @Component({
   selector: 'app-search-box',
@@ -50,7 +51,7 @@ export class SearchBoxComponent implements OnInit {
     // Navigate to the new page
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=> {
       // This is needed to ensure that the details page gets reloaded
-      this.router.navigate(['page/search/details/', aMatch.id]).then(() =>{} )
+      this.router.navigate([Constants.SEARCH_DETAILS_ROUTE, aMatch.id]).then(() =>{} )
     });
 
   }

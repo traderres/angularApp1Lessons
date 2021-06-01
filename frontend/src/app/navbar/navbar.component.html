@@ -11,10 +11,10 @@
     <div class='navGroup' [ngClass]="{'navGroupClosed': reportsNavGroupClosed == true}">
 
       <!-- View Reports -->
-      <mat-list-item class="navItem" [routerLink]="'page/viewReports'" routerLinkActive="active">
+      <mat-list-item class="navItem" [routerLink]="constants.VIEW_REPORTS_ROUTE" routerLinkActive="active">
         <a title="View Reports">View Reports</a>
         <div fxFlex fxLayoutAlign="end end">
-          <a [routerLink]="'page/viewReports'" target="_blank">
+          <a [routerLink]="constants.VIEW_REPORTS_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon" title="Open View Reports in a new
 window"></i>
           </a>
@@ -22,10 +22,10 @@ window"></i>
       </mat-list-item>
 
       <!-- Add Report -->
-      <mat-list-item class="navItem" [routerLink]="'page/addReport'" routerLinkActive="active">
+      <mat-list-item class="navItem" [routerLink]="constants.ADD_REPORTS_ROUTE" routerLinkActive="active">
         <a title="Add Report">Add Report</a>
         <div fxFlex fxLayoutAlign="end end">
-          <a [routerLink]="'page/addReport'" target="_blank">
+          <a [routerLink]="constants.ADD_REPORTS_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon" title="Open Add Report in a new
 window"></i>
           </a>
@@ -33,21 +33,21 @@ window"></i>
       </mat-list-item>
 
       <!-- Add Report 2 -->
-      <mat-list-item class="navItem" [routerLink]="'page/addReport2'"
+      <mat-list-item class="navItem" [routerLink]="constants.ADD_REPORTS2_ROUTE"
                      routerLinkActive="active">
         <a title="Add Report">Add Report 2</a>
         <div fxFlex fxLayoutAlign="end end">
-          <a [routerLink]="'page/addReport2'" target="_blank">
+          <a [routerLink]="constants.ADD_REPORTS2_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon" title="Open Add Report 2 in a new window"></i>
           </a>
         </div>
       </mat-list-item>
 
       <!-- Audit History -->
-      <mat-list-item class="navItem" [routerLink]="'page/auditHistory'" routerLinkActive="active">
+      <mat-list-item class="navItem" [routerLink]="constants.AUDIT_HISTORY_ROUTE" routerLinkActive="active">
         <a title="Audit History">Audit History</a>
         <div fxFlex fxLayoutAlign="end end" >
-          <a [routerLink]="'page/auditHistory'" target="_blank">
+          <a [routerLink]="constants.AUDIT_HISTORY_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon" title="Open Audit History in a new
 window"></i>
           </a>
@@ -55,11 +55,11 @@ window"></i>
       </mat-list-item>
 
       <!-- Upload Report -->
-      <mat-list-item class="navItem" [routerLink]="'page/uploadReport'"
+      <mat-list-item class="navItem" [routerLink]="constants.UPLOAD_REPORT_ROUTE"
                      routerLinkActive="active">
         <a title="Upload Report">Upload Report</a>
         <div fxFlex fxLayoutAlign="end end" >
-          <a [routerLink]="'page/uploadReport'" target="_blank">
+          <a [routerLink]="constants.UPLOAD_REPORT_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon"
                title="Open 'Upload Report' a new window"></i>
           </a>
@@ -67,11 +67,11 @@ window"></i>
       </mat-list-item>
 
       <!-- Long View Report -->
-      <mat-list-item class="navItem" [routerLink]="'page/longReport'"
+      <mat-list-item class="navItem" [routerLink]="constants.LONGVIEW_REPORT"
                      routerLinkActive="active">
         <a title="Long View Report">Long View Report</a>
         <div fxFlex fxLayoutAlign="end end" >
-          <a [routerLink]="'page/longReport'" target="_blank">
+          <a [routerLink]="constants.LONGVIEW_REPORT" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon"
                title="Open 'Long View Report' a new window"></i>
           </a>
@@ -90,50 +90,50 @@ window"></i>
     <div class='navGroup' [ngClass]="{'navGroupClosed': analyticsGroupClosed == true}">
 
       <!-- Dashboard -->
-      <mat-list-item class="navItem" [routerLink]="'page/dashboard'" routerLinkActive="active">
+      <mat-list-item class="navItem" [routerLink]="constants.DASHBOARD_ROUTE" routerLinkActive="active">
         <a title="Dashboard">Dashboard</a>
         <div fxFlex fxLayoutAlign="end end">
-          <a [routerLink]="'page/dashboard'" target="_blank">
+          <a [routerLink]="constants.DASHBOARD_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon" title="Open 'Dashboard' in a new window"></i>
           </a>
         </div>
       </mat-list-item>
 
       <!-- USA Map -->
-      <mat-list-item class="navItem" [routerLink]="'page/usa-map'" routerLinkActive="active">
+      <mat-list-item class="navItem" [routerLink]="constants.USA_MAP_ROUTE" routerLinkActive="active">
         <a title="USA Map">USA Map</a>
         <div fxFlex fxLayoutAlign="end end">
-          <a [routerLink]="'page/usa-map'" target="_blank">
+          <a [routerLink]="constants.USA_MAP_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon" title="Open 'USA Map' in a new window"></i>
           </a>
         </div>
       </mat-list-item>
 
       <!-- Drill Down Bar Chart -->
-      <mat-list-item class="navItem" [routerLink]="'page/chart-drill-down'" routerLinkActive="active">
+      <mat-list-item class="navItem" [routerLink]="constants.CHART_DRILLDOWN_ROUTE" routerLinkActive="active">
         <a title="Drill Down Chart">Drill Down Chart</a>
         <div fxFlex fxLayoutAlign="end end">
-          <a [routerLink]="'page/chart-drill-down'" target="_blank">
+          <a [routerLink]="constants.CHART_DRILLDOWN_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon" title="Open 'Drill Down Chart' in a new window"></i>
           </a>
         </div>
       </mat-list-item>
 
       <!-- Chart 1 -->
-      <mat-list-item class="navItem" [routerLink]="'page/chart1'" routerLinkActive="active">
+      <mat-list-item class="navItem" [routerLink]="constants.CHART1_ROUTE" routerLinkActive="active">
         <a title="Chart 1">Chart 1</a>
         <div fxFlex fxLayoutAlign="end end">
-          <a [routerLink]="'page/chart1'" target="_blank">
+          <a [routerLink]="constants.CHART1_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon" title="Open Chart 1 in a new window"></i>
           </a>
         </div>
       </mat-list-item>
 
       <!-- Chart 2 -->
-      <mat-list-item class="navItem" [routerLink]="'page/chart2'" routerLinkActive="active">
+      <mat-list-item class="navItem" [routerLink]="constants.CHART2_ROUTE" routerLinkActive="active">
         <a title="Chart 2">Chart 2</a>
         <div fxFlex fxLayoutAlign="end end">
-          <a [routerLink]="'page/chart2'" target="_blank">
+          <a [routerLink]="constants.CHART2_ROUTE" target="_blank">
             <i class="fas fa-external-link-alt navItemIcon" title="Open Chart 2 in a new window"></i>
           </a>
         </div>

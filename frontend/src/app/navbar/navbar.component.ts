@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Constants} from "../utilities/constants";
 
 @Component({
   selector: 'app-navbar',
@@ -35,5 +36,11 @@ export class NavbarComponent implements OnInit {
   public downloadHelpFile(): void {
     // Open the help.pdf in another tab
     window.open('./assets/help.pdf', "_blank");
+  }
+
+  public get constants(): typeof Constants {
+    // Get a reference to the enumerated object
+    // -- This is needed so that the html page can use the enum class
+    return Constants;
   }
 }
