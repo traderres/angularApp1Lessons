@@ -1,4 +1,4 @@
-Angular App1 Lesson 20g
+Angular App1 Lesson 20h
 -----------------------
 
 
@@ -9,7 +9,7 @@ To Get started From Project Setup
  2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson20g/secure-route/invoke-rest-call
+    unix> git checkout lesson20h/secure-route/cache-rest-call
 
  3. Verify that the webapp works
     a. Compile the project (into an executable JAR)
