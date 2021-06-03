@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import {UserInfoDTO} from "../models/user-info-dto";
-import {Observable, of} from "rxjs";
-import {Constants} from "../utilities/constants";
+import {Observable} from "rxjs";
+import {environment} from "../../environments/environment";
+import {HttpClient} from "@angular/common/http";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
   /*
    * Return an observable that holds information about the user
@@ -16,29 +18,22 @@ export class UserService {
    */
   public getUserInfo(): Observable<UserInfoDTO> {
 
-    let userInfo: UserInfoDTO = new UserInfoDTO();
+    // Construct the URL of the REST call
+    const restUrl = environment.baseUrl + '/api/user/me';
 
-    userInfo.name = 'John Smith';
+    // Return an observable
+    return this.httpClient.get <UserInfoDTO>(restUrl).pipe(
+        map( (userInfoDTO: UserInfoDTO) => {
 
-    userInfo.pageRoutes = new Map<string, boolean>([
-      [Constants.ADD_REPORTS_ROUTE, true],
-      [Constants.ADD_REPORTS2_ROUTE, true],
-      [Constants.LONGVIEW_REPORT, true],
-      [Constants.VIEW_REPORTS_ROUTE, true],
-      [Constants.AUDIT_HISTORY_ROUTE, true],
-      [Constants.DASHBOARD_ROUTE, true],
-      [Constants.USA_MAP_ROUTE, true],
-      [Constants.CHART_DRILLDOWN_ROUTE, true],
-      [Constants.LONGVIEW_INTERNAL_NAV_REPORT, true],
-      [Constants.LONGVIEW_REPORT, true],
-      [Constants.EDIT_REPORT_ROUTE, true],
-      [Constants.SEARCH_DETAILS_ROUTE, true],
-      [Constants.UPLOAD_REPORT_ROUTE, true],
-      [Constants.CHART1_ROUTE, true],
-      [Constants.CHART2_ROUTE, true]
-    ]);
+          // Convert the userInfoDTO.pageRoutes into a map
+          // So that the PageGuard does not have to do it repeatedly
+          let mapPageRoutes: Map<string, boolean> = new Map(Object.entries(userInfoDTO.pageRoutes));
 
-    // Return an observable that holds this information
-    return of(userInfo);
-  }
+          userInfoDTO.pageRoutes = mapPageRoutes;
+          return userInfoDTO;
+        }
+      ));
+
+  } // end of getUserInfo
+
 }
