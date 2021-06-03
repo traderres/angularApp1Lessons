@@ -58,6 +58,16 @@ insert into uicontrols(id, name) values(1002, 'page/reports/add');
 insert into uicontrols(id, name) values(1003, 'page/reports/add2');
 insert into uicontrols(id, name) values(1004, 'page/longReport');
 insert into uicontrols(id, name) values(1005, 'page/searchResults');
+insert into uicontrols(id, name) values(1006, 'page/dashboard');
+insert into uicontrols(id, name) values(1007, 'page/usa-map');
+insert into uicontrols(id, name) values(1008, 'page/chart-drill-down');
+insert into uicontrols(id, name) values(1009, 'page/longview/');
+insert into uicontrols(id, name) values(1010, 'page/longview');
+insert into uicontrols(id, name) values(1011, 'page/page/reports/edit/');
+insert into uicontrols(id, name) values(1012, 'page/search/details/');
+insert into uicontrols(id, name) values(1013, 'page/report/upload');
+insert into uicontrols(id, name) values(1014, 'page/chart1');
+insert into uicontrols(id, name) values(1015, 'page/chart2');
 
 
 -- Assign ui controls for the 'admin' role
@@ -73,3 +83,13 @@ insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1002);
 insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1003);
 insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1004);
 insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1005);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1006);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1007);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1008);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1009);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1010);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1011);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1012);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1013);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1014);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1015);
