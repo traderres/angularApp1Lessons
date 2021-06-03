@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,12 +36,12 @@ public class HomeController {
     }
 
 
-    /*************************************************************************
-     * REST endpoint /api/time
-     *
-     * @return a plain-old string with the system time (not JSON)
-     *************************************************************************/
+    /**
+     * GET /api/time
+     * @return a plain-old string with the system time
+     */
     @RequestMapping(value = "/api/time", method = RequestMethod.GET, produces = "application/json")
+    @PreAuthorize("hasAnyRole('READER', 'ADMIN')")
     public ResponseEntity<?> getDateTime() {
         logger.debug("getDateTime() started.");
 
@@ -54,6 +55,6 @@ public class HomeController {
                 .status(HttpStatus.OK)
                 .contentType(MediaType.TEXT_PLAIN)
                 .body(dateTime);
-    }
+        }
 
 }

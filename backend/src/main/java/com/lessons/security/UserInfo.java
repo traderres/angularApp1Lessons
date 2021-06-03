@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -16,6 +17,7 @@ public class UserInfo implements UserDetails, Serializable{
     private String usernameDN;                    // The entire DN string    (from the PKI client cert)
     private List<GrantedAuthority> grantedAuthorities;    // List of roles found in the database)
     private Integer id;                                   // Holds the user's ID in the database
+    private Map<String, Boolean> accessMap;
 
     public String getPassword() {
         // Must implement this method in order to implement the UserDetails interface
@@ -85,6 +87,10 @@ public class UserInfo implements UserDetails, Serializable{
         return id;
     }
 
+    public Map<String, Boolean> getAccessMap() {
+        return accessMap;
+    }
+
     public String toString() {
         return ("Roles=" + StringUtils.join(this.grantedAuthorities, ",") +
                 " UID=" + this.username +
@@ -111,4 +117,8 @@ public class UserInfo implements UserDetails, Serializable{
         return this;
     }
 
+    public UserInfo withAccessMap(Map<String, Boolean> aAccessMap) {
+        this.accessMap = aAccessMap;
+        return this;
+    }
 }

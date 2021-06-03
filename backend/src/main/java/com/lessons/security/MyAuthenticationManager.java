@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -106,6 +107,10 @@ public class MyAuthenticationManager implements AuthenticationManager {
             // -- This would be the place to add/update a database record indicating that the user logged-in
             Integer userId = this.userService.getOrAddUserRecordsToSystem(userUID);
 
+            // Get the user's granted access map
+            // NOTE:  This holds all authorized routes and UI controls (based on the user's granted roles)
+            Map<String, Boolean> accessMap = userService.generateAccessMap(grantedRoleAuthorities);
+            
             logger.debug("loadUserDetailsFromRealSource() about to return new UserInfo object");
 
             // We *MUST* set the database ID in the UserInfo object here
@@ -162,13 +167,17 @@ public class MyAuthenticationManager implements AuthenticationManager {
         }
 
         // Create a list of granted authorities
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_READER"));
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER_FOUND_IN_VALID_LIST_OF_USERS"));
+        List<GrantedAuthority> grantedRoleAuthorities = new ArrayList<>();
+        grantedRoleAuthorities.add(new SimpleGrantedAuthority("ROLE_READER"));
+        grantedRoleAuthorities.add(new SimpleGrantedAuthority("ROLE_USER_FOUND_IN_VALID_LIST_OF_USERS"));
 
         // User is about to login
         // -- This would be the place to add/update a database record indicating that the user logged-in
         Integer userId = 25;
+
+        // Get the user's granted access map
+        // NOTE:  This holds all authorized routes and UI controls (based on the user's granted roles)
+        Map<String, Boolean> accessMap = userService.generateAccessMap(grantedRoleAuthorities);
 
         // Create a bogus UserInfo object
         // NOTE:  I am hard-coding the user's userid=25
@@ -176,7 +185,9 @@ public class MyAuthenticationManager implements AuthenticationManager {
                 .withId(userId)
                 .withUsernameUID(userUID)
                 .withUsernameDn(userDN)
-                .withGrantedAuthorities(grantedAuthorities);
+                .withGrantedAuthorities(grantedRoleAuthorities)
+                .withAccessMap(accessMap);
+        
         return anonymousUserInfo;
     }
 
