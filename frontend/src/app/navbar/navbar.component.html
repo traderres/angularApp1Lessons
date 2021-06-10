@@ -1,16 +1,18 @@
-<ng-container *ngIf="(this.userInfoObs | async) as userInfo">
-    <!-- The UserInfoObs data has come in.  So, show the navbar -->
+<div class="navbar" style="width:200px">
 
-    <div class="navbar" style="width:200px">
-      <mat-nav-list style="margin-top: 0; padding-top: 0">
+      <ng-container *ngIf="(this.userInfoObs | async) as userInfo">
+        <!-- The UserInfoObs data has come in.  So, show the navbar -->
+        <!-- NOTE:  The async-pipe for userInfo must be *inside* the outer div that hsa width of 200px.  Otherwise all of the pages are screwed-up on page load  -->
 
-        <ng-container  *ngIf="userInfo.pageRoutes.get(constants.VIEW_REPORTS_ROUTE) ||
-                              userInfo.pageRoutes.get(constants.ADD_REPORTS_ROUTE) ||
-                              userInfo.pageRoutes.get(constants.ADD_REPORTS2_ROUTE) ||
-                              userInfo.pageRoutes.get(constants.AUDIT_HISTORY_ROUTE) ||
-                              userInfo.pageRoutes.get(constants.LONGVIEW_REPORT) ||
-                              userInfo.pageRoutes.get(constants.UPLOAD_REPORT_ROUTE) ">
-            <!-- The user is authorized to see atleast one of the Reports Navbar Items -->
+          <mat-nav-list style="margin-top: 0; padding-top: 0">
+
+            <ng-container  *ngIf="userInfo.pageRoutes.get(constants.VIEW_REPORTS_ROUTE) ||
+                                  userInfo.pageRoutes.get(constants.ADD_REPORTS_ROUTE) ||
+                                  userInfo.pageRoutes.get(constants.ADD_REPORTS2_ROUTE) ||
+                                  userInfo.pageRoutes.get(constants.AUDIT_HISTORY_ROUTE) ||
+                                  userInfo.pageRoutes.get(constants.LONGVIEW_REPORT) ||
+                                  userInfo.pageRoutes.get(constants.UPLOAD_REPORT_ROUTE) ">
+                <!-- The user is authorized to see atleast one of the Reports Navbar Items -->
 
             <!-- Menu Group 1 -->
             <div class='navHeader clickable'  (click)="toggleNavGroup(1)">
@@ -170,6 +172,8 @@
         </div>  <!-- End of Menu Group 2 Items -->
 
       </mat-nav-list>
-    </div>
 
-</ng-container>
+      </ng-container>
+
+</div>
+
