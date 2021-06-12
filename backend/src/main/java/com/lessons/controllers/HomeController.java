@@ -27,6 +27,7 @@ public class HomeController {
      *         2. Angular routes will redirect the user to the route for view/reports
      */
     @RequestMapping(value = {"/", "/page/**"}, method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('READER', 'ADMIN')")
     public String home() {
 
         // This method handles two cases:
