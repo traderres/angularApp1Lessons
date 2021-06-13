@@ -118,7 +118,9 @@ public class MyAuthenticationManager implements AuthenticationManager {
                     .withId(userId)
                     .withUsernameDn(userDN)
                     .withUsernameUID(userUID)
-                    .withGrantedAuthorities(grantedRoleAuthorities);
+                    .withGrantedAuthorities(grantedRoleAuthorities)
+                    .withAccessMap(accessMap);
+
         } catch (Exception e) {
             throw new UsernameNotFoundException("Exception raised in loadUserDetailsFromRealSource():  This user will definitely not login", e);
         }
