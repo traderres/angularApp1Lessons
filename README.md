@@ -1,4 +1,4 @@
-Angular App1 Lesson 21a
+Angular App1 Lesson 21b
 -----------------------
 
 
@@ -9,7 +9,7 @@ To Get started From Project Setup
  2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson21a/bdp/add-ssl-to-elasticsearch
+    unix> git checkout lesson21b/bdp/add-module-to-create-rda
 
  3. Verify that the webapp works
     a. Compile the project (into an executable JAR)
