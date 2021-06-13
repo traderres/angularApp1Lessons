@@ -14,15 +14,20 @@ disable.cors: false
 spring.profiles.active: prod
 
 # Tell Spring to disable DataSource Auto Configuration (so you can run a springboot app without a datasource
+# Tell Spring to disable using the White label ErrorMvcAutoConfiguration
 spring.autoconfigure:
   exclude:
     - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
     - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+    - org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
 
+# Disable the white label page
+server.error.whitelabel.enabled: true
 
 # Tell Spring to not run flyway
 # NOTE:  In the DataSourceConfig, there is code to run flyway migrate on webapp startup
 spring.flyway.enabled: false
+
 
 
 #################################################################
