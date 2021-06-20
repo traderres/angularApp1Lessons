@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import "ag-grid-enterprise";
 
 @Component({
   selector: 'app-report-grid-view',
@@ -6,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./report-grid-view.component.css']
 })
 export class ReportGridViewComponent implements OnInit {
+
+  public gridOptions: any = {
+    debug: true
+  };
 
   public defaultColDefs: any = {
     flex: 1,
@@ -53,7 +58,9 @@ export class ReportGridViewComponent implements OnInit {
   ];
 
 
-  constructor() { }
+
+
+  constructor() {}
 
   ngOnInit(): void {
   }
