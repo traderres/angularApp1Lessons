@@ -51,10 +51,13 @@ import { SearchBoxDetailsComponent } from './search/search-box-details/search-bo
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import {PageGuard} from "./guards/page.guard";
 import {Constants} from "./utilities/constants";
+import {AgGridModule} from "ag-grid-angular";
+import { ReportGridViewComponent } from './reports/report-grid-view/report-grid-view.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
   { path: Constants.ADD_REPORTS_ROUTE,    component: AddReportComponent,  canActivate: [PageGuard] },
+  { path: Constants.REPORTS_GRID_VIEW_ROUTE,    component: ReportGridViewComponent,  canActivate: [PageGuard] },
   { path: Constants.ADD_REPORTS2_ROUTE,    component: AddReport2Component,  canActivate: [PageGuard] },
   { path: Constants.VIEW_REPORTS_ROUTE,  component: ViewReportsComponent,  canActivate: [PageGuard] },
   { path: Constants.DASHBOARD_ROUTE,    component: DashboardComponent,  canActivate: [PageGuard] },
@@ -97,10 +100,12 @@ const appRoutes: Routes = [
     BannerComponent,
     SearchBoxComponent,
     SearchBoxDetailsComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    ReportGridViewComponent
   ],
   imports: [
     AppRoutingModule,
+    AgGridModule,
     BrowserAnimationsModule,
     BrowserModule,
     FileUploadModule,

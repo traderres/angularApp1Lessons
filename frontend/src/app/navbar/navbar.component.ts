@@ -11,8 +11,8 @@ import {UserInfoDTO} from "../models/user-info-dto";
 })
 export class NavbarComponent implements OnInit {
 
-  public reportsNavGroupClosed: boolean = true;   // Close Reports  section on page load
-  public analyticsGroupClosed:  boolean = false;   // Open Analytics section on page load
+  public reportsNavGroupClosed: boolean = false;   // Open Reports  section on page load
+  public analyticsGroupClosed:  boolean = true;    // Close Analytics section on page load
 
   public userInfoObs: Observable<UserInfoDTO>
 

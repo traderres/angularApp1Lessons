@@ -91,6 +91,17 @@
             </div>
           </mat-list-item>
 
+          <!-- Report Grid View -->
+          <mat-list-item class="navItem" [routerLink]="constants.REPORTS_GRID_VIEW_ROUTE" routerLinkActive="active"
+                         *ngIf="userInfo.pageRoutes.get(constants.REPORTS_GRID_VIEW_ROUTE)">
+            <a title="Long View Report">Report Grid View</a>
+            <div fxFlex fxLayoutAlign="end end" >
+              <a [routerLink]="constants.REPORTS_GRID_VIEW_ROUTE" target="_blank">
+                <i class="fas fa-external-link-alt navItemIcon" title="Open 'Report Grid View' a new window"></i>
+              </a>
+            </div>
+          </mat-list-item>
+
         </div>  <!-- End of navMenuGroup -->
       </ng-container>
 

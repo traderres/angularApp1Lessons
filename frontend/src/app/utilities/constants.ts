@@ -3,6 +3,7 @@ export enum Constants {
   AUDIT_HISTORY_ROUTE          = "page/auditHistory",
   ADD_REPORTS_ROUTE            = "page/reports/add",
   ADD_REPORTS2_ROUTE           = "page/reports/add2",
+  REPORTS_GRID_VIEW_ROUTE      = "page/reports/grid",
   VIEW_REPORTS_ROUTE           = "page/viewReports",
   DASHBOARD_ROUTE              = "page/dashboard",
   USA_MAP_ROUTE                = "page/usa-map",
