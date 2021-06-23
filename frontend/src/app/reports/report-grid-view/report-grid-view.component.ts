@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import "ag-grid-enterprise";
+import {GridService} from "../../services/grid.service";
+import {ReportRowDataDTO} from "../../models/report-row-data-dto";
+import {ColumnApi, GridApi} from "ag-grid-community";
 
 @Component({
   selector: 'app-report-grid-view',
@@ -27,42 +30,47 @@ export class ReportGridViewComponent implements OnInit {
     {field: 'end_date'}
   ];
 
-  public rowData = [
-
-    { id: 1, name: 'Report 1', priority: 'low', 'start_date': '05/01/2019', 'end_date': '05/05/2019'},
-    { id: 2, name: 'Report 2', priority: 'medium', 'start_date': '06/01/2019', 'end_date': '06/06/2019'},
-    { id: 3, name: 'Report 3', priority: 'high', 'start_date': '07/01/2019', 'end_date': '07/07/2019'},
-    { id: 1, name: 'Report 4', priority: 'low', 'start_date': '05/01/2019', 'end_date': '05/05/2019'},
-    { id: 2, name: 'Report 5', priority: 'medium', 'start_date': '06/01/2019', 'end_date': '06/06/2019'},
-    { id: 3, name: 'Report 6', priority: 'high', 'start_date': '07/01/2019', 'end_date': '07/07/2019'},
-    { id: 1, name: 'Report 7', priority: 'low', 'start_date': '05/01/2019', 'end_date': '05/05/2019'},
-    { id: 2, name: 'Report 8', priority: 'medium', 'start_date': '06/01/2019', 'end_date': '06/06/2019'},
-    { id: 3, name: 'Report 9', priority: 'high', 'start_date': '07/01/2019', 'end_date': '07/07/2019'},
-    { id: 1, name: 'Report 10', priority: 'low', 'start_date': '05/01/2019', 'end_date': '05/05/2019'},
-    { id: 2, name: 'Report 11', priority: 'medium', 'start_date': '06/01/2019', 'end_date': '06/06/2019'},
-    { id: 3, name: 'Report 12', priority: 'high', 'start_date': '07/01/2019', 'end_date': '07/07/2019'},
-    { id: 1, name: 'Report 13', priority: 'low', 'start_date': '05/01/2019', 'end_date': '05/05/2019'},
-    { id: 2, name: 'Report 14', priority: 'medium', 'start_date': '06/01/2019', 'end_date': '06/06/2019'},
-    { id: 3, name: 'Report 15', priority: 'high', 'start_date': '07/01/2019', 'end_date': '07/07/2019'},
-    { id: 1, name: 'Report 16', priority: 'low', 'start_date': '05/01/2019', 'end_date': '05/05/2019'},
-    { id: 2, name: 'Report 17', priority: 'medium', 'start_date': '06/01/2019', 'end_date': '06/06/2019'},
-    { id: 3, name: 'Report 18', priority: 'high', 'start_date': '07/01/2019', 'end_date': '07/07/2019'},
-    { id: 1, name: 'Report 19', priority: 'low', 'start_date': '05/01/2019', 'end_date': '05/05/2019'},
-    { id: 2, name: 'Report 20', priority: 'medium', 'start_date': '06/01/2019', 'end_date': '06/06/2019'},
-    { id: 3, name: 'Report 21', priority: 'high', 'start_date': '07/01/2019', 'end_date': '07/07/2019'},
-    { id: 1, name: 'Report 22', priority: 'low', 'start_date': '05/01/2019', 'end_date': '05/05/2019'},
-    { id: 2, name: 'Report 23', priority: 'medium', 'start_date': '06/01/2019', 'end_date': '06/06/2019'},
-    { id: 3, name: 'Report 24', priority: 'high', 'start_date': '07/01/2019', 'end_date': '07/07/2019'},
-    { id: 3, name: 'Report 25', priority: 'high', 'start_date': '07/01/2019', 'end_date': '07/07/2019'}
-
-  ];
+  public rowData: ReportRowDataDTO[];
+  private gridApi: GridApi;
+  private gridColumnApi: ColumnApi;
 
 
+  constructor(private gridService: GridService) {}
 
-
-  constructor() {}
 
   ngOnInit(): void {
   }
+
+
+  public onGridReady(params: any): void {
+    // Get a reference to the gridApi and gridColumnApi (which we will need later to get selected rows)
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+
+    // Show the loading overlay
+    this.gridApi.showLoadingOverlay();
+
+    // Invoke a REST call to get data for the initial page load
+    this.gridService.getReportData().subscribe((aData: ReportRowDataDTO[]) => {
+      // We got data from the REST call
+
+      // Put the data into the grid
+      this.rowData = aData;
+
+      // Resize the columns
+      this.gridApi.sizeColumnsToFit();
+
+      // Reset row heights
+      this.gridApi.resetRowHeights();
+
+      // Tell the grid to resize when user resizes the browser window
+      window.onresize = () => {
+        this.gridApi.sizeColumnsToFit();
+      }
+
+    });
+
+  }  // end of onGridReady()
+
 
 }

@@ -34,7 +34,8 @@
               [rowData]="this.rowData"
               [defaultColDef]="this.defaultColDefs"
               [columnDefs]="this.columnDefs"
-              [gridOptions]="this.gridOptions">
+              [gridOptions]="this.gridOptions"
+              (gridReady)="this.onGridReady($event)">
             </ag-grid-angular>
 
           </div>
