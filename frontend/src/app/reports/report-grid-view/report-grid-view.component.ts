@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import "ag-grid-enterprise";
 import {GridService} from "../../services/grid.service";
 import {ReportRowDataDTO} from "../../models/report-row-data-dto";
-import {ColumnApi, GridApi} from "ag-grid-community";
+import {ColumnApi, GridApi, GridOptions} from "ag-grid-community";
 
 @Component({
   selector: 'app-report-grid-view',
@@ -11,7 +11,7 @@ import {ColumnApi, GridApi} from "ag-grid-community";
 })
 export class ReportGridViewComponent implements OnInit {
 
-  public gridOptions: any = {
+  public gridOptions: GridOptions = {
     debug: true
   };
 
