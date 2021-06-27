@@ -4,6 +4,7 @@ import {GridService} from "../../services/grid.service";
 import {ReportRowDataDTO} from "../../models/report-row-data-dto";
 import {ColumnApi, GridApi, GridOptions} from "ag-grid-community";
 import {PriorityCellCustomRendererComponent} from "./priority-cell-custom-renderer/priority-cell-custom-renderer.component";
+import {ReportGridActionCellRendererComponent} from "./report-grid-action-cell-renderer/report-grid-action-cell-renderer.component";
 
 @Component({
   selector: 'app-report-grid-view',
@@ -14,6 +15,7 @@ export class ReportGridViewComponent implements OnInit {
 
   public gridOptions: GridOptions = {
     debug: true,
+    suppressCellSelection: true
     // domLayout: 'normal',
     // rowGroupPanelShow: 'never'   // Possible options are 'never', 'always', and 'onlyWhenGrouping'
   };
@@ -29,7 +31,8 @@ export class ReportGridViewComponent implements OnInit {
   public columnDefs = [
     {
       field: 'id',
-      cellClass: 'grid-text-cell-format'
+      cellClass: 'grid-text-cell-format',
+      cellRenderer: 'actionCellRenderer'
     },
     {
       field: 'name',
@@ -53,6 +56,7 @@ export class ReportGridViewComponent implements OnInit {
   // This is a map of component names that correspond to components that implement ICellRendererAngularComp
   public frameworkComponents: any = {
     priorityCellRenderer: PriorityCellCustomRendererComponent,
+    actionCellRenderer: ReportGridActionCellRendererComponent
   };
 
   public rowData: ReportRowDataDTO[];
