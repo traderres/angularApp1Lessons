@@ -175,3 +175,48 @@ pre {
 .page-container {
   margin: 10px;
 }
+
+.priority-low-color {
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 1.1em;
+  font-weight: 500;
+  border-radius: 15px;
+  background-color: #d8d8d8;
+}
+
+.priority-medium-color {
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 1.1em;
+  font-weight: 500;
+  border-radius: 15px;
+  background-color: #b2b2ff;
+}
+
+.priority-high-color {
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 1.1em;
+  font-weight: 500;
+  border-radius: 15px;
+  background-color: #ffffb2;
+}
+
+.priority-critical-color {
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 1.1em;
+  font-weight: 500;
+  border-radius: 15px;
+  background-color: #ffdcb2;
+}
+
+
+.grid-text-cell-format {
+  font-family: 'Roboto';
+  font-size: 1.1em;
+  font-weight: 400;
+
+  margin-top: .25em;    /* Fixes the bug with autoHeight not working in the ag-grid */
+}

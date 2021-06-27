@@ -53,6 +53,7 @@ import {PageGuard} from "./guards/page.guard";
 import {Constants} from "./utilities/constants";
 import {AgGridModule} from "ag-grid-angular";
 import { ReportGridViewComponent } from './reports/report-grid-view/report-grid-view.component';
+import { PriorityCellCustomRendererComponent } from './reports/report-grid-view/priority-cell-custom-renderer/priority-cell-custom-renderer.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -101,7 +102,8 @@ const appRoutes: Routes = [
     SearchBoxComponent,
     SearchBoxDetailsComponent,
     ForbiddenComponent,
-    ReportGridViewComponent
+    ReportGridViewComponent,
+    PriorityCellCustomRendererComponent
   ],
   imports: [
     AppRoutingModule,
