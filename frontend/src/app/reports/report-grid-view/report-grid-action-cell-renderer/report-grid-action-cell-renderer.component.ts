@@ -26,9 +26,17 @@ export class ReportGridActionCellRendererComponent implements OnInit, ICellRende
 
   public editClick(): void {
     console.log('editClick()');
+
+    // @ts-ignore
+    // Call the "edit" method back on the grid page
+    this.params.editButtonGridMethod(this.params);
   }
 
   public deleteClick(): void {
     console.log('deleteClick()');
+
+    // @ts-ignore
+    // Call the "delete" method back on the grid page
+    this.params.deleteButtonGridMethod(this.params);
   }
 }

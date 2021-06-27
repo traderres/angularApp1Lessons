@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import "ag-grid-enterprise";
 import {GridService} from "../../services/grid.service";
 import {ReportRowDataDTO} from "../../models/report-row-data-dto";
-import {ColumnApi, GridApi, GridOptions} from "ag-grid-community";
+import {ColumnApi, GridApi, GridOptions, ICellRendererParams} from "ag-grid-community";
 import {PriorityCellCustomRendererComponent} from "./priority-cell-custom-renderer/priority-cell-custom-renderer.component";
 import {ReportGridActionCellRendererComponent} from "./report-grid-action-cell-renderer/report-grid-action-cell-renderer.component";
 
@@ -33,6 +33,10 @@ export class ReportGridViewComponent implements OnInit {
       field: 'id',
       cellClass: 'grid-text-cell-format',
       cellRenderer: 'actionCellRenderer',
+      cellRendererParams: {
+        deleteButtonGridMethod: (params: ICellRendererParams) => this.openDeleteDialog(params),
+        editButtonGridMethod: (params: ICellRendererParams) => this.openEditDialog(params)
+      },
 
       headerName: '',
       filter: false,
@@ -106,5 +110,13 @@ export class ReportGridViewComponent implements OnInit {
 
   }  // end of onGridReady()
 
+
+  public openDeleteDialog(params: ICellRendererParams): void {
+    console.log('openDeleteDialog()  params=', params);
+  }
+
+  public openEditDialog(params: ICellRendererParams): void {
+    console.log('openEditDialog() params=', params);
+  }
 
 }
