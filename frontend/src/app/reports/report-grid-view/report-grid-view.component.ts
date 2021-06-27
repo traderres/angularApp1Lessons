@@ -15,9 +15,9 @@ export class ReportGridViewComponent implements OnInit {
 
   public gridOptions: GridOptions = {
     debug: true,
-    suppressCellSelection: true
-    // domLayout: 'normal',
-    // rowGroupPanelShow: 'never'   // Possible options are 'never', 'always', and 'onlyWhenGrouping'
+    suppressCellSelection: true,
+    rowSelection: 'multiple',      // Possible values are 'single' and 'multiple'
+    domLayout: 'normal'
   };
 
   public defaultColDefs: any = {
@@ -41,7 +41,8 @@ export class ReportGridViewComponent implements OnInit {
       headerName: '',
       filter: false,
       suppressMenu: true,
-      sortable: false
+      sortable: false,
+      checkboxSelection: true
     },
     {
       field: 'name',
@@ -68,11 +69,11 @@ export class ReportGridViewComponent implements OnInit {
     actionCellRenderer: ReportGridActionCellRendererComponent
   };
 
-  public rowData: ReportRowDataDTO[];
+  public  rowData: ReportRowDataDTO[];
   private gridApi: GridApi;
   private gridColumnApi: ColumnApi;
-
-
+  public  totalRowsSelected: number;
+  public  updateButtonLabel: string;
   constructor(private gridService: GridService) {}
 
 
@@ -94,6 +95,8 @@ export class ReportGridViewComponent implements OnInit {
 
       // Put the data into the grid
       this.rowData = aData;
+
+      this.generateDerivedValuesOnUserSelection()
 
       // Resize the columns
       this.gridApi.sizeColumnsToFit();
@@ -117,6 +120,25 @@ export class ReportGridViewComponent implements OnInit {
 
   public openEditDialog(params: ICellRendererParams): void {
     console.log('openEditDialog() params=', params);
+  }
+
+
+  public generateDerivedValuesOnUserSelection(): void {
+    // Get the total number of rows that are selected
+    this.totalRowsSelected = this.gridApi.getSelectedRows().length;
+
+    if (this.totalRowsSelected == 0) {
+      this.updateButtonLabel = "Update Entries";
+    }
+    else if (this.totalRowsSelected == 1) {
+      // User has checked one entry
+      this.updateButtonLabel = "Update 1 Entry";
+    }
+    else {
+      // User has checked multiple entries
+      this.updateButtonLabel = "Update " + this.totalRowsSelected + " Entries";
+    }
+
   }
 
 }
