@@ -32,7 +32,12 @@ export class ReportGridViewComponent implements OnInit {
     {
       field: 'id',
       cellClass: 'grid-text-cell-format',
-      cellRenderer: 'actionCellRenderer'
+      cellRenderer: 'actionCellRenderer',
+
+      headerName: '',
+      filter: false,
+      suppressMenu: true,
+      sortable: false
     },
     {
       field: 'name',
