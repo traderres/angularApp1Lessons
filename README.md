@@ -1,4 +1,4 @@
-Angular App1 Lesson 22g
+Angular App1 Lesson 22h
 -----------------------
 
 
@@ -9,7 +9,7 @@ To Get started From Project Setup
  2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson22g/grid/row-selection
+    unix> git checkout lesson22h/grid/dialog
 
  3. Verify that the webapp works
     a. Compile the project (into an executable JAR)
