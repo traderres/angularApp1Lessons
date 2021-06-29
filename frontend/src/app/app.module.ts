@@ -52,9 +52,11 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
 import {PageGuard} from "./guards/page.guard";
 import {Constants} from "./utilities/constants";
 import {AgGridModule} from "ag-grid-angular";
-import { ReportGridViewComponent } from './reports/report-grid-view/report-grid-view.component';
+import { ReportGridViewComponent } from './reports/report-grid-view/report-grid-view/report-grid-view.component';
 import { PriorityCellCustomRendererComponent } from './reports/report-grid-view/priority-cell-custom-renderer/priority-cell-custom-renderer.component';
 import { ReportGridActionCellRendererComponent } from './reports/report-grid-view/report-grid-action-cell-renderer/report-grid-action-cell-renderer.component';
+import { UpdatePriorityDialogComponent } from './reports/report-grid-view/update-priority-dialog-component/update-priority-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -105,7 +107,8 @@ const appRoutes: Routes = [
     ForbiddenComponent,
     ReportGridViewComponent,
     PriorityCellCustomRendererComponent,
-    ReportGridActionCellRendererComponent
+    ReportGridActionCellRendererComponent,
+    UpdatePriorityDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -121,6 +124,7 @@ const appRoutes: Routes = [
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,

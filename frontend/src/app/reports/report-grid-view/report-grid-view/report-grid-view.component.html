@@ -26,7 +26,8 @@
       <div fxFlex fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="0">
 
         <button mat-stroked-button color="primary" class="grid-button" title="{{this.updateButtonLabel}}"
-              [disabled]="this.totalRowsSelected == 0">
+              [disabled]="this.totalRowsSelected == 0"
+              (click)="this.openUpdatePriorityPopup()">
           <i class="far fa-user"></i>
           {{this.updateButtonLabel}}
         </button>
@@ -50,7 +51,7 @@
         <mat-card-content>
 
           <!-- Setup a wrapper div that uses the entire available height (total height - 165px) -->
-          <div style="height: calc(100vh - 170px);">
+          <div style="height: calc(100vh - 175px);">
 
             <!-- AG-Grid -->
             <ag-grid-angular

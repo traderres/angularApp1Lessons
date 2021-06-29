@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import "ag-grid-enterprise";
-import {GridService} from "../../services/grid.service";
-import {ReportRowDataDTO} from "../../models/report-row-data-dto";
+import {GridService} from "../../../services/grid.service";
+import {ReportRowDataDTO} from "../../../models/report-row-data-dto";
 import {ColumnApi, GridApi, GridOptions, ICellRendererParams} from "ag-grid-community";
-import {PriorityCellCustomRendererComponent} from "./priority-cell-custom-renderer/priority-cell-custom-renderer.component";
-import {ReportGridActionCellRendererComponent} from "./report-grid-action-cell-renderer/report-grid-action-cell-renderer.component";
+import {PriorityCellCustomRendererComponent} from "../priority-cell-custom-renderer/priority-cell-custom-renderer.component";
+import {ReportGridActionCellRendererComponent} from "../report-grid-action-cell-renderer/report-grid-action-cell-renderer.component";
+import {MatDialog} from "@angular/material/dialog";
+import {UpdatePriorityDialogFormData} from "../../../models/update-priority-dialog-form-data";
+import {UpdatePriorityDialogComponent} from "../update-priority-dialog-component/update-priority-dialog.component";
 
 @Component({
   selector: 'app-report-grid-view',
@@ -74,7 +77,9 @@ export class ReportGridViewComponent implements OnInit {
   private gridColumnApi: ColumnApi;
   public  totalRowsSelected: number;
   public  updateButtonLabel: string;
-  constructor(private gridService: GridService) {}
+
+  constructor(private gridService: GridService,
+              private matDialog: MatDialog) {}
 
 
   ngOnInit(): void {
@@ -86,6 +91,13 @@ export class ReportGridViewComponent implements OnInit {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 
+    // Reload the page
+    this.reloadPage();
+  }
+
+
+  private reloadPage(): void {
+
     // Show the loading overlay
     this.gridApi.showLoadingOverlay();
 
@@ -96,6 +108,10 @@ export class ReportGridViewComponent implements OnInit {
       // Put the data into the grid
       this.rowData = aData;
 
+      // Unselect all values
+      this.gridApi.deselectAll();
+
+      // Regenerate derived values
       this.generateDerivedValuesOnUserSelection()
 
       // Resize the columns
@@ -111,7 +127,8 @@ export class ReportGridViewComponent implements OnInit {
 
     });
 
-  }  // end of onGridReady()
+  }  // end of reloadPage()
+
 
 
   public openDeleteDialog(params: ICellRendererParams): void {
@@ -140,5 +157,43 @@ export class ReportGridViewComponent implements OnInit {
     }
 
   }
+
+  public openUpdatePriorityPopup(): void {
+    console.log('openUpdatePriorityPopup');
+
+    // Create an empty array of numbers
+    let selectedReportIds: number[] = [];
+
+    // Loop through the array of selected rows and add the selected ids to the list
+    this.gridApi.getSelectedRows().forEach((row: ReportRowDataDTO) => {
+      selectedReportIds.push(row.id);
+    });
+
+    let formData: UpdatePriorityDialogFormData = new UpdatePriorityDialogFormData();
+    formData.reportIds = selectedReportIds;
+
+    // Open the dialog box in modal mode
+    let dialogRef = this.matDialog.open(UpdatePriorityDialogComponent, {
+      data: formData
+      // minWidth: 400,
+      // minHeight: 200
+    });
+
+    // Listen for the dialog box to close
+    dialogRef.afterClosed().subscribe((returnedFormData: UpdatePriorityDialogFormData) => {
+      // The dialog box has closed
+
+      if (returnedFormData) {
+        // The user pressed OK.  So, update the data
+
+        // TODO: Invoke the REST call
+
+        // Reload the list
+        this.reloadPage();
+      }
+    });
+
+  }   // end of openUpdatePriorityPopup()
+
 
 }
