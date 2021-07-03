@@ -69,6 +69,7 @@ insert into uicontrols(id, name) values(1013, 'page/report/upload');
 insert into uicontrols(id, name) values(1014, 'page/chart1');
 insert into uicontrols(id, name) values(1015, 'page/chart2');
 insert into uicontrols(id, name) values(1016, 'page/reports/grid');
+insert into uicontrols(id, name) values(1017, 'page/reports/markdown-submit');
 
 
 -- Assign ui controls for the 'admin' role
@@ -77,6 +78,7 @@ insert into roles_uicontrols(role_id, uicontrol_id) values(1, 1002);
 insert into roles_uicontrols(role_id, uicontrol_id) values(1, 1003);
 insert into roles_uicontrols(role_id, uicontrol_id) values(1, 1004);
 insert into roles_uicontrols(role_id, uicontrol_id) values(1, 1016);
+insert into roles_uicontrols(role_id, uicontrol_id) values(1, 1017);
 
 
 -- Assign ui controls for the 'reader' role  (cannot get to addReport)
@@ -96,3 +98,4 @@ insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1013);
 insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1014);
 insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1015);
 insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1016);
+insert into roles_uicontrols(role_id, uicontrol_id) values(2, 1017);

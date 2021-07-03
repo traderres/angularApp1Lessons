@@ -11,6 +11,7 @@
   font-size: 13px;
   color: white;
   height: 25px;
+  white-space: nowrap;   /* stop wrapping of text */
 }
 
 .navHeader{
@@ -24,6 +25,7 @@
   height: 44px;
   display: flex;
   align-items: center;
+  white-space: nowrap;   /* stop wrapping of text */
 }
 
 .navHeaderIcon {

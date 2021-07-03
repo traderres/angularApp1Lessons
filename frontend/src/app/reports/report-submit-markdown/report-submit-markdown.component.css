@@ -1,0 +1,14 @@
+
+::ng-deep .ql-toolbar {
+  /* Set the background for the markdown toolbar to be a gradient */
+
+  background: linear-gradient(to left, #5e6b7b, rgba(94, 107, 123, 0));
+}
+
+::ng-deep .ql-toolbar.ql-snow {
+  border: 1px solid #6294CF;
+}
+
+::ng-deep  .ql-container.ql-snow {
+  border: 1px solid #6294CF;
+}

@@ -57,6 +57,8 @@ import { PriorityCellCustomRendererComponent } from './reports/report-grid-view/
 import { ReportGridActionCellRendererComponent } from './reports/report-grid-view/report-grid-action-cell-renderer/report-grid-action-cell-renderer.component';
 import { UpdatePriorityDialogComponent } from './reports/report-grid-view/update-priority-dialog-component/update-priority-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {QuillModule} from "ngx-quill";
+import { ReportSubmitMarkdownComponent } from './reports/report-submit-markdown/report-submit-markdown.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -73,6 +75,7 @@ const appRoutes: Routes = [
   { path: Constants.UPLOAD_REPORT_ROUTE, component: UploadReportComponent ,  canActivate: [PageGuard] },
   { path: Constants.CHART1_ROUTE,       component: Chart1Component,  canActivate: [PageGuard] },
   { path: Constants.CHART2_ROUTE,       component: Chart2Component,  canActivate: [PageGuard] },
+  { path: Constants.REPORT_SUBMIT_MARKDOWN,     component: ReportSubmitMarkdownComponent,  canActivate: [PageGuard] },
   { path: Constants.LONGVIEW_REPORT,     component: LongViewOuterReportComponent,  canActivate: [PageGuard] },
   { path: Constants.FORBIDDEN_ROUTE,     component: ForbiddenComponent },
   { path: '',                  component: WelcomeComponent},
@@ -108,7 +111,8 @@ const appRoutes: Routes = [
     ReportGridViewComponent,
     PriorityCellCustomRendererComponent,
     ReportGridActionCellRendererComponent,
-    UpdatePriorityDialogComponent
+    UpdatePriorityDialogComponent,
+    ReportSubmitMarkdownComponent
   ],
   imports: [
     AppRoutingModule,
@@ -136,6 +140,7 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatSnackBarModule,
     MatToolbarModule,
+    QuillModule.forRoot(),
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
   ],
