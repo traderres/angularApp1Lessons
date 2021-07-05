@@ -114,6 +114,18 @@
             </div>
           </mat-list-item>
 
+          <!-- Report PDF Viewer Page -->
+          <mat-list-item class="navItem" [routerLink]="constants.REPORT_PDFVIEWER_ROUTE" routerLinkActive="active"
+                         *ngIf="userInfo.pageRoutes.get(constants.REPORT_PDFVIEWER_ROUTE)">
+            <a title="PDF Viewer">PDF Viewer</a>
+            <div fxFlex fxLayoutAlign="end end" >
+              <a [routerLink]="constants.REPORT_PDFVIEWER_ROUTE" target="_blank">
+                <i class="fas fa-external-link-alt navItemIcon" title="Open PDF Viewer a new window"></i>
+              </a>
+            </div>
+          </mat-list-item>
+
+
         </div>  <!-- End of navMenuGroup -->
       </ng-container>
 

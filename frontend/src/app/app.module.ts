@@ -59,6 +59,8 @@ import { UpdatePriorityDialogComponent } from './reports/report-grid-view/update
 import {MatDialogModule} from "@angular/material/dialog";
 import {QuillModule} from "ngx-quill";
 import { ReportSubmitMarkdownComponent } from './reports/report-submit-markdown/report-submit-markdown.component';
+import {NgxExtendedPdfViewerModule} from "ngx-extended-pdf-viewer";
+import { PdfViewerComponent } from './reports/pdf-viewer/pdf-viewer.component';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -77,6 +79,7 @@ const appRoutes: Routes = [
   { path: Constants.CHART2_ROUTE,       component: Chart2Component,  canActivate: [PageGuard] },
   { path: Constants.REPORT_SUBMIT_MARKDOWN,     component: ReportSubmitMarkdownComponent,  canActivate: [PageGuard] },
   { path: Constants.LONGVIEW_REPORT,     component: LongViewOuterReportComponent,  canActivate: [PageGuard] },
+  { path: Constants.REPORT_PDFVIEWER_ROUTE,   component: PdfViewerComponent,  canActivate: [PageGuard] },
   { path: Constants.FORBIDDEN_ROUTE,     component: ForbiddenComponent },
   { path: '',                  component: WelcomeComponent},
   { path: '**',                component: NotFoundComponent}
@@ -112,7 +115,8 @@ const appRoutes: Routes = [
     PriorityCellCustomRendererComponent,
     ReportGridActionCellRendererComponent,
     UpdatePriorityDialogComponent,
-    ReportSubmitMarkdownComponent
+    ReportSubmitMarkdownComponent,
+    PdfViewerComponent
   ],
   imports: [
     AppRoutingModule,
@@ -140,6 +144,7 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatSnackBarModule,
     MatToolbarModule,
+    NgxExtendedPdfViewerModule,
     QuillModule.forRoot(),
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
