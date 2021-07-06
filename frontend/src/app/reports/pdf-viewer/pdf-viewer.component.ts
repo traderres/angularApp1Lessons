@@ -123,6 +123,22 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
   }
 
 
+  private refreshDivider(): void {
+    // Hide the divider
+    this.showDivider = false;
+
+    // use setTimeout to show the divider
+    // -- Show the divider (which will cause the divider to be placed in the correct spot)
+    setTimeout(() => {
+      // Show the divider (inside setTimeout, Angular change detection will pick this up)
+      this.showDivider = true;
+
+      // Set the columnResize flag to false so that the onResize() method knows to ignore this
+      this.columnResize = false;
+    }, 1);
+  }
+
+
   /*
    * The drag-and-drop operation finished
    *
@@ -152,15 +168,8 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
       window.dispatchEvent(new Event('resize'));
     }, 1);
 
-    // Refresh the divider by hiding it and showing it
-    this.showDivider = false;
-
-    // use setTimeout to show the divider (which will cause the divider to be placed in the correct spot)
-    setTimeout(() => {
-      this.showDivider = true;
-      this.columnResize = false;
-    }, 1);
-
+    // Refresh the divider (so it appears the correct location)
+    this.refreshDivider();
 
   }  // end of dragEnded()
 
