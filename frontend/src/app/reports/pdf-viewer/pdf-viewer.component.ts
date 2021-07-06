@@ -101,6 +101,14 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
         else {
           this.adjustWidthOffsetForNavbar = 0;
         }
+
+        this.refreshDivider();
+
+        // Send a resize event so that the pdf viewer will resize
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 1);
+
       });
 
   }  // end of ngOnInit()
@@ -149,12 +157,27 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
    */
   public dragEnded(aEvent: CdkDragEnd): void {
 
+    const SMALLEST_LEFT_SIDE_IN_PIXELS: number = 100;
+    const SMALLEST_RIGHT_SIDE_IN_PIXELS: number = 325;
+
     // Get the total number of pixels that were dragged
     let changeInX: number = aEvent.distance.x;
 
     // Calculate the new widths of the left and right columns
     let leftSideNewWidth = this.leftDiv.nativeElement.offsetWidth + changeInX;
     let rightSideNewWidth = this.rightDiv.nativeElement.offsetWidth - changeInX;
+
+
+    if (leftSideNewWidth < SMALLEST_LEFT_SIDE_IN_PIXELS) {
+      // The left side is too small.  Cancel the drag & drop.
+      aEvent.source._dragRef.reset();
+      return;
+    }
+    else if (rightSideNewWidth < SMALLEST_RIGHT_SIDE_IN_PIXELS) {
+      // The right side is too small.  Cancel the drag & drop.
+      aEvent.source._dragRef.reset();
+      return;
+    }
 
     // Set the new widths of the left and right columns
     this.leftFlexValue = leftSideNewWidth + "px";
