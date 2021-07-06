@@ -163,20 +163,26 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
     // Get the total number of pixels that were dragged
     let changeInX: number = aEvent.distance.x;
 
+    let oldWidthTotal =  this.leftDiv.nativeElement.offsetWidth + this.rightDiv.nativeElement.offsetWidth;
+
     // Calculate the new widths of the left and right columns
     let leftSideNewWidth = this.leftDiv.nativeElement.offsetWidth + changeInX;
     let rightSideNewWidth = this.rightDiv.nativeElement.offsetWidth - changeInX;
 
 
     if (leftSideNewWidth < SMALLEST_LEFT_SIDE_IN_PIXELS) {
-      // The left side is too small.  Cancel the drag & drop.
-      aEvent.source._dragRef.reset();
-      return;
+      // The left side is too small.
+
+      // Set the left side=(smallest size) and right side=(what's left)
+      leftSideNewWidth = SMALLEST_LEFT_SIDE_IN_PIXELS;
+      rightSideNewWidth = oldWidthTotal - leftSideNewWidth;
     }
     else if (rightSideNewWidth < SMALLEST_RIGHT_SIDE_IN_PIXELS) {
-      // The right side is too small.  Cancel the drag & drop.
-      aEvent.source._dragRef.reset();
-      return;
+      // The right side is too small.
+
+      // Set the right side=(smallest size) and left side=(what's left)
+      rightSideNewWidth = SMALLEST_RIGHT_SIDE_IN_PIXELS;
+      leftSideNewWidth = oldWidthTotal - rightSideNewWidth;
     }
 
     // Set the new widths of the left and right columns
