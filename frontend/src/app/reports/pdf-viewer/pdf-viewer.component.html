@@ -25,7 +25,7 @@
       <div fxFlex fxLayout="row" fxLayoutGap="0" >
 
 
-          <div fxFlex="50%" fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="15px"  style="border: 1px solid #babfc7">
+          <div [fxFlex]="this.leftFlexValue" #leftDiv fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="15px" style="border: 1px solid #babfc7" >
             <!-- Left Side of the Page -->
 
             <!-- Use the full height of the page (minus some height for the header and title) -->
@@ -47,14 +47,20 @@
                   <button type="button" mat-stroked-button  color="primary" (click)="this.clearPdfViewer()" title="Clear the PDF Viewer">Clear</button>
               </div>
 
+
             </div>
 
           </div>
 
 
+          <div fxFlex="10px" *ngIf="this.showDivider" cdkDrag cdkDragLockAxis="x" class="divider"
+               (cdkDragEnded)="dragEnded($event)">
+              <!-- Draggable Column Divider (that will adjust the column widths  -->
+          </div>
 
-          <div fxFlex="50%" fxLayoutAlign="end center"  style="border: 1px solid #babfc7">
-            <!-- Right Side of the Page -->
+
+          <div [fxFlex]="this.rightFlexValue" #rightDiv fxLayoutAlign="end center" style="border: 1px solid #babfc7">
+              <!-- Right Side of the Page -->
 
               <ngx-extended-pdf-viewer style="height: 100%; width: 100%"
                                        [src]="this.pdfSrc"

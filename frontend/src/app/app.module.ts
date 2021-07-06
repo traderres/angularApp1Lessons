@@ -61,6 +61,7 @@ import {QuillModule} from "ngx-quill";
 import { ReportSubmitMarkdownComponent } from './reports/report-submit-markdown/report-submit-markdown.component';
 import {NgxExtendedPdfViewerModule} from "ngx-extended-pdf-viewer";
 import { PdfViewerComponent } from './reports/pdf-viewer/pdf-viewer.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -133,6 +134,7 @@ const appRoutes: Routes = [
     MatCardModule,
     MatDatepickerModule,
     MatDialogModule,
+    DragDropModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,
