@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {CdkDragEnd} from "@angular/cdk/drag-drop";
 import {NavbarService} from "../../services/navbar.service";
@@ -9,7 +9,8 @@ import {Subscription} from "rxjs";
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.css']
 })
-export class PdfViewerComponent implements OnInit, OnDestroy {
+export class PdfViewerComponent implements OnInit, OnDestroy, AfterContentInit {
+
   @ViewChild("leftDiv") leftDiv: ElementRef;   // Used to get the width of left column
   @ViewChild("rightDiv") rightDiv: ElementRef; // used to get the width of right column
 
@@ -26,6 +27,10 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
 
   private navbarSubscription: Subscription;
   private adjustWidthOffsetForNavbar: number;
+
+  private previousPageWidth: number;
+  private previousLeftPageWidth: number;
+  private previousRightPageWidth: number;
 
   constructor(private navbarService: NavbarService) { }
 
@@ -50,21 +55,17 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Calculate the width of this page
-    // NOTE:  adjustWidthOffsetForNavbar = -200 if the left-side navbar is open
-    //        adjustWidthOffsetForNavbar = 0    if the left-side navbar is closed
-    let pageWidth: number = event.target.innerWidth + this.adjustWidthOffsetForNavbar;
+    // Calculate the ratio of the old width to new-width
+    let newPageWidth: number = event.target.innerWidth + this.adjustWidthOffsetForNavbar;
+    let ratioOfPageWidths: number = newPageWidth / this.previousPageWidth;
 
-    // Calculate the left and right columns as percentages
-    let leftSideWidth = this.leftDiv.nativeElement.offsetWidth;
-
-    // NOTE:  We add 10 to the left-side-width as a correction for the divider
-    let leftSidePercentage = ((leftSideWidth + 10) / pageWidth) * 100;
-    let rightSidePecentage = 100 - leftSidePercentage;
+    // Calculate the new left and right side iwdths
+    let newLeftSideWidth: number = this.previousLeftPageWidth * ratioOfPageWidths;
+    let newRightSideWidth: number = this.previousRightPageWidth * ratioOfPageWidths;
 
     // Set the new widths of the left and right columns
-    this.leftFlexValue = String(leftSidePercentage) + "%";
-    this.rightFlexValue = String(rightSidePecentage) + "%";
+    this.leftFlexValue = String(newLeftSideWidth) + "px";
+    this.rightFlexValue = String(newRightSideWidth) + "px";
 
     // Refresh the divider by hiding it and showing it
     this.showDivider = false;
@@ -75,6 +76,16 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
       window.dispatchEvent(new Event('resize'));
     }, 1);
 
+    // Store the current page width as (previousPageWidth)
+    this.previousLeftPageWidth = newLeftSideWidth;
+    this.previousRightPageWidth = newRightSideWidth;
+    this.previousPageWidth = newPageWidth;
+  }
+
+
+  public ngAfterContentInit(): void {
+    this.previousLeftPageWidth = this.leftDiv.nativeElement.offsetWidth;
+    this.previousRightPageWidth = this.rightDiv.nativeElement.offsetWidth;
   }
 
 
@@ -102,6 +113,8 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
           this.adjustWidthOffsetForNavbar = 0;
         }
 
+        this.previousPageWidth = window.innerWidth + this.adjustWidthOffsetForNavbar;
+
         this.refreshDivider();
 
         // Send a resize event so that the pdf viewer will resize
@@ -112,6 +125,9 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
       });
 
   }  // end of ngOnInit()
+
+
+
 
   public ngOnDestroy(): void {
     if (this.navbarSubscription) {
