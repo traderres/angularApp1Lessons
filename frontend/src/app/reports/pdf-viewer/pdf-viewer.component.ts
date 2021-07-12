@@ -1,4 +1,12 @@
-import {AfterContentInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {CdkDragEnd} from "@angular/cdk/drag-drop";
 import {NavbarService} from "../../services/navbar.service";
@@ -9,7 +17,7 @@ import {Subscription} from "rxjs";
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.css']
 })
-export class PdfViewerComponent implements OnInit, OnDestroy, AfterContentInit {
+export class PdfViewerComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild("leftDiv") leftDiv: ElementRef;   // Used to get the width of left column
   @ViewChild("rightDiv") rightDiv: ElementRef; // used to get the width of right column
@@ -24,10 +32,8 @@ export class PdfViewerComponent implements OnInit, OnDestroy, AfterContentInit {
 
   private secondResize: boolean = false;
   private columnResize: boolean = false;
-
   private navbarSubscription: Subscription;
   private adjustWidthOffsetForNavbar: number;
-
   private previousPageWidth: number;
   private previousLeftPageWidth: number;
   private previousRightPageWidth: number;
@@ -35,55 +41,8 @@ export class PdfViewerComponent implements OnInit, OnDestroy, AfterContentInit {
   constructor(private navbarService: NavbarService) { }
 
 
-  /*
-   * We received a resize event
-   *  1) If columnResize==true, then we kicked-off this resize event.  And, we want to ignore it
-   *  2) If secondResize==true, then just refresh the divider
-   *  3) Else
-   *       -- Calculate the left and right divs as *percentages*
-   *       -- So, the web page looks good
-   */
-  @HostListener('window:resize', ['$event'])
-  public onResize(event: any): void {
-    if (this.columnResize) {
-      return;
-    }
 
-    if (this.secondResize) {
-      this.showDivider = true;
-      this.secondResize = false;
-      return;
-    }
-
-    // Calculate the ratio of the old width to new-width
-    let newPageWidth: number = event.target.innerWidth + this.adjustWidthOffsetForNavbar;
-    let ratioOfPageWidths: number = newPageWidth / this.previousPageWidth;
-
-    // Calculate the new left and right side iwdths
-    let newLeftSideWidth: number = this.previousLeftPageWidth * ratioOfPageWidths;
-    let newRightSideWidth: number = this.previousRightPageWidth * ratioOfPageWidths;
-
-    // Set the new widths of the left and right columns
-    this.leftFlexValue = String(newLeftSideWidth) + "px";
-    this.rightFlexValue = String(newRightSideWidth) + "px";
-
-    // Refresh the divider by hiding it and showing it
-    this.showDivider = false;
-
-    // Send a resize event so that the pdf viewer will resize
-    setTimeout(() => {
-      this.secondResize = true;
-      window.dispatchEvent(new Event('resize'));
-    }, 1);
-
-    // Store the current page width as (previousPageWidth)
-    this.previousLeftPageWidth = newLeftSideWidth;
-    this.previousRightPageWidth = newRightSideWidth;
-    this.previousPageWidth = newPageWidth;
-  }
-
-
-  public ngAfterContentInit(): void {
+  public ngAfterViewInit(): void {
     this.previousLeftPageWidth = this.leftDiv.nativeElement.offsetWidth;
     this.previousRightPageWidth = this.rightDiv.nativeElement.offsetWidth;
   }
@@ -116,12 +75,6 @@ export class PdfViewerComponent implements OnInit, OnDestroy, AfterContentInit {
         this.previousPageWidth = window.innerWidth + this.adjustWidthOffsetForNavbar;
 
         this.refreshDivider();
-
-        // Send a resize event so that the pdf viewer will resize
-        setTimeout(() => {
-          window.dispatchEvent(new Event('resize'));
-        }, 1);
-
       });
 
   }  // end of ngOnInit()
@@ -205,6 +158,10 @@ export class PdfViewerComponent implements OnInit, OnDestroy, AfterContentInit {
     this.leftFlexValue = leftSideNewWidth + "px";
     this.rightFlexValue = rightSideNewWidth + "px";
 
+    // Store the previous left and right widths  (we need this if the user resizes the browser)
+    this.previousLeftPageWidth = leftSideNewWidth;
+    this.previousRightPageWidth = rightSideNewWidth;
+
     // Set columnResize = true (so our own resize listener does nothing)
     this.columnResize = true;
 
@@ -216,6 +173,59 @@ export class PdfViewerComponent implements OnInit, OnDestroy, AfterContentInit {
     // Refresh the divider (so it appears the correct location)
     this.refreshDivider();
 
+
   }  // end of dragEnded()
+
+
+
+  /*
+   * We received a resize event
+   *  1) If columnResize==true, then we kicked-off this resize event (so ignore it)
+   *  2) If secondResize==true, then just refresh the divider
+   *  3) Else
+   *     a. Calculate the ratio of the old-width to new-width
+   *     b. Calculate the newLeftWidth = ratio * oldLeftWidth
+   *     c. Calculate the newRightWidth = ratio * oldRightWidth
+   *     d. Set the new leftWidth and newRightWidths
+   */
+  @HostListener('window:resize', ['$event'])
+  public onResize(event: any): void {
+    if (this.columnResize) {
+      return;
+    }
+
+    if (this.secondResize) {
+      this.showDivider = true;
+      this.secondResize = false;
+      return;
+    }
+
+    // Calculate the ratio of the old width to new-width
+    let newPageWidth: number = event.target.innerWidth + this.adjustWidthOffsetForNavbar;
+    let ratioOfPageWidths: number = newPageWidth / this.previousPageWidth;
+
+    // Calculate the new left and right side widths
+    let newLeftSideWidth: number = this.previousLeftPageWidth * ratioOfPageWidths;
+    let newRightSideWidth: number = this.previousRightPageWidth * ratioOfPageWidths;
+
+    // Set the new widths of the left and right columns
+    this.leftFlexValue = String(newLeftSideWidth) + "px";
+    this.rightFlexValue = String(newRightSideWidth) + "px";
+
+    // Refresh the divider by hiding it and showing it
+    this.showDivider = false;
+
+    // Send a resize event so that the pdf viewer will resize
+    setTimeout(() => {
+      this.secondResize = true;
+      window.dispatchEvent(new Event('resize'));
+    }, 1);
+
+    // Store the current page width as (previousPageWidth)
+    this.previousLeftPageWidth = newLeftSideWidth;
+    this.previousRightPageWidth = newRightSideWidth;
+    this.previousPageWidth = newPageWidth;
+  }
+
 
 }
