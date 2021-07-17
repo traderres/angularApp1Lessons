@@ -1,6 +1,6 @@
 .navbar {
   /* Set the colors for the navbar */
-  background: #19134b;   /* dark blue so it blends with the header */
+  background: #303030;   /* dark grey is 303030....Light grey is 424242 */
   color: white;
   height: 100%;
   overflow: hidden;
@@ -55,13 +55,13 @@
 
 .navItemIcon {
   /* By default, the navItemIcon is invisible (It's same color as the navbar background) */
-  color: #19134b
+  color: #303030
 }
 
 
 .mat-list-item.active .navItemIcon {
   /* User is not hoving over an active navItemIcon.  So, set it's background as the same color as the background so it's invisible */
-  color: #5e6bd5;
+  color: #111111;
 }
 
 
@@ -75,7 +75,7 @@
   /* Active mat-list-item has a background gradient that goes to the right */
   color: #fff;
   /*background: linear-gradient(to left, #364150, #5e6bd5);*/
-  background: #5e6bd5 !important;
+  background: #111111 !important;   /* light blue is 5e6bd5 */
   font-weight: 700;
 
   /*!* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#19134b+1,5e6bd5+50,19134b+100 *!*/

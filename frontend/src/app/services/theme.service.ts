@@ -18,6 +18,8 @@ export class ThemeService {
       `assets/themes/${aThemeName}.css`
     );
 
+    // Send a message to the grid (telling the grid to change the theme to dark)
+
   }
 
 
@@ -51,7 +53,15 @@ export class ThemeService {
         "headingColor": "#9c27b0",
         "label": "Purple & Green",
         "value": "purple-green"
+      },
+      {
+        "backgroundColor": "",
+        "buttonColor": "",
+        "headingColor": "",
+        "label": "My Dark Blue",
+        "value": "my-dark-blue"
       }
+
     ];
 
     return of(options);
