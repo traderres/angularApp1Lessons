@@ -62,6 +62,9 @@ import { ReportSubmitMarkdownComponent } from './reports/report-submit-markdown/
 import {NgxExtendedPdfViewerModule} from "ngx-extended-pdf-viewer";
 import { PdfViewerComponent } from './reports/pdf-viewer/pdf-viewer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ThemeChangerMenuComponent } from './theme-changer-menu/theme-changer-menu.component';
+import {MatMenuModule} from "@angular/material/menu";
+import {MatRadioModule} from "@angular/material/radio";
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -117,7 +120,8 @@ const appRoutes: Routes = [
     ReportGridActionCellRendererComponent,
     UpdatePriorityDialogComponent,
     ReportSubmitMarkdownComponent,
-    PdfViewerComponent
+    PdfViewerComponent,
+    ThemeChangerMenuComponent
   ],
   imports: [
     AppRoutingModule,
@@ -140,8 +144,10 @@ const appRoutes: Routes = [
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatMenuModule,
     MatNativeDateModule,
     MatProgressBarModule,
+    MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
     MatSnackBarModule,

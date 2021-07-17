@@ -4,7 +4,7 @@
     <!-- The UserInfoObs data has come in.  So, show the navbar -->
     <!-- NOTE:  The async-pipe for userInfo must be *inside* the outer div that hsa width of 200px.  Otherwise all of the pages are screwed-up on page load  -->
 
-    <mat-nav-list style="margin-top: 0; padding-top: 0">
+    <mat-nav-list color="primary"  style="margin-top: 0; padding-top: 0">
 
       <ng-container  *ngIf="userInfo.pageRoutes.get(constants.VIEW_REPORTS_ROUTE) ||
                                   userInfo.pageRoutes.get(constants.ADD_REPORTS_ROUTE) ||
