@@ -5,27 +5,34 @@
   padding-left: 16px;
   padding-right: 16px;
 
-  /* Permalink - use to edit and share this gradient:
-  https://colorzilla.com/gradient-editor/#364150+0,111111+50,364150+100 */
-  background: #364150; /* Old browsers */
-  background: -moz-linear-gradient(left,  #364150 0%, #111111 50%, #364150 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(left,  #364150 0%,#111111 50%,#364150 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to right,  #364150 0%,#111111 50%,#364150 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#364150', endColorstr='#364150',GradientType=1 ); /* IE6-9 */
+  /* Dark Blue longer....Light Blue....Dark Blue longer */
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#19134b+0,19134b+13,257aaf+50,19134b+87,19134b+100 */
+  background: #19134b; /* Old browsers */
+  background: -moz-linear-gradient(left,  #19134b 0%, #19134b 13%, #257aaf 50%, #19134b 87%, #19134b 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left,  #19134b 0%,#19134b 13%,#257aaf 50%,#19134b 87%,#19134b 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right,  #19134b 0%,#19134b 13%,#257aaf 50%,#19134b 87%,#19134b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#19134b', endColorstr='#19134b',GradientType=1 ); /* IE6-9 */
 }
 
-.app1Logo {
+.appLogo {
   color: #fff;
-  padding: 3px 0 5px 5px;
-  font-size: 1.7em;
+  padding: 0;
   margin: 0;
-  font-family: "Verdana", san-serif;
   text-decoration: none;
+
+  font-size: 1.7em;
+  font-weight: 400;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+  /* Outline of zero gets rid of the annoying box around the link */
+  outline: 0;
+
+  white-space: nowrap;
 }
 
 a.button {
-  background-color: inherit;
-  border: 1px solid #919191;
+  background-color: #19134b;   /* dark blue */
+  border: 1px solid #444;
   border-radius: 4px;
   font-size: 14px;
   line-height: 20px;
@@ -40,9 +47,8 @@ a.button {
   background-image: none;
 }
 
-
 a.button:hover {
-  background-color: black;
+  background-color: #2579af;   /* light blue */
   color: white;
   border-color: #f9f9f9;
 }

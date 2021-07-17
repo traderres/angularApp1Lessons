@@ -1,25 +1,32 @@
 .navbar {
-  /*background: #364150;*/
-  /*color: white;*/
+  /* Set the colors for the navbar */
+  background: #19134b;   /* dark blue so it blends with the header */
+  color: white;
   height: 100%;
   overflow: hidden;
 }
 
 
 .mat-list-item {
-  font-family: Verdana, sans-serif;
-  font-size: 13px;
-  color: white;
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: normal;
+  color: white !important;
   height: 25px;
+
   white-space: nowrap;   /* stop wrapping of text */
 }
 
 .navHeader{
   /* The navHeader has a background gradient that goes to the left */
   background: linear-gradient(to left, #5e6b7b, rgba(94, 107, 123, 0));
-  font-family: Verdana, sans-serif;
-  font-size: 16px;
-  font-weight: bold;
+
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+
   padding: 0;
   margin-top: 0;
   height: 44px;
@@ -42,17 +49,24 @@
 
 .navItem:hover  {
   color: #fff;
-  background: linear-gradient(to right, #5e6b7b, rgba(94, 107, 123, 0));
+  background: linear-gradient(to right, #5e6b7b, rgba(94, 107, 123, 0)) !important;
   font-weight: bold;
 }
 
 .navItemIcon {
   /* By default, the navItemIcon is invisible (It's same color as the navbar background) */
-  color: #364150
+  color: #19134b
 }
 
+
+.mat-list-item.active .navItemIcon {
+  /* User is not hoving over an active navItemIcon.  So, set it's background as the same color as the background so it's invisible */
+  color: #5e6bd5;
+}
+
+
 .navItem:hover .navItemIcon {
-  /* When hovering over navItem change the color of the navItemIcon so it appears */
+  /* User is hovering over navItem on a non-active route */
   color: #999
 }
 
@@ -60,8 +74,17 @@
   /* Set the color for the actively clicked navbar item */
   /* Active mat-list-item has a background gradient that goes to the right */
   color: #fff;
-  background: linear-gradient(to right, #5e6b7b, rgba(94, 107, 123, 0));
-  font-weight: bold;
+  /*background: linear-gradient(to left, #364150, #5e6bd5);*/
+  background: #5e6bd5 !important;
+  font-weight: 700;
+
+  /*!* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#19134b+1,5e6bd5+50,19134b+100 *!*/
+  /*background: #19134b; !* Old browsers *!*/
+  /*background: -moz-linear-gradient(left,  #19134b 1%, #5e6bd5 50%, #19134b 100%); !* FF3.6-15 *!*/
+  /*background: -webkit-linear-gradient(left,  #19134b 1%,#5e6bd5 50%,#19134b 100%); !* Chrome10-25,Safari5.1-6 *!*/
+  /*background: linear-gradient(to right,  #19134b 1%,#5e6bd5 50%,#19134b 100%); !* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ *!*/
+  /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#19134b', endColorstr='#19134b',GradientType=1 ); !* IE6-9 *!*/
+
 }
 
 .navGroupClosed {
