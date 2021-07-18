@@ -1,12 +1,11 @@
-<button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Choose your theme" title="Choose your theme">
-  <i class="fas fa-fill-drip" style="font-size: 22px"></i>
+<button class="header-button" [matMenuTriggerFor]="menu" mat-raised-button aria-label="Choose your theme" title="Choose your theme">
+  <i class="fas fa-fill-drip" style="font-size: 20px"></i>
 </button>
 
 <mat-menu #menu="matMenu">
   <mat-radio-group>
 
     <ng-container *ngIf="(this.themeOptions | async) as options">
-
       <button *ngFor="let option of this.options" mat-menu-item style="height: fit-content;">
             <mat-radio-button [value]="option.label"
                               (click)="changeTheme(option.value)"
@@ -14,10 +13,7 @@
               {{ option.label}}
             </mat-radio-button>
       </button>
-
     </ng-container>
-
-
 
   </mat-radio-group>
 

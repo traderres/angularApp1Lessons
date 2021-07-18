@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ThemeOptionDTO} from "../models/ThemeOptionDTO";
 import {ThemeService} from "../services/theme.service";
 import {Observable} from "rxjs";
@@ -9,6 +9,7 @@ import {Observable} from "rxjs";
   styleUrls: ['./theme-changer-menu.component.css']
 })
 export class ThemeChangerMenuComponent implements OnInit {
+
 
   public selectedThemeName: string = "deeppurple-amber";
 

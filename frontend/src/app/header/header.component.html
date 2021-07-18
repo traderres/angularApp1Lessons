@@ -3,7 +3,7 @@
   <div fxFlex fxLayout="row" fxLayoutGap="0">
 
     <!-- Left Side of the Header -->
-    <div fxFlex fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="10px">
+    <div fxFlex fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="5px">
 
       <!-- App Logo -->
       <img class="appLogo clickable" [routerLink]="'/'" src="./assets/images/logo.png" height="47px" alt="Application Logo" title="Application Logo">
@@ -31,7 +31,7 @@
     <div fxFlex fxLayoutAlign="end center">
 
       <!-- Theme Chanager -->
-      <app-theme-changer-menu></app-theme-changer-menu>
+      <app-theme-changer-menu style="margin-right: 5px"></app-theme-changer-menu>
 
       <!-- User Menu -->
       <a class="button" (click)="toggleUserNavbar()">
