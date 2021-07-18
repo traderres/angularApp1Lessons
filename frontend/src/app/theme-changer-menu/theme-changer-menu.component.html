@@ -8,8 +8,8 @@
     <ng-container *ngIf="(this.themeOptions | async) as options">
       <button *ngFor="let option of this.options" mat-menu-item style="height: fit-content;">
             <mat-radio-button [value]="option.label"
-                              (click)="changeTheme(option.value)"
-                              [checked]="this.selectedThemeName == option.value">
+                              (click)="changeTheme(option)"
+                              [checked]="this.selectedThemeName == option.themeName">
               {{ option.label}}
             </mat-radio-button>
       </button>

@@ -1,22 +1,37 @@
 
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NavbarService} from "../services/navbar.service";
 import {ThemeService} from "../services/theme.service";
+import {ThemeOptionDTO} from "../models/ThemeOptionDTO";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
+  private themeStateSubscription: Subscription;
+  public currentTheme: ThemeOptionDTO;
 
+  constructor(private navbarService: NavbarService,
+              private themeService: ThemeService)  {}
 
-constructor(private navbarService: NavbarService,
-            private themeService: ThemeService)  {}
+  public ngOnInit(): void {
 
-  ngOnInit(): void {
-    this.themeService.setTheme("deeppurple-amber");
+    // Listen for changes from the theme service
+    this.themeStateSubscription = this.themeService.getThemeStateAsObservable().subscribe( (aNewTheme: ThemeOptionDTO) => {
+      // The theme has changed.
+      this.currentTheme = aNewTheme;
+    });
+
+  }
+
+  public ngOnDestroy(): void {
+    if (this.themeStateSubscription) {
+      this.themeStateSubscription.unsubscribe();
+    }
   }
 
   public toggleAppNavbar(): void {
@@ -28,7 +43,5 @@ constructor(private navbarService: NavbarService,
     this.navbarService.toggleUserNavbar();
   }
 
-  public themeChangeHandler(aThemeName: string) {
-    this.themeService.setTheme(aThemeName);
-  }
+
 }

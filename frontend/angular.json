@@ -41,6 +41,7 @@
               "./node_modules/quill-emoji/dist/quill-emoji.css",
               "./node_modules/quill-mention/dist/quill.mention.min.css",
               "./node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css",
+              "./node_modules/ag-grid-community/dist/styles/ag-theme-alpine-dark.css",
               "src/styles.css"
             ],
             "scripts": []

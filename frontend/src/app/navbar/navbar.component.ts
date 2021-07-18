@@ -1,27 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Constants} from "../utilities/constants";
 import {UserService} from "../services/user.service";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {UserInfoDTO} from "../models/user-info-dto";
+import {ThemeOptionDTO} from "../models/ThemeOptionDTO";
+import {ThemeService} from "../services/theme.service";
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   public reportsNavGroupClosed: boolean = false;   // Open Reports  section on page load
   public analyticsGroupClosed:  boolean = true;    // Close Analytics section on page load
 
   public userInfoObs: Observable<UserInfoDTO>
 
-  constructor(private userService: UserService) { }
 
-  ngOnInit(): void {
+  private themeStateSubscription: Subscription;
+  public  currentTheme: ThemeOptionDTO;
+
+  constructor(private themeService: ThemeService,
+              private userService: UserService) { }
+
+
+  public ngOnInit(): void {
+    // Listen for changes from the theme service
+    this.themeStateSubscription = this.themeService.getThemeStateAsObservable().subscribe( (aNewTheme: ThemeOptionDTO) => {
+      // The theme has changed.
+      this.currentTheme = aNewTheme;
+    });
+
     // Setup an observable to get the UserInfo
     // NOTE:  The HTML Template uses an async pipe to subscribe and unsubscribe to this observable
     this.userInfoObs = this.userService.getUserInfo();
+  }
+
+  public ngOnDestroy(): void {
+    if (this.themeStateSubscription) {
+      this.themeStateSubscription.unsubscribe();
+    }
   }
 
   public toggleNavGroup(aNavGroupNumber: number) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ThemeOptionDTO} from "../models/ThemeOptionDTO";
-import {Observable, of} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import {StyleManagerService} from "./style-manager.service";
 
 @Injectable({
@@ -8,18 +8,24 @@ import {StyleManagerService} from "./style-manager.service";
 })
 export class ThemeService {
 
-  constructor(private styleManagerService: StyleManagerService) { }
+  private themeStateSubject: BehaviorSubject<ThemeOptionDTO>;
 
-  public setTheme(aThemeName: string): void {
-    console.log('setTheme()  aThemeName=', aThemeName);
 
-    this.styleManagerService.setStyle(
-      "theme",
-      `assets/themes/${aThemeName}.css`
-    );
+  constructor(private styleManagerService: StyleManagerService) {
 
-    // Send a message to the grid (telling the grid to change the theme to dark)
+    let startingTheme: ThemeOptionDTO = {
+        label: "Light Mode  (Deep Purple & Amber)",
+        themeName: "deeppurple-amber-modified",
+        isLightMode: true
+      };
 
+    // Have the themeService send an initial message with the default (light) theme
+    this.themeStateSubject = new BehaviorSubject<ThemeOptionDTO>(startingTheme)
+  }
+
+
+  public getThemeStateAsObservable(): Observable<ThemeOptionDTO> {
+    return this.themeStateSubject.asObservable();
   }
 
 
@@ -27,44 +33,33 @@ export class ThemeService {
 
     let options: ThemeOptionDTO[] = [
       {
-        "backgroundColor": "#fff",
-        "buttonColor": "#ffc107",
-        "headingColor": "#673ab7",
-        "label": "Deep Purple & Amber",
-        "value": "deeppurple-amber"
+        label: "Light Mode",
+        themeName: "deeppurple-amber-modified",
+        isLightMode: true
       },
       {
-        "backgroundColor": "#fff",
-        "buttonColor": "#ff4081",
-        "headingColor": "#3f51b5",
-        "label": "Indigo & Pink",
-        "value": "indigo-pink"
-      },
-      {
-        "backgroundColor": "#303030",
-        "buttonColor": "#607d8b",
-        "headingColor": "#e91e63",
-        "label": "Pink & Blue Grey",
-        "value": "pink-bluegrey"
-      },
-      {
-        "backgroundColor": "#303030",
-        "buttonColor": "#4caf50",
-        "headingColor": "#9c27b0",
-        "label": "Purple & Green",
-        "value": "purple-green"
-      },
-      {
-        "backgroundColor": "",
-        "buttonColor": "",
-        "headingColor": "",
-        "label": "My Dark Blue",
-        "value": "my-dark-blue"
+        label: "Dark Mode",
+        themeName: "purple-green-modified",
+        isLightMode: false
       }
-
     ];
 
     return of(options);
+  }
+
+
+
+  public setTheme(aNewTheme: ThemeOptionDTO): void {
+    console.log('setTheme()  isLightMode=', aNewTheme.isLightMode);
+
+    // Tell Angular Material to change the theme
+    this.styleManagerService.setStyle(
+      "theme",
+      `assets/themes/${aNewTheme.themeName}.css`
+    );
+
+    // Send a message out to the header/navbar/grid pages that the theme has changed
+    this.themeStateSubject.next(aNewTheme);
   }
 
 

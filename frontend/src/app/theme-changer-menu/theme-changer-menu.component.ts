@@ -11,7 +11,7 @@ import {Observable} from "rxjs";
 export class ThemeChangerMenuComponent implements OnInit {
 
 
-  public selectedThemeName: string = "deeppurple-amber";
+  public selectedThemeName: string = "deeppurple-amber-modified";
 
   public themeOptions: Observable<ThemeOptionDTO[]>;
 
@@ -23,8 +23,8 @@ export class ThemeChangerMenuComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public changeTheme(aThemeName: string) {
-    this.selectedThemeName = aThemeName;
+  public changeTheme(aThemeName: ThemeOptionDTO) {
+    this.selectedThemeName = aThemeName.themeName;
 
     this.themeService.setTheme(aThemeName);
   }

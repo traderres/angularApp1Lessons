@@ -56,7 +56,12 @@
             <!-- AG-Grid -->
             <ag-grid-angular
               style="width: 100%; height: 100%"
-              class="ag-theme-alpine"
+
+              [ngClass]="{
+                'ag-theme-alpine':        this.currentTheme.isLightMode == true,
+                'ag-theme-alpine-dark':   this.currentTheme.isLightMode == false
+              }"
+
               [rowData]="this.rowData"
               [defaultColDef]="this.defaultColDefs"
               [columnDefs]="this.columnDefs"

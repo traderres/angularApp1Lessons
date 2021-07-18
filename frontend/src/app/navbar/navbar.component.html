@@ -1,4 +1,9 @@
-<div class="navbar" style="width:200px">
+<div  style="width:200px"
+      [ngClass]="{
+					'light':   this.currentTheme.isLightMode == true,
+					'dark':    this.currentTheme.isLightMode == false
+        }">
+
 
   <ng-container *ngIf="(this.userInfoObs | async) as userInfo">
     <!-- The UserInfoObs data has come in.  So, show the navbar -->
