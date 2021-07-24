@@ -10,6 +10,11 @@ import {GridService} from "../../services/grid.service";
 import {MatDialog} from "@angular/material/dialog";
 import {UpdatePriorityDialogFormData} from "../../models/update-priority-dialog-form-data";
 import {UpdatePriorityDialogComponent} from "../report-grid-view/update-priority-dialog-component/update-priority-dialog.component";
+import {GridGetRowsResponseDTO} from "../../models/grid-get-rows-response-dto";
+import {
+  IServerSideDatasource,
+  IServerSideGetRowsParams
+} from "ag-grid-community/dist/lib/interfaces/iServerSideDatasource";
 
 @Component({
   selector: 'app-big-report-grid-view',
@@ -23,7 +28,8 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     suppressCellSelection: true,
     rowSelection: 'multiple',      // Possible values are 'single' and 'multiple'
     domLayout: 'normal',
-    rowModelType: 'clientSide'    // Possible valures are 'clientSide', 'infinite', 'viewport', and 'serverSide'
+    rowModelType: 'serverSide',    // Possible valures are 'clientSide', 'infinite', 'viewport', and 'serverSide'
+    pagination: false
   };
 
   public defaultColDefs: any = {
@@ -85,8 +91,8 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
   public  currentTheme: ThemeOptionDTO;
 
   constructor(private themeService: ThemeService,
-              private gridService: GridService,
-              private matDialog: MatDialog) {}
+              private matDialog: MatDialog,
+              private gridService: GridService) {}
 
 
   public ngOnInit(): void {
@@ -110,8 +116,29 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 
-    // Reload the page
-    this.reloadPage();
+    // Create a server-side data source object
+    let serverSideDataSource: IServerSideDatasource = {
+      getRows: (params: IServerSideGetRowsParams) => {
+        // The grid needs to load data.  So, invoke our gridService.getServerSideData() and load the data
+
+        // By default the grid will sohw a "Loading..." mesage while it's waiting for data
+
+        // Subscribe to this service method to get the data
+        this.gridService.getServerSideData(params.request)
+          .subscribe((response: GridGetRowsResponseDTO) => {
+            // REST Call finished successfully
+            console.log('server side REST call came back successfully');
+
+            // Load the data
+            params.successCallback(response.data, response.lastRow)
+          });
+
+      }
+    };
+
+    // Set the server-side data source
+    // NOTE:  The grid will asynchronously call getRows() as it needs to load data
+    this.gridApi.setServerSideDatasource(serverSideDataSource);
   }
 
 
