@@ -6,6 +6,7 @@ import com.lessons.config.ElasticSearchResources;
 import com.lessons.models.AutoCompleteDTO;
 import com.lessons.models.AutoCompleteMatchDTO;
 import com.lessons.models.ErrorsDTO;
+import com.lessons.models.grid.GridGetRowsResponseDTO;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Service("com.lessons.services.ElasticSearchService")
 public class ElasticSearchService {
@@ -344,4 +346,97 @@ public class ElasticSearchService {
     }
 
 
+
+    public String runSearchGetJsonResponse(String aIndexName, String aJsonBody) throws Exception {
+        if (StringUtils.isEmpty(aIndexName)) {
+            throw new RuntimeException("The passed-in aIndexName is null or empty.");
+        }
+
+        // Make a synchronous POST call to execute a search and return the count
+        Response response = this.asyncHttpClient.prepareGet(this.elasticSearchUrl + "/" + aIndexName + "/_search")
+                .setRequestTimeout(this.ES_REQUEST_TIMEOUT_IN_MILLISECS)
+                .setHeader("accept", "application/json")
+                .setHeader("Content-Type", "application/json")
+                .setBody(aJsonBody)
+                .execute()
+                .get();
+
+        if (response.getStatusCode() != 200) {
+            throw new RuntimeException("Critical error in runSearchGetJsonResponse():  ElasticSearch returned a response status code of " +
+                    response.getStatusCode() + ".  Response message is " + response.getResponseBody() + "\n\n" + aJsonBody);
+        }
+
+        // Get the JSON response
+        String jsonResponse = response.getResponseBody();
+        return jsonResponse;
+    }
+
+
+
+    public GridGetRowsResponseDTO runSearchGetRowsResponseDTO(String aIndexName, String aJsonBody) throws Exception {
+        if (StringUtils.isEmpty(aIndexName)) {
+            throw new RuntimeException("The passed-in aIndexName is null or empty.");
+        }
+        else if (StringUtils.isEmpty(aJsonBody)) {
+            throw new RuntimeException("The passed-in aJsonBody is null or empty.");
+        }
+
+        // Make a synchronous POST call to execute a search and return a response object
+        Response response = this.asyncHttpClient.prepareGet(this.elasticSearchUrl + "/" + aIndexName + "/_search")
+                .setRequestTimeout(this.ES_REQUEST_TIMEOUT_IN_MILLISECS)
+                .setHeader("accept", "application/json")
+                .setHeader("Content-Type", "application/json")
+                .setBody(aJsonBody)
+                .execute()
+                .get();
+
+        if (response.getStatusCode() != 200) {
+            throw new RuntimeException("Critical error in runSearchGetJsonResponse():  ElasticSearch returned a response status code of " +
+                    response.getStatusCode() + ".  Response message is " + response.getResponseBody() + "\n\n" + aJsonBody);
+        }
+
+
+        // Create an empty array list
+        List<Map<String, Object>> listOfMaps = new ArrayList<>();
+
+        // Pull the list of matching values from the JSON Response
+        String jsonResponse = response.getResponseBody();
+
+        // Convert the response JSON string into a map and examine it to see if the request really worked
+        Map<String, Object> mapResponse = objectMapper.readValue(jsonResponse, new TypeReference<Map<String, Object>>() {});
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> outerHits = (Map<String, Object>) mapResponse.get("hits");
+        if (outerHits == null) {
+            throw new RuntimeException("Error in runAutoComplete():  The outer hits value was not found in the JSON response");
+        }
+
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> innerHits = (List<Map<String, Object>>) outerHits.get("hits");
+        if (innerHits == null) {
+            throw new RuntimeException("Error in runAutoComplete():  The inner hits value was not found in the JSON response");
+        }
+
+        if (innerHits.size() > 0) {
+            for (Map<String, Object> hit: innerHits) {
+
+                // Get the source map (that has all of the results)
+                @SuppressWarnings("unchecked")
+                Map<String, Object> sourceMap = (Map<String, Object>) hit.get("_source");
+                if (sourceMap == null) {
+                    throw new RuntimeException("Error in runAutoComplete():  The source map was null in the JSON response");
+                }
+
+                // Add the sourceMap to the list of maps
+                listOfMaps.add(sourceMap);
+            }
+        }
+
+
+        // Get the total rows from the json
+        int totalRows = 1000000;
+
+        GridGetRowsResponseDTO responseDTO = new GridGetRowsResponseDTO(listOfMaps, totalRows, null);
+        return responseDTO;
+    }
 }

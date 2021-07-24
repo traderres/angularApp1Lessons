@@ -5,12 +5,8 @@ import com.lessons.models.grid.GridGetRowsResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 @Service("com.lessons.services.GridService")
 public class GridService {
@@ -29,37 +25,27 @@ public class GridService {
      * @param aGridRequestDTO holds information about the request
      * @return holds the response object (that holds the list of data, p
      */
-    public GridGetRowsResponseDTO getRows(GridGetRowsRequestDTO aGridRequestDTO) {
+    public GridGetRowsResponseDTO getPageOfData(String aIndexName, GridGetRowsRequestDTO aGridRequestDTO) throws Exception {
 
+        // Construct an ElasticSearch query
+        String jsonQuery =
+                        "{" +
+                        "       \"query\": {\n" +
+                        "           \"match_all\": {}\n" +
+                        "       },\n" +
+                        "       \"size\": 20,\n" +
+                        "       \"sort\": [\n" +
+                        "        {\n" +
+                        "          \"id\": {\n" +
+                        "            \"order\": \"asc\",\n" +
+                        "            \"missing\" : \"_first\"\n" +
+                        "          }\n" +
+                        "        }\n" +
+                        "      ]" +
+                        "}";
 
-        GridGetRowsResponseDTO responseDTO = new GridGetRowsResponseDTO();
-
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("id", 1);
-        map1.put("name", "Report 1");
-        map1.put("priority", "low");
-        map1.put("start_date", "05/02/2021");
-        map1.put("end_date",   "06/03/2021");
-
-        Map<String, Object> map2 = new HashMap<>();
-        map2.put("id", 2);
-        map2.put("name", "Report 2");
-        map1.put("priority", "low");
-        map2.put("start_date", "05/02/2022");
-        map2.put("end_date",   "06/03/2022");
-
-        Map<String, Object> map3 = new HashMap<>();
-        map3.put("id", 3);
-        map3.put("name", "Report 3");
-        map1.put("priority", "medium");
-        map3.put("start_date", "05/02/2023");
-        map3.put("end_date",   "06/03/2023");
-
-        List<Map<String, Object>> listOfData = Arrays.asList(map1, map2, map3);
-
-        responseDTO.setData(listOfData);
-        responseDTO.setLastRow(3);
-
+        // Make an outgoing ES aggregate call
+        GridGetRowsResponseDTO responseDTO  = this.elasticSearchService.runSearchGetRowsResponseDTO(aIndexName, jsonQuery);
         return responseDTO;
     }
 }

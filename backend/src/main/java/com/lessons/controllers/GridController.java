@@ -33,10 +33,8 @@ public class GridController {
     public ResponseEntity<?> getRows(@RequestBody GridGetRowsRequestDTO aGridRequestDTO) throws Exception {
         logger.debug("getRows() started.");
 
-        // Adding a report record to the system
-        // reportService.addReport(aAddReportDTO);
-
-        GridGetRowsResponseDTO responseDTO = gridService.getRows(aGridRequestDTO);
+        // Use the grid service to get some matches and return an object that has the matches and meta-data about the matches
+        GridGetRowsResponseDTO responseDTO = gridService.getPageOfData("reports", aGridRequestDTO);
 
         // Return the responseDTO object and a 200 status code
         return ResponseEntity
