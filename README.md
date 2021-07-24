@@ -1,4 +1,4 @@
-Angular App1 Lesson 24c
+Angular App1 Lesson 25a
 -----------------------
 
 
@@ -9,7 +9,7 @@ To Get started From Project Setup
  2. Clone the project
     unix> git clone https://github.com/traderres/angularApp1Lessons.git angularApp1
     unix> cd angularApp1
-    unix> git checkout lesson24c/finished-theme-switcher
+    unix> git checkout lesson25a/grid/server-side
 
  3. Verify that the webapp works
     a. Compile the project (into an executable JAR)
