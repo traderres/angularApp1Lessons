@@ -130,6 +130,16 @@
             </div>
           </mat-list-item>
 
+          <!-- Big Reports Grid View  Page -->
+          <mat-list-item class="navItem" [routerLink]="constants.BIG_REPORT_GRID_VIEW_ROUTE" routerLinkActive="active"
+                         *ngIf="userInfo.pageRoutes.get(constants.BIG_REPORT_GRID_VIEW_ROUTE)">
+            <a title="PDF Viewer">Big Reports Grid View</a>
+            <div fxFlex fxLayoutAlign="end end" >
+              <a [routerLink]="constants.BIG_REPORT_GRID_VIEW_ROUTE" target="_blank">
+                <i class="fas fa-external-link-alt navItemIcon" title="Open 'Big Reports Grid View' in a new window"></i>
+              </a>
+            </div>
+          </mat-list-item>
 
         </div>  <!-- End of navMenuGroup -->
       </ng-container>

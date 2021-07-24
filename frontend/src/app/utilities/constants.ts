@@ -16,5 +16,6 @@ export enum Constants {
   CHART1_ROUTE                 = "page/chart1",
   CHART2_ROUTE                 = "page/chart2",
   REPORT_SUBMIT_MARKDOWN       = "page/reports/markdown-submit",
-  REPORT_PDFVIEWER_ROUTE       = "page/reports/pdf-viewer"
+  REPORT_PDFVIEWER_ROUTE       = "page/reports/pdf-viewer",
+  BIG_REPORT_GRID_VIEW_ROUTE   = "page/reports/big-grid"
 }
