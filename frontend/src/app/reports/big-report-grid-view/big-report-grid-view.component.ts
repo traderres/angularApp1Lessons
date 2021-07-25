@@ -116,15 +116,15 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
         this.gridService.getServerSideData(params.request)
           .subscribe((response: GridGetRowsResponseDTO) => {
             // REST Call finished successfully
-            console.log('server side REST call came back successfully');
 
             // Load the data
             params.successCallback(response.data, response.lastRow)
 
             if ( (!this.isInitialCellFocusComplete) && response.data.length > 0) {
+              // This is the initial page load.
               this.isInitialCellFocusComplete = true;
 
-              console.log('setFocusedCell() started');
+              // Set the focus on cell 1, row 1 so that the page-up/page-down buttons on the keyboard are picked-up
               this.gridApi.setFocusedCell(1, "id");
             }
 

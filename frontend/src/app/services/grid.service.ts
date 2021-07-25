@@ -51,8 +51,6 @@ export class GridService {
 
 
   public getServerSideData(aIServerSideGetRowsRequest: IServerSideGetRowsRequest): Observable<GridGetRowsResponseDTO> {
-    console.log('getServerSideData() called:  aIServerSideGetRowsRequest=', aIServerSideGetRowsRequest);
-
     // Construct the URL of the REST call
     const restUrl = environment.baseUrl + '/api/grid/getRows';
 
