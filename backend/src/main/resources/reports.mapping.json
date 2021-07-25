@@ -39,12 +39,22 @@
         "fields": {
           "raw": {
             "type": "keyword"
+          },
+          "filtered": {
+            "type": "text",
+            "analyzer": "my_ngram_analyzer"
           }
         }
       },
 
       "description": {
-        "type": "text"
+        "type": "text",
+        "fields": {
+          "filtered": {
+            "type": "text",
+            "analyzer": "my_ngram_analyzer"
+          }
+        }
       },
 
       "display_name": {

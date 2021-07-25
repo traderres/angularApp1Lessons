@@ -57,7 +57,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
   public columnDefs = [
     {
       field: 'id',
-      filter: 'agTextColumnFilter',
+      filter: 'agNumberColumnFilter',           // numeric filter
       filterParams: this.textFilterParams,
       cellClass: 'grid-text-cell-format',
       checkboxSelection: true

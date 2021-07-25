@@ -118,23 +118,56 @@ public class GridService {
             return null;
         }
 
+        // Start off the filter ES query
         StringBuilder sbFilterClause = new StringBuilder("\"filter\": [");
 
         for (Map.Entry<String, ColumnFilter> filter: aFilterModelsMap.entrySet() ) {
+            String originalFieldName = filter.getKey();
+            String actualFilterFieldName;
 
-            // TODO: Get the correct fieldname by examining ElasticSearch at startup
-            String filterFieldName = filter.getKey() + ".filtered";
+            // Get the columnFilter object -- it may be a NumericColumnFilter or a TextColumnFilter
+            ColumnFilter columnFilter = filter.getValue();
 
-            TextColumnFilter textColumnFilter = (TextColumnFilter) filter.getValue();
-            String filterValue = textColumnFilter.getFilter();
+            if (columnFilter instanceof NumberColumnFilter) {
+                // This is a numeric filter.
 
-            // NOTE: Set the filterValue to lowercase (as the filtered collumn is stored as lowercase)
-            sbFilterClause.append("{" +
-                    "                \"term\" : {\n" +
-                    "                  \"" + filterFieldName + "\":\"" + filterValue.toLowerCase() +"\"\n" +
-                    "                }\n" +
-                    "              },");
-        }
+                // The actual ES field to search will have .filtered on it
+                actualFilterFieldName = originalFieldName + ".filtered";
+
+                NumberColumnFilter numberColumnFilter = (NumberColumnFilter) filter.getValue();
+                Integer filterValue = numberColumnFilter.getFilter();
+
+                // Add the filter to the ES query
+                sbFilterClause.append("{" +
+                        "                \"term\" : {\n" +
+                        "                  \"" + actualFilterFieldName + "\":\"" + filterValue +"\"\n" +
+                        "                }\n" +
+                        "              },");
+            }
+            else if (columnFilter instanceof TextColumnFilter) {
+                // This is a text filter
+
+                // TODO: Get the correct fieldname by examining ElasticSearch at startup
+
+                // The actual ES field to search will have .filtered on it
+                actualFilterFieldName = originalFieldName + ".filtered";
+
+                TextColumnFilter textColumnFilter = (TextColumnFilter) filter.getValue();
+                String filterValue = textColumnFilter.getFilter();
+
+                // Add the filter to the ES query
+                // NOTE: Set the filterValue to lowercase (as the filtered collumn is stored as lowercase)
+                sbFilterClause.append("{" +
+                        "                \"term\" : {\n" +
+                        "                  \"" + actualFilterFieldName + "\":\"" + filterValue.toLowerCase() +"\"\n" +
+                        "                }\n" +
+                        "              },");
+            }
+            else {
+                throw new RuntimeException("Error in generateFilterClause():  Unknown filter Type.");
+            }
+
+        }  // End of looping through filters
 
         // Remove the last comma
         sbFilterClause.deleteCharAt(sbFilterClause.length() - 1);
@@ -161,7 +194,7 @@ public class GridService {
 
         for (SortModel sortModel: aSortModels) {
             String fieldName = sortModel.getColId();
-            Object fieldValue = (Object) lastMap.get(fieldName);
+            Object fieldValue = lastMap.get(fieldName);
 
             sbLastRowInfo.append(String.valueOf(fieldValue))
                          .append(",");
