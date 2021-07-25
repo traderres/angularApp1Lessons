@@ -3,6 +3,7 @@ package com.lessons;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,8 @@ public class AppTest
 
 
 
-    //    @Test
+    @Ignore
+    @Test
     public void createTestFile() throws Exception {
         long startTime = System.currentTimeMillis();
 
@@ -73,11 +75,12 @@ public class AppTest
 
         for (int i=1; i<=TOTAL_RECORDS; i++)
         {
+            int id = i + 1000;
             // Append one line to the stringBuilderobject
-            fileContents.append(i)
+            fileContents.append(id)
                     .append(",")
                     .append("report ")
-                    .append(i)
+                    .append(id)
                     .append(",")
                     .append( getRandomDescription() )
                     .append(",")
