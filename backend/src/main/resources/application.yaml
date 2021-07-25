@@ -48,6 +48,8 @@ spring.servlet.multipart.max-request-size: 400MB
 # NOTE:  In the DataSourceConfig, java code is used to run a flyway migrate
 spring.flyway.enabled: false
 
+# Have the generic exception handler returned detailed info to the front end
+exception_handler.return_dev_info: true
 
 
 ---
@@ -56,6 +58,8 @@ spring.flyway.enabled: false
 #
 #################################################################################################
 spring.profiles: dev
+
+
 
 ##########################################################
 # Database Settings
