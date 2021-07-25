@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ColumnApi, GridApi, GridOptions} from "ag-grid-community";
+import {ColumnApi, GridApi, GridOptions, ServerSideStoreType} from "ag-grid-community";
 import {PriorityCellCustomRendererComponent} from "../report-grid-view/priority-cell-custom-renderer/priority-cell-custom-renderer.component";
 import {ReportGridActionCellRendererComponent} from "../report-grid-view/report-grid-action-cell-renderer/report-grid-action-cell-renderer.component";
 import {Subscription} from "rxjs";
@@ -27,7 +27,10 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     rowSelection: 'multiple',      // Possible values are 'single' and 'multiple'
     domLayout: 'normal',
     rowModelType: 'serverSide',    // Possible valures are 'clientSide', 'infinite', 'viewport', and 'serverSide'
-    pagination: false
+    pagination: false,             // Do not show the 1 of 20 of 20, page 1 of 1
+
+    serverSideStoreType:  ServerSideStoreType.Partial,
+    cacheBlockSize: 20
   };
 
   public defaultColDefs: any = {

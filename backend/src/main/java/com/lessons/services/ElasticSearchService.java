@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 @Service("com.lessons.services.ElasticSearchService")
 public class ElasticSearchService {
@@ -434,7 +433,7 @@ public class ElasticSearchService {
 
 
         // Get the total rows from the json
-        int totalRows = 1000000;
+        Integer totalRows = null;
 
         GridGetRowsResponseDTO responseDTO = new GridGetRowsResponseDTO(listOfMaps, totalRows, null);
         return responseDTO;

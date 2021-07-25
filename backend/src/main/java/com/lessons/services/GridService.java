@@ -27,13 +27,25 @@ public class GridService {
      */
     public GridGetRowsResponseDTO getPageOfData(String aIndexName, GridGetRowsRequestDTO aGridRequestDTO) throws Exception {
 
+        logger.debug("getPageOfData()  startRow={}   endRow={}", aGridRequestDTO.getStartRow(), aGridRequestDTO.getEndRow() );
+
+        int pageSize = aGridRequestDTO.getEndRow() - aGridRequestDTO.getStartRow();
+
+        String searchAfterClause = "";
+
+        if (aGridRequestDTO.getStartRow() > 0) {
+            // Getting the 2nd row
+            searchAfterClause = " \"search_after\": [" + aGridRequestDTO.getStartRow() + "],";
+        }
+
         // Construct an ElasticSearch query
         String jsonQuery =
                         "{" +
                         "       \"query\": {\n" +
                         "           \"match_all\": {}\n" +
                         "       },\n" +
-                        "       \"size\": 20,\n" +
+                        "       \"size\": " + pageSize +",\n" +
+                                searchAfterClause + "\n" +
                         "       \"sort\": [\n" +
                         "        {\n" +
                         "          \"id\": {\n" +
