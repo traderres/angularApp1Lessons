@@ -21,8 +21,10 @@ import {BigReportRowDataDTO} from "../../models/big-report-row-data-dto";
 })
 export class BigReportGridViewComponent implements OnInit, OnDestroy {
 
+  private isInitialCellFocusComplete: boolean = false;
+
   public gridOptions: GridOptions = {
-    debug: true,
+    debug: false,
     suppressCellSelection: true,
     rowSelection: 'multiple',      // Possible values are 'single' and 'multiple'
     domLayout: 'normal',
@@ -118,6 +120,14 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
 
             // Load the data
             params.successCallback(response.data, response.lastRow)
+
+            if ( (!this.isInitialCellFocusComplete) && response.data.length > 0) {
+              this.isInitialCellFocusComplete = true;
+
+              console.log('setFocusedCell() started');
+              this.gridApi.setFocusedCell(1, "id");
+            }
+
           });
 
       }
