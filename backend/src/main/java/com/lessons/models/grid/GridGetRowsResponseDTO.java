@@ -16,6 +16,8 @@ public class GridGetRowsResponseDTO {
     @JsonProperty("secondaryColumnFields")
     private List<String> secondaryColumnFields;
 
+    @JsonProperty("lastRowInfo")
+    private String lastRowInfo;
 
     // --------------- Constructor, Getters, and Setters -------------------------------/
 
@@ -47,5 +49,13 @@ public class GridGetRowsResponseDTO {
 
     public void setSecondaryColumnFields(List<String> secondaryColumnFields) {
         this.secondaryColumnFields = secondaryColumnFields;
+    }
+
+    public String getLastRowInfo() {
+        return lastRowInfo;
+    }
+
+    public void setLastRowInfo(String lastRowInfo) {
+        this.lastRowInfo = lastRowInfo;
     }
 }

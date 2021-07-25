@@ -13,6 +13,7 @@ import {
   IServerSideGetRowsParams
 } from "ag-grid-community/dist/lib/interfaces/iServerSideDatasource";
 import {BigReportRowDataDTO} from "../../models/big-report-row-data-dto";
+import {GridGetRowsRequestDTO} from "../../models/grid-get-rows-request-dto";
 
 @Component({
   selector: 'app-big-report-grid-view',
@@ -22,6 +23,7 @@ import {BigReportRowDataDTO} from "../../models/big-report-row-data-dto";
 export class BigReportGridViewComponent implements OnInit, OnDestroy {
 
   private isInitialCellFocusComplete: boolean = false;
+  private lastRowInfo: string | null;
 
   public gridOptions: GridOptions = {
     debug: false,
@@ -112,12 +114,24 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
 
         // By default the grid will sohw a "Loading..." mesage while it's waiting for data
 
+        if (params.request.startRow == 0) {
+          // The user is requesting a first page (so we are not getting a 2nd or 3rd page)
+          // -- Reset the additional sort fields  (needed for the 2nd, 3rd, 4th pages)
+          this.lastRowInfo = null;
+        }
+
+        // Add the additional sort fields to the request object
+        let getRowsRequestDTO: GridGetRowsRequestDTO = new GridGetRowsRequestDTO(params.request, this.lastRowInfo)
+
         // Subscribe to this service method to get the data
-        this.gridService.getServerSideData(params.request)
+        this.gridService.getServerSideData(getRowsRequestDTO)
           .subscribe((response: GridGetRowsResponseDTO) => {
             // REST Call finished successfully
 
-            // Load the data
+            // Save the additional sort fields  (we will use when getting the next page)
+            this.lastRowInfo = response.lastRowInfo;
+
+            // Load the data into the grid
             params.successCallback(response.data, response.lastRow)
 
             if ( (!this.isInitialCellFocusComplete) && response.data.length > 0) {
@@ -140,16 +154,14 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
 
 
   public  reloadPage(): void {
-    console.log('reloadPage()');
 
     this.gridApi.refreshServerSideStore({
       route: [],    // List of group keys, pointing to the store to refresh
-      purge: false  // if purge==true,  then "Loading" spinner appears,   all rows are destroyed, and one page of data is loaded.  Also, the loading image appears
+      purge: true   // if purge==true,  then "Loading" spinner appears,   all rows are destroyed, and one page of data is loaded.  Also, the loading image appears
                     // if purge==false, then No "Loading" spinner appears, all rows are destroyed and N pages are re-loaded (if there are 5 pages, then 5 REST calls are invoked)
     });
 
-
-  }  // end of reloadPage()
+  }
 
 
 
@@ -171,43 +183,6 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     }
 
   }
-  //
-  // public openUpdatePriorityPopup(): void {
-  //   console.log('openUpdatePriorityPopup');
-  //
-  //   // Create an empty array of numbers
-  //   let selectedReportIds: number[] = [];
-  //
-  //   // Loop through the array of selected rows and add the selected ids to the list
-  //   this.gridApi.getSelectedRows().forEach((row: BigReportRowDataDTO) => {
-  //     selectedReportIds.push(row.id);
-  //   });
-  //
-  //   let formData: UpdatePriorityDialogFormData = new UpdatePriorityDialogFormData();
-  //   formData.reportIds = selectedReportIds;
-  //
-  //   // Open the dialog box in modal mode
-  //   let dialogRef = this.matDialog.open(UpdatePriorityDialogComponent, {
-  //     data: formData
-  //     // minWidth: 400,
-  //     // minHeight: 200
-  //   });
-  //
-  //   // Listen for the dialog box to close
-  //   dialogRef.afterClosed().subscribe((returnedFormData: UpdatePriorityDialogFormData) => {
-  //     // The dialog box has closed
-  //
-  //     if (returnedFormData) {
-  //       // The user pressed OK.  So, update the data
-  //
-  //       // TODO: Invoke the REST call
-  //
-  //       // Reload the list
-  //       this.reloadPage();
-  //     }
-  //   });
-  //
-  // }   // end of openUpdatePriorityPopup()
 
 
 

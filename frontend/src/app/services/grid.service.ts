@@ -8,6 +8,7 @@ import {
   IServerSideGetRowsParams,
   IServerSideGetRowsRequest
 } from "ag-grid-community/dist/lib/interfaces/iServerSideDatasource";
+import {GridGetRowsRequestDTO} from "../models/grid-get-rows-request-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -50,11 +51,11 @@ export class GridService {
   }
 
 
-  public getServerSideData(aIServerSideGetRowsRequest: IServerSideGetRowsRequest): Observable<GridGetRowsResponseDTO> {
+  public getServerSideData(aGridGetRowsRequestDTO: GridGetRowsRequestDTO): Observable<GridGetRowsResponseDTO> {
     // Construct the URL of the REST call
     const restUrl = environment.baseUrl + '/api/grid/getRows';
 
     // Use a POST call to send a JSON body of info
-    return this.httpClient.post <GridGetRowsResponseDTO> (restUrl, aIServerSideGetRowsRequest, {} );
+    return this.httpClient.post <GridGetRowsResponseDTO> (restUrl, aGridGetRowsRequestDTO, {} );
   }
 }

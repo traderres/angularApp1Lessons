@@ -44,6 +44,9 @@ public class GridGetRowsRequestDTO {
     @JsonProperty("sortModel")
     private List<SortModel> sortModel;
 
+    @JsonProperty("lastRowInfo")
+    private String lastRowInfo;
+
 
     // ------------------- Getters & Setters -----------------------------
 
@@ -127,5 +130,13 @@ public class GridGetRowsRequestDTO {
 
     public void setSortModel(List<SortModel> sortModel) {
         this.sortModel = sortModel;
+    }
+
+    public String getLastRowInfo() {
+        return lastRowInfo;
+    }
+
+    public void setLastRowInfo(String lastRowInfo) {
+        this.lastRowInfo = lastRowInfo;
     }
 }
