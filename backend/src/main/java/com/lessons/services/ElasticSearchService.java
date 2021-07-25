@@ -431,12 +431,15 @@ public class ElasticSearchService {
             }
         }
 
-        Integer totalRows = null;
+        Integer totalRows = 0;
 
-        // Get the total rows from the json
-        if (listOfMaps.size() == 0) {
-            // Setting the totalRows to zero tells the ag-grid that there are no records -- and so do not show the "Loading" and do not enable infinite scrolling
-            totalRows = 0;
+
+        if (listOfMaps.size() > 0) {
+            // Get the total rows from the json
+            Map<String, Object> totalInfoMap = (Map<String, Object>) outerHits.get("total");
+            if ((totalInfoMap != null) && (totalInfoMap.size() > 0)) {
+                totalRows = (Integer) totalInfoMap.get("value");
+            }
         }
 
 

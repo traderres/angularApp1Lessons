@@ -54,6 +54,7 @@ public class GridService {
             jsonQuery = "{\n" +
                             esSearchAfterClause + "\n" +
                             esSortClauseWithComma + "\n" +
+                           "   \"track_total_hits\": true,\n" +
                            "   \"size\": " + pageSize +",\n" +
                             "  \"query\": {\n" +
                             "    \"bool\": {\n" +
@@ -70,6 +71,7 @@ public class GridService {
             jsonQuery = "{" +
                                 esSearchAfterClause + "\n" +
                                 esSortClauseWithComma + "\n" +
+                            "       \"track_total_hits\": true,\n" +
                             "       \"size\": " + pageSize +",\n" +
                             "       \"query\": {\n" +
                             "           \"match_all\": {}\n" +

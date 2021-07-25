@@ -24,6 +24,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
 
   private isInitialCellFocusComplete: boolean = false;
   private lastRowInfo: string | null;
+  public  totalMatches: number = 0;
 
   public gridOptions: GridOptions = {
     debug: true,
@@ -146,6 +147,9 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
 
             // Save the additional sort fields  (we will use when getting the next page)
             this.lastRowInfo = response.lastRowInfo;
+
+            // Update total matches on the screen
+            this.totalMatches = response.lastRow;
 
             // Load the data into the grid
             params.successCallback(response.data, response.lastRow)
