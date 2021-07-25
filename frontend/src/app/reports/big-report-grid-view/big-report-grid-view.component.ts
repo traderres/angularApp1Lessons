@@ -139,37 +139,15 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
   }
 
 
-  private reloadPage(): void {
+  public  reloadPage(): void {
     console.log('reloadPage()');
 
-    // // Show the loading overlay
-    // this.gridApi.showLoadingOverlay();
-    //
-    // // Invoke a REST call to get data for the initial page load
-    // this.gridService.getReportData().subscribe((aData: BigReportRowDataDTO[]) => {
-    //   // We got data from the REST call
-    //
-    //   // Put the data into the grid
-    //   this.rowData = aData;
-    //
-    //   // Unselect all values
-    //   this.gridApi.deselectAll();
-    //
-    //   // Regenerate derived values
-    //   this.generateDerivedValuesOnUserSelection()
-    //
-    //   // Resize the columns
-    //   this.gridApi.sizeColumnsToFit();
-    //
-    //   // Reset row heights
-    //   this.gridApi.resetRowHeights();
-    //
-    //   // Tell the grid to resize when user resizes the browser window
-    //   window.onresize = () => {
-    //     this.gridApi.sizeColumnsToFit();
-    //   }
-    //
-    // });
+    this.gridApi.refreshServerSideStore({
+      route: [],    // List of group keys, pointing to the store to refresh
+      purge: false  // if purge==true,  then "Loading" spinner appears,   all rows are destroyed, and one page of data is loaded.  Also, the loading image appears
+                    // if purge==false, then No "Loading" spinner appears, all rows are destroyed and N pages are re-loaded (if there are 5 pages, then 5 REST calls are invoked)
+    });
+
 
   }  // end of reloadPage()
 
