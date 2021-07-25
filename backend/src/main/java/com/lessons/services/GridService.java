@@ -1,8 +1,6 @@
 package com.lessons.services;
 
-import com.lessons.models.grid.GridGetRowsRequestDTO;
-import com.lessons.models.grid.GridGetRowsResponseDTO;
-import com.lessons.models.grid.SortModel;
+import com.lessons.models.grid.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -44,19 +42,44 @@ public class GridService {
         }
 
         // Construct the sort clause
-        String esSortClause = generateSortClauseFromSortParams(aGridRequestDTO.getSortModel() );
+        String esSortClauseWithComma = generateSortClauseFromSortParams(aGridRequestDTO.getSortModel() );
+
+        // Construct the filter clause (if any)
+        String filterClauseW = generateFilterClause(aGridRequestDTO.getFilterModel() );
+
+        String jsonQuery;
+
+        if (StringUtils.isNotEmpty(filterClauseW)) {
+            // This ES query has a filter
+            jsonQuery = "{\n" +
+                            esSearchAfterClause + "\n" +
+                            esSortClauseWithComma + "\n" +
+                           "   \"size\": " + pageSize +",\n" +
+                            "  \"query\": {\n" +
+                            "    \"bool\": {\n" +
+                            "      \"must\": {\n" +
+                            "        \"match_all\": {}\n" +
+                            "      },\n" +
+                                    filterClauseW +
+                            "    }\n" +
+                            "  }\n" +
+                            "}";
+        }
+        else {
+            // This ES query does *NOT* have a filter
+            jsonQuery = "{" +
+                                esSearchAfterClause + "\n" +
+                                esSortClauseWithComma + "\n" +
+                            "       \"size\": " + pageSize +",\n" +
+                            "       \"query\": {\n" +
+                            "           \"match_all\": {}\n" +
+                            "       }\n" +
+                            "}";
+        }
+
 
         // Construct an ElasticSearch query
-        String jsonQuery =
-                        "{" +
-                        "       \"query\": {\n" +
-                        "           \"match_all\": {}\n" +
-                        "       },\n" +
-                        "       \"size\": " + pageSize +",\n" +
-                                esSearchAfterClause + "\n" +
-                                esSortClause + "\n" +
-                        "      ]" +
-                        "}";
+
 
         // Make an outgoing ES aggregate call
         GridGetRowsResponseDTO responseDTO  = this.elasticSearchService.runSearchGetRowsResponseDTO(aIndexName, jsonQuery);
@@ -66,6 +89,58 @@ public class GridService {
         responseDTO.setLastRowInfo( lastRowInfo);
 
         return responseDTO;
+    }
+
+    /**
+     * Generate an ElasticSearch Filter clause
+     *
+     *       "filter": [
+     *         {
+     *           "term" : {
+     *             "id":254
+     *           }
+     *         },
+     *         {
+     *           "term" : {
+     *             "cityId":35
+     *           }
+     *         }
+     *       ],
+     *
+     * @param aFilterModelsMap
+     * @return
+     */
+    private String generateFilterClause(Map<String, ColumnFilter> aFilterModelsMap) {
+        if ((aFilterModelsMap == null) || (aFilterModelsMap.size() == 0)){
+            // There are no filters
+            return null;
+        }
+
+        StringBuilder sbFilterClause = new StringBuilder("\"filter\": [");
+
+        for (Map.Entry<String, ColumnFilter> filter: aFilterModelsMap.entrySet() ) {
+
+            // TODO: Get the correct fieldname by examining ElasticSearch at startup
+            String filterFieldName = filter.getKey() + ".filtered";
+
+            TextColumnFilter textColumnFilter = (TextColumnFilter) filter.getValue();
+            String filterValue = textColumnFilter.getFilter();
+
+            // NOTE: Set the filterValue to lowercase (as the filtered collumn is stored as lowercase)
+            sbFilterClause.append("{" +
+                    "                \"term\" : {\n" +
+                    "                  \"" + filterFieldName + "\":\"" + filterValue.toLowerCase() +"\"\n" +
+                    "                }\n" +
+                    "              },");
+        }
+
+        // Remove the last comma
+        sbFilterClause.deleteCharAt(sbFilterClause.length() - 1);
+
+        // Add the closing square bracket
+        sbFilterClause.append("]\n");
+
+        return sbFilterClause.toString();
     }
 
 
@@ -119,6 +194,10 @@ public class GridService {
 
         // Remove the last comma
         sbSortClause.deleteCharAt(sbSortClause.length() - 1);
+
+        // Add the closing square bracket and comma to the end
+        sbSortClause.append("],\n");
+
         return sbSortClause.toString();
     }
 }

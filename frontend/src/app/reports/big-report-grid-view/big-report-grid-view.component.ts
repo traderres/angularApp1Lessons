@@ -26,7 +26,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
   private lastRowInfo: string | null;
 
   public gridOptions: GridOptions = {
-    debug: false,
+    debug: true,
     suppressCellSelection: true,
     rowSelection: 'multiple',      // Possible values are 'single' and 'multiple'
     domLayout: 'normal',
@@ -45,22 +45,38 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     autoHeight: true
   };
 
+
+  private textFilterParams = {
+    filterOptions: ['contains', 'notContains'],
+    caseSensitive: false,
+    debounceMs: 200,
+    suppressAndOrCondition: true,
+  };
+
   public columnDefs = [
     {
       field: 'id',
+      filter: 'agTextColumnFilter',
+      filterParams: this.textFilterParams,
       cellClass: 'grid-text-cell-format',
       checkboxSelection: true
     },
     {
       field: 'display_name',
+      filter: 'agTextColumnFilter',
+      filterParams: this.textFilterParams,
       cellClass: 'grid-text-cell-format'
     },
     {
       field: 'priority',
+      filter: 'agTextColumnFilter',
+      filterParams: this.textFilterParams,
       cellRenderer: 'priorityCellRenderer',
     },
     {
       field: 'description',
+      filter: 'agTextColumnFilter',
+      filterParams: this.textFilterParams,
       cellClass: 'grid-text-cell-format'
     }
   ];

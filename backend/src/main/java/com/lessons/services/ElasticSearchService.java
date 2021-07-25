@@ -431,9 +431,14 @@ public class ElasticSearchService {
             }
         }
 
+        Integer totalRows = null;
 
         // Get the total rows from the json
-        Integer totalRows = null;
+        if (listOfMaps.size() == 0) {
+            // Setting the totalRows to zero tells the ag-grid that there are no records -- and so do not show the "Loading" and do not enable infinite scrolling
+            totalRows = 0;
+        }
+
 
         GridGetRowsResponseDTO responseDTO = new GridGetRowsResponseDTO(listOfMaps, totalRows, null);
         return responseDTO;
