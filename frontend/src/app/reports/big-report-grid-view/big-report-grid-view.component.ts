@@ -62,9 +62,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
   // Create a server-side data source object
   private serverSideDataSource: IServerSideDatasource = {
     getRows: (params: IServerSideGetRowsParams) => {
-      // The grid needs to load data.  So, invoke our gridService.getServerSideData() and load the data
-
-      // By default the grid will sohw a "Loading..." mesage while it's waiting for data
+      // The grid needs to load data.  So, subscribe to gridService.getServerSideData() and load the data
 
       if (params.request.startRow == 0) {
         // The user is requesting a first page (so we are not getting a 2nd or 3rd page)
