@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ColumnApi, GridApi, GridOptions, ServerSideStoreType} from "ag-grid-community";
 import {PriorityCellCustomRendererComponent} from "../report-grid-view/priority-cell-custom-renderer/priority-cell-custom-renderer.component";
 import {ReportGridActionCellRendererComponent} from "../report-grid-view/report-grid-action-cell-renderer/report-grid-action-cell-renderer.component";
@@ -20,9 +20,8 @@ import {GridGetRowsRequestDTO} from "../../models/grid-get-rows-request-dto";
   templateUrl: './big-report-grid-view.component.html',
   styleUrls: ['./big-report-grid-view.component.css']
 })
-export class BigReportGridViewComponent implements OnInit, OnDestroy {
+export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  private isInitialCellFocusComplete: boolean = false;
   private lastRowInfo: string | null;
   public  totalMatches: number = 0;
 
@@ -100,15 +99,6 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
           // If lastRow == -1,           then Infinite-Scrolling is turned ON
           // if lastRow == totalMatches, then infinite-scrolling is turned OFF
           params.successCallback(response.data, response.lastRow)
-
-          if ( (!this.isInitialCellFocusComplete) && response.data.length > 0) {
-            // This is the initial page load.
-            this.isInitialCellFocusComplete = true;
-
-            // Set the focus on cell 1, row 1 so that the page-up/page-down buttons on the keyboard are picked-up
-            this.gridApi.setFocusedCell(1, "id");
-          }
-
         });
 
     }
@@ -178,7 +168,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
   private themeStateSubscription: Subscription;
   public  currentTheme: ThemeOptionDTO;
 
-
+  @ViewChild('searchBox',  { read: ElementRef }) searchBox: ElementRef;
 
   constructor(private themeService: ThemeService,
               private matDialog: MatDialog,
@@ -191,6 +181,12 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
       // The theme has changed.
       this.currentTheme = aNewTheme;
     });
+  }
+
+
+  public ngAfterViewInit(): void {
+    // Set the focus on the search box
+    setTimeout(() => this.searchBox.nativeElement.focus(), 10);
   }
 
 

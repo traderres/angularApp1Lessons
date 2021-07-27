@@ -30,8 +30,27 @@
       </div>
 
 
+      <!-- Center of the "button row"  -->
+      <div fxFlex fxLayoutAlign="center center" fxLayout="row" fxLayoutGap="0">
+
+        <div class="searchBoxWrapper fa-border">
+
+          <!-- Search Box -->
+          <input #searchBox matInput type="text"
+                 id="searchBox" placeholder="Enter Criteria..." aria-label="search box" />
+
+          <!-- Search Icon -->
+          <span class="searchBoxIcon">
+            <i class="fa fa-search"></i>
+          </span>
+
+        </div>
+
+
+      </div>
+
       <!-- Right Side of the "button row" -->
-      <div fxFlex fxLayoutAlign="end center">
+      <div fxFlex fxLayoutAlign="end end">
           <!-- Display the total matches -->
           <b>{{this.totalMatches | number }} matches</b>
       </div>
