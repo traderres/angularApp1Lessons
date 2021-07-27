@@ -50,12 +50,24 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  private clearGridCache() {
+  private clearGridCache(): void {
     // Move the scrollbar to the top
     this.gridApi.ensureIndexVisible(0, 'top');
 
     // Clear the cache
     this.gridApi?.setServerSideDatasource(this.serverSideDataSource);
+  }
+
+
+  public clearFilterAndSorting(): void {
+    // Clear the grid cache and move the vertical scrollbar to the top
+    this.clearGridCache();
+
+    this.gridApi.setFilterModel(null);
+    this.gridApi.setSortModel(null);
+
+    // Call onFilterChanged so that the grid starts over
+    this.gridApi.onFilterChanged();
   }
 
 
