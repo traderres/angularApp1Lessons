@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ColumnApi, GridApi, GridOptions, ServerSideStoreType} from "ag-grid-community";
+import {ColumnApi, GridApi, GridOptions, ServerSideStoreType, SortChangedEvent} from "ag-grid-community";
 import {PriorityCellCustomRendererComponent} from "../report-grid-view/priority-cell-custom-renderer/priority-cell-custom-renderer.component";
 import {ReportGridActionCellRendererComponent} from "../report-grid-view/report-grid-action-cell-renderer/report-grid-action-cell-renderer.component";
 import {Subscription} from "rxjs";
@@ -14,6 +14,7 @@ import {
 } from "ag-grid-community/dist/lib/interfaces/iServerSideDatasource";
 import {BigReportRowDataDTO} from "../../models/big-report-row-data-dto";
 import {GridGetRowsRequestDTO} from "../../models/grid-get-rows-request-dto";
+import {FilterChangedEvent} from "ag-grid-community/dist/lib/events";
 
 @Component({
   selector: 'app-big-report-grid-view',
@@ -26,6 +27,51 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
   private lastRowInfo: string | null;
   public  totalMatches: number = 0;
 
+
+  // Create a server-side data source object
+  private serverSideDataSource: IServerSideDatasource = {
+    getRows: (params: IServerSideGetRowsParams) => {
+      // The grid needs to load data.  So, invoke our gridService.getServerSideData() and load the data
+
+      // By default the grid will sohw a "Loading..." mesage while it's waiting for data
+
+      if (params.request.startRow == 0) {
+        // The user is requesting a first page (so we are not getting a 2nd or 3rd page)
+        // -- Reset the additional sort fields  (needed for the 2nd, 3rd, 4th pages)
+        this.lastRowInfo = null;
+      }
+
+      // Add the additional sort fields to the request object
+      let getRowsRequestDTO: GridGetRowsRequestDTO = new GridGetRowsRequestDTO(params.request, this.lastRowInfo)
+
+      // Subscribe to this service method to get the data
+      this.gridService.getServerSideData(getRowsRequestDTO)
+        .subscribe((response: GridGetRowsResponseDTO) => {
+          // REST Call finished successfully
+
+          // Save the additional sort fields  (we will use when getting the next page)
+          this.lastRowInfo = response.lastRowInfo;
+
+          // Update total matches on the screen
+          this.totalMatches = response.lastRow;
+
+          // Load the data into the grid
+          params.successCallback(response.data, response.lastRow)
+
+          if ( (!this.isInitialCellFocusComplete) && response.data.length > 0) {
+            // This is the initial page load.
+            this.isInitialCellFocusComplete = true;
+
+            // Set the focus on cell 1, row 1 so that the page-up/page-down buttons on the keyboard are picked-up
+            this.gridApi.setFocusedCell(1, "id");
+          }
+
+        });
+
+    }
+  };
+
+
   public gridOptions: GridOptions = {
     debug: true,
     suppressCellSelection: true,
@@ -34,9 +80,29 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     rowModelType: 'serverSide',    // Possible valures are 'clientSide', 'infinite', 'viewport', and 'serverSide'
     pagination: false,             // Do not show the 1 of 20 of 20, page 1 of 1
 
-    serverSideStoreType:  ServerSideStoreType.Partial,
-    cacheBlockSize: 20
-  };
+    serverSideStoreType: ServerSideStoreType.Partial,
+    cacheBlockSize: 20,
+    blockLoadDebounceMillis: 10,
+   // debounceVerticalScrollbar: true,
+
+    onFilterChanged: (event: FilterChangedEvent) => {
+      this.clearGridCache();
+    },
+
+    onSortChanged: (event: SortChangedEvent) => {
+      this.clearGridCache();
+    }
+  }
+
+
+  private clearGridCache() {
+
+    // Move the scrollbar to the top
+    this.gridApi.ensureIndexVisible(0, 'top');
+
+    // Clear the cache
+    this.gridApi?.setServerSideDatasource(this.serverSideDataSource);
+  }
 
   public defaultColDefs: any = {
     flex: 1,
@@ -76,6 +142,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     },
     {
       field: 'description',
+      sortable: false,                      // The description field is not sortable
       filter: 'agTextColumnFilter',
       filterParams: this.textFilterParams,
       cellClass: 'grid-text-cell-format'
@@ -97,6 +164,8 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
 
   private themeStateSubscription: Subscription;
   public  currentTheme: ThemeOptionDTO;
+
+
 
   constructor(private themeService: ThemeService,
               private matDialog: MatDialog,
@@ -124,52 +193,10 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 
-    // Create a server-side data source object
-    let serverSideDataSource: IServerSideDatasource = {
-      getRows: (params: IServerSideGetRowsParams) => {
-        // The grid needs to load data.  So, invoke our gridService.getServerSideData() and load the data
-
-        // By default the grid will sohw a "Loading..." mesage while it's waiting for data
-
-        if (params.request.startRow == 0) {
-          // The user is requesting a first page (so we are not getting a 2nd or 3rd page)
-          // -- Reset the additional sort fields  (needed for the 2nd, 3rd, 4th pages)
-          this.lastRowInfo = null;
-        }
-
-        // Add the additional sort fields to the request object
-        let getRowsRequestDTO: GridGetRowsRequestDTO = new GridGetRowsRequestDTO(params.request, this.lastRowInfo)
-
-        // Subscribe to this service method to get the data
-        this.gridService.getServerSideData(getRowsRequestDTO)
-          .subscribe((response: GridGetRowsResponseDTO) => {
-            // REST Call finished successfully
-
-            // Save the additional sort fields  (we will use when getting the next page)
-            this.lastRowInfo = response.lastRowInfo;
-
-            // Update total matches on the screen
-            this.totalMatches = response.lastRow;
-
-            // Load the data into the grid
-            params.successCallback(response.data, response.lastRow)
-
-            if ( (!this.isInitialCellFocusComplete) && response.data.length > 0) {
-              // This is the initial page load.
-              this.isInitialCellFocusComplete = true;
-
-              // Set the focus on cell 1, row 1 so that the page-up/page-down buttons on the keyboard are picked-up
-              this.gridApi.setFocusedCell(1, "id");
-            }
-
-          });
-
-      }
-    };
 
     // Set the server-side data source
     // NOTE:  The grid will asynchronously call getRows() as it needs to load data
-    this.gridApi.setServerSideDatasource(serverSideDataSource);
+    this.gridApi.setServerSideDatasource(this.serverSideDataSource);
   }
 
 
@@ -203,7 +230,6 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     }
 
   }
-
 
 
 }
