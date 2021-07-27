@@ -47,6 +47,8 @@ public class GridService {
         // Construct the filter clause (if any)
         String filterClauseW = generateFilterClause(aGridRequestDTO.getFilterModel() );
 
+        // Construct the query string
+
         String jsonQuery;
 
         if (StringUtils.isNotEmpty(filterClauseW)) {

@@ -23,7 +23,7 @@
     <div fxFlex  fxLayout="row" fxLayoutGap="5px">
 
       <!-- Left Side of the "button row"  -->
-      <div fxFlex fxLayoutAlign="left center" fxLayout="row" fxLayoutGap="0">
+      <div fxFlex fxLayoutAlign="left end" fxLayout="row" fxLayoutGap="0">
           <button mat-stroked-button type="button" color="primary" (click)="this.clearFilterAndSorting()" title="Clear the Grid">
             Clear
           </button>
@@ -31,22 +31,20 @@
 
 
       <!-- Center of the "button row"  -->
-      <div fxFlex fxLayoutAlign="center center" fxLayout="row" fxLayoutGap="0">
+      <div fxFlex fxLayoutAlign="center center" fxLayout="row" fxLayoutGap="0" style="border: 0px solid black">
 
         <div class="searchBoxWrapper fa-border">
 
           <!-- Search Box -->
-          <input #searchBox matInput type="text"
+          <input #searchBox matInput type="text" [(ngModel)]="this.rawSearchQuery" (keyup.enter)="this.runSearch()"
                  id="searchBox" placeholder="Enter Criteria..." aria-label="search box" />
 
           <!-- Search Icon -->
-          <span class="searchBoxIcon">
+          <span class="searchBoxIcon" (click)="this.runSearch()">
             <i class="fa fa-search"></i>
           </span>
 
         </div>
-
-
       </div>
 
       <!-- Right Side of the "button row" -->

@@ -47,6 +47,9 @@ public class GridGetRowsRequestDTO {
     @JsonProperty("lastRowInfo")
     private String lastRowInfo;
 
+    @JsonProperty("rawSearchQuery")
+    private String rawSearchQuery;
+
 
     // ------------------- Getters & Setters -----------------------------
 
@@ -138,5 +141,13 @@ public class GridGetRowsRequestDTO {
 
     public void setLastRowInfo(String lastRowInfo) {
         this.lastRowInfo = lastRowInfo;
+    }
+
+    public String getRawSearchQuery() {
+        return rawSearchQuery;
+    }
+
+    public void setRawSearchQuery(String rawSearchQuery) {
+        this.rawSearchQuery = rawSearchQuery;
     }
 }

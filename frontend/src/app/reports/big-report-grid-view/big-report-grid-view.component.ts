@@ -25,7 +25,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
   private lastRowInfo: string | null;
   public  totalMatches: number = 0;
 
-
+  public  rawSearchQuery: string = "";
 
   public gridOptions: GridOptions = {
     debug: true,
@@ -65,6 +65,19 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
     this.gridApi.setFilterModel(null);
     this.gridApi.setSortModel(null);
 
+    this.rawSearchQuery = "";
+
+    // Call onFilterChanged so that the grid starts over
+    this.gridApi.onFilterChanged();
+  }
+
+
+  public runSearch(): void {
+    this.clearGridCache();
+
+    this.gridApi.setFilterModel(null);
+    this.gridApi.setSortModel(null);
+
     // Call onFilterChanged so that the grid starts over
     this.gridApi.onFilterChanged();
   }
@@ -82,7 +95,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
       }
 
       // Add the additional sort fields to the request object
-      let getRowsRequestDTO: GridGetRowsRequestDTO = new GridGetRowsRequestDTO(params.request, this.lastRowInfo)
+      let getRowsRequestDTO: GridGetRowsRequestDTO = new GridGetRowsRequestDTO(params.request, this.lastRowInfo, this.rawSearchQuery)
 
       // Subscribe to this service method to get the data
       this.gridService.getServerSideData(getRowsRequestDTO)
