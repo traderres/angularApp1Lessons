@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ColumnApi, GridApi, GridOptions, ServerSideStoreType, SortChangedEvent} from "ag-grid-community";
+import {ColumnApi, GridApi, GridOptions, ServerSideStoreType} from "ag-grid-community";
 import {PriorityCellCustomRendererComponent} from "../report-grid-view/priority-cell-custom-renderer/priority-cell-custom-renderer.component";
 import {ReportGridActionCellRendererComponent} from "../report-grid-view/report-grid-action-cell-renderer/report-grid-action-cell-renderer.component";
 import {Subscription} from "rxjs";
@@ -14,7 +14,6 @@ import {
 } from "ag-grid-community/dist/lib/interfaces/iServerSideDatasource";
 import {BigReportRowDataDTO} from "../../models/big-report-row-data-dto";
 import {GridGetRowsRequestDTO} from "../../models/grid-get-rows-request-dto";
-import {FilterChangedEvent} from "ag-grid-community/dist/lib/events";
 
 @Component({
   selector: 'app-big-report-grid-view',
@@ -26,6 +25,38 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
   private isInitialCellFocusComplete: boolean = false;
   private lastRowInfo: string | null;
   public  totalMatches: number = 0;
+
+
+
+  public gridOptions: GridOptions = {
+    debug: true,
+    suppressCellSelection: true,
+    rowSelection: 'multiple',      // Possible values are 'single' and 'multiple'
+    domLayout: 'normal',
+    rowModelType: 'serverSide',    // Possible valures are 'clientSide', 'infinite', 'viewport', and 'serverSide'
+    pagination: false,             // Do not show the 1 of 20 of 20, page 1 of 1 (as we are doing infinite scrolling)
+
+    serverSideStoreType: ServerSideStoreType.Partial,   // Use partial Server Side Store Type so that pages of data are loaded
+    cacheBlockSize: 50,                                 // Load 50 records at a time with each REST call
+    blockLoadDebounceMillis: 100,
+    debounceVerticalScrollbar: true,
+
+    onFilterChanged: () => {
+      this.clearGridCache();
+    },
+
+    onSortChanged: () => {
+      this.clearGridCache();
+    }
+  }
+
+  private clearGridCache() {
+    // Move the scrollbar to the top
+    this.gridApi.ensureIndexVisible(0, 'top');
+
+    // Clear the cache
+    this.gridApi?.setServerSideDatasource(this.serverSideDataSource);
+  }
 
 
   // Create a server-side data source object
@@ -53,19 +84,11 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
           this.lastRowInfo = response.lastRowInfo;
 
           // Update total matches on the screen
-          this.totalMatches = response.lastRow;
+          this.totalMatches = response.totalMatches;
 
-          if (params.request.endRow < this.totalMatches) {
-            // This is not the last batch.  So, keep infinite-srolling ON
-            console.log('Infinite Scrolling is ON    Change this to -1:  response.lastRow=', response.lastRow);
-            response.lastRow = -1
-          }
-          else {
-            // This is the last row.  So, by setting lastRow as the total matches, infinite scrolling is turned OFF
-            console.log('Infinite Scrolling is OFF    response.lastRow=', response.lastRow);
-          }
-
-          // Load the data into the grid
+          // Load the data into the grid and turn on/off infinite scrolling
+          // If lastRow == -1,           then Infinite-Scrolling is turned ON
+          // if lastRow == totalMatches, then infinite-scrolling is turned OFF
           params.successCallback(response.data, response.lastRow)
 
           if ( (!this.isInitialCellFocusComplete) && response.data.length > 0) {
@@ -81,40 +104,6 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     }
   };
 
-
-  public gridOptions: GridOptions = {
-    debug: true,
-    suppressCellSelection: true,
-    rowSelection: 'multiple',      // Possible values are 'single' and 'multiple'
-    domLayout: 'normal',
-
-
-    rowModelType: 'serverSide',    // Possible valures are 'clientSide', 'infinite', 'viewport', and 'serverSide'
-    pagination: false,             // Do not show the 1 of 20 of 20, page 1 of 1
-
-    serverSideStoreType: ServerSideStoreType.Partial,   // Use partial Server Side Store Type
-    cacheBlockSize: 50,                                 // Load 50 records at a time with each REST call
-    blockLoadDebounceMillis: 100,
-    debounceVerticalScrollbar: true,
-
-    onFilterChanged: (event: FilterChangedEvent) => {
-      this.clearGridCache();
-    },
-
-    onSortChanged: (event: SortChangedEvent) => {
-      this.clearGridCache();
-    }
-  }
-
-
-  private clearGridCache() {
-
-    // Move the scrollbar to the top
-    this.gridApi.ensureIndexVisible(0, 'top');
-
-    // Clear the cache
-    this.gridApi?.setServerSideDatasource(this.serverSideDataSource);
-  }
 
   public defaultColDefs: any = {
     flex: 1,
@@ -167,6 +156,8 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     priorityCellRenderer: PriorityCellCustomRendererComponent,
     actionCellRenderer: ReportGridActionCellRendererComponent
   };
+
+
 
   public  rowData: BigReportRowDataDTO[];
   private gridApi: GridApi;

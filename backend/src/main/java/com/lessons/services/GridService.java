@@ -84,11 +84,22 @@ public class GridService {
 
 
         // Make an outgoing ES aggregate call
+        // -- This sets responseDTO.setData() and responseDTo.setTotalMatches()
         GridGetRowsResponseDTO responseDTO  = this.elasticSearchService.runSearchGetRowsResponseDTO(aIndexName, jsonQuery);
 
-        // Set the last row info
+        // Set the lastRowInfo
         String lastRowInfo = generateLastRowInfoFromData(aGridRequestDTO.getSortModel(), responseDTO.getData());
         responseDTO.setLastRowInfo( lastRowInfo);
+
+        // Set the lastRow  (so the ag-grid's infinite scrolling works correctly)
+        if (aGridRequestDTO.getEndRow() < responseDTO.getTotalMatches() ) {
+            // This is not the last page.  So, set lastRow=-1  (which turns on infinite scrolling)
+            responseDTO.setLastRow(-1);
+        }
+        else {
+            // This is the last page.  So, set lastRow=totalMatches (which turns off infinite scrolling)
+            responseDTO.setLastRow( responseDTO.getTotalMatches() );
+        }
 
         return responseDTO;
     }

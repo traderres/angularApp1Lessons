@@ -13,6 +13,9 @@ public class GridGetRowsResponseDTO {
     @JsonProperty("lastRow")
     private Integer lastRow;
 
+    @JsonProperty("totalMatches")
+    private Integer totalMatches;
+
     @JsonProperty("secondaryColumnFields")
     private List<String> secondaryColumnFields;
 
@@ -21,10 +24,9 @@ public class GridGetRowsResponseDTO {
 
     // --------------- Constructor, Getters, and Setters -------------------------------/
 
-    public GridGetRowsResponseDTO(List<Map<String, Object>> data, Integer lastRow, List<String> secondaryColumnFields) {
+    public GridGetRowsResponseDTO(List<Map<String, Object>> data, Integer totalMatches) {
         this.data = data;
-        this.lastRow = lastRow;
-        this.secondaryColumnFields = secondaryColumnFields;
+        this.totalMatches = totalMatches;
     }
 
     public List<Map<String, Object>> getData() {
@@ -57,5 +59,13 @@ public class GridGetRowsResponseDTO {
 
     public void setLastRowInfo(String lastRowInfo) {
         this.lastRowInfo = lastRowInfo;
+    }
+
+    public Integer getTotalMatches() {
+        return totalMatches;
+    }
+
+    public void setTotalMatches(Integer totalMatches) {
+        this.totalMatches = totalMatches;
     }
 }

@@ -431,19 +431,19 @@ public class ElasticSearchService {
             }
         }
 
-        Integer totalRows = 0;
+        Integer totalMatches = 0;
 
 
         if (listOfMaps.size() > 0) {
-            // Get the total rows from the json
+            // Get the total matches from the json
             Map<String, Object> totalInfoMap = (Map<String, Object>) outerHits.get("total");
             if ((totalInfoMap != null) && (totalInfoMap.size() > 0)) {
-                totalRows = (Integer) totalInfoMap.get("value");
+                totalMatches = (Integer) totalInfoMap.get("value");
             }
         }
 
 
-        GridGetRowsResponseDTO responseDTO = new GridGetRowsResponseDTO(listOfMaps, totalRows, null);
+        GridGetRowsResponseDTO responseDTO = new GridGetRowsResponseDTO(listOfMaps, totalMatches);
         return responseDTO;
     }
 }
