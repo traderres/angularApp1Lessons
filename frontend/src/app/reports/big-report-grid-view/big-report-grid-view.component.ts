@@ -55,6 +55,16 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
           // Update total matches on the screen
           this.totalMatches = response.lastRow;
 
+          if (params.request.endRow < this.totalMatches) {
+            // This is not the last batch.  So, keep infinite-srolling ON
+            console.log('Infinite Scrolling is ON    Change this to -1:  response.lastRow=', response.lastRow);
+            response.lastRow = -1
+          }
+          else {
+            // This is the last row.  So, by setting lastRow as the total matches, infinite scrolling is turned OFF
+            console.log('Infinite Scrolling is OFF    response.lastRow=', response.lastRow);
+          }
+
           // Load the data into the grid
           params.successCallback(response.data, response.lastRow)
 
@@ -77,13 +87,15 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy {
     suppressCellSelection: true,
     rowSelection: 'multiple',      // Possible values are 'single' and 'multiple'
     domLayout: 'normal',
+
+
     rowModelType: 'serverSide',    // Possible valures are 'clientSide', 'infinite', 'viewport', and 'serverSide'
     pagination: false,             // Do not show the 1 of 20 of 20, page 1 of 1
 
-    serverSideStoreType: ServerSideStoreType.Partial,
-    cacheBlockSize: 20,
-    blockLoadDebounceMillis: 10,
-   // debounceVerticalScrollbar: true,
+    serverSideStoreType: ServerSideStoreType.Partial,   // Use partial Server Side Store Type
+    cacheBlockSize: 50,                                 // Load 50 records at a time with each REST call
+    blockLoadDebounceMillis: 100,
+    debounceVerticalScrollbar: true,
 
     onFilterChanged: (event: FilterChangedEvent) => {
       this.clearGridCache();
