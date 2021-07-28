@@ -123,7 +123,8 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
     sortable: true,
     filter: true,
     floatingFilter: true,    // Causes the filter row to appear below column names
-    autoHeight: true
+    autoHeight: true,
+    resizable: true
   };
 
 
