@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,7 +71,9 @@ public class GridController {
 
 
         // Use the grid service to get some matches and return an object that has the matches and meta-data about the matches
-        GridGetRowsResponseDTO responseDTO = gridService.getPageOfData("reports", aGridRequestDTO);
+        List<String> reportFieldsToSearch = Arrays.asList("id.sort", "description", "display_name.sort", "priority.sort");
+
+        GridGetRowsResponseDTO responseDTO = gridService.getPageOfData("reports", reportFieldsToSearch, aGridRequestDTO);
 
         // Return the responseDTO object and a 200 status code
         return ResponseEntity

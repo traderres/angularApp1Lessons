@@ -40,6 +40,10 @@
           "raw": {
             "type": "keyword"
           },
+          "sort": {
+            "type": "keyword",
+            "normalizer": "case_insensitive_normalizer"
+          },
           "filtered": {
             "type": "text",
             "analyzer": "my_ngram_analyzer"

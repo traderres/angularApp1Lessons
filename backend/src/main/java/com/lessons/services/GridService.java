@@ -28,7 +28,7 @@ public class GridService {
      * @param aGridRequestDTO holds information about the request
      * @return holds the response object (that holds the list of data, p
      */
-    public GridGetRowsResponseDTO getPageOfData(String aIndexName, GridGetRowsRequestDTO aGridRequestDTO) throws Exception {
+    public GridGetRowsResponseDTO getPageOfData(String aIndexName, List<String> aFieldsToSearch, GridGetRowsRequestDTO aGridRequestDTO) throws Exception {
 
         logger.debug("getPageOfData()  startRow={}   endRow={}", aGridRequestDTO.getStartRow(), aGridRequestDTO.getEndRow() );
 
@@ -49,7 +49,7 @@ public class GridService {
         String filterClause = generateFilterClause(aGridRequestDTO.getFilterModel() );
 
         // Construct the *QUERY* clause
-        String queryStringClause = generateQueryStringClause(aGridRequestDTO.getRawSearchQuery() );
+        String queryStringClause = generateQueryStringClause(aGridRequestDTO.getRawSearchQuery(), aFieldsToSearch );
 
         // Assemble the pieces to build the JSON query
         String jsonQuery;
@@ -104,12 +104,17 @@ public class GridService {
         return responseDTO;
     }
 
-    private String generateQueryStringClause(String aRawQuery) {
+    private String generateQueryStringClause(String aRawQuery, List<String> aFieldsToSearch) {
         String queryStringClause;
+        String fieldsClause = "";
+
+        if (CollectionUtils.isNotEmpty(aFieldsToSearch)) {
+            // A list of fields were passed-in.  So, generate a string that holds "fields": ["field1", "field2", "field3"],
+            fieldsClause = "\"fields\": [\"" + StringUtils.join(aFieldsToSearch, "\",\"") + "\"],\n";
+        }
 
         // Get the cleaned query
         String cleanedQuery = this.elasticSearchService.cleanupQuery(aRawQuery );
-
 
         if (StringUtils.isEmpty(cleanedQuery)) {
             // There is no query.  So, use ElasticSearch's match_all to run a search with no query
@@ -118,6 +123,7 @@ public class GridService {
         else {
             // There is a query, so return a query_string clause
             queryStringClause = "  \"query_string\": {\n" +
+                                     fieldsClause +
                                 "    \"query\": \"" + cleanedQuery + "\"\n" +
                                 "     }\n";
         }
