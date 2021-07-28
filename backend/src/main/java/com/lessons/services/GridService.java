@@ -32,26 +32,28 @@ public class GridService {
 
         logger.debug("getPageOfData()  startRow={}   endRow={}", aGridRequestDTO.getStartRow(), aGridRequestDTO.getEndRow() );
 
+        // Calculate the page size  (to determine how many records to request from ES)
         int pageSize = aGridRequestDTO.getEndRow() - aGridRequestDTO.getStartRow();
 
+        // Build the search_after clause  (which is used to get page 2, page 3, page 4 from an ES query)
         String esSearchAfterClause = "";
-
         if (aGridRequestDTO.getStartRow() > 0) {
             // Getting the 2nd, 3rd, 4th page....
             esSearchAfterClause = " \"search_after\": [" + aGridRequestDTO.getLastRowInfo() + "],";
         }
 
-        // Construct the sort clause
+        // Construct the *SORT* clause
         String esSortClauseWithComma = generateSortClauseFromSortParams(aGridRequestDTO.getSortModel() );
 
-        // Construct the filter clause (if any)
-        String filterClauseW = generateFilterClause(aGridRequestDTO.getFilterModel() );
+        // Construct the *FILTER* clause (if any)
+        String filterClause = generateFilterClause(aGridRequestDTO.getFilterModel() );
 
-        // Construct the query string
+        // Construct the *QUERY* clause
+        String queryStringClause = generateQueryStringClause(aGridRequestDTO.getRawSearchQuery() );
 
+        // Assemble the pieces to build the JSON query
         String jsonQuery;
-
-        if (StringUtils.isNotEmpty(filterClauseW)) {
+        if (StringUtils.isNotEmpty(filterClause)) {
             // This ES query has a filter
             jsonQuery = "{\n" +
                             esSearchAfterClause + "\n" +
@@ -61,9 +63,9 @@ public class GridService {
                             "  \"query\": {\n" +
                             "    \"bool\": {\n" +
                             "      \"must\": {\n" +
-                            "        \"match_all\": {}\n" +
+                                      queryStringClause + "\n" +
                             "      },\n" +
-                                    filterClauseW +
+                                    filterClause +
                             "    }\n" +
                             "  }\n" +
                             "}";
@@ -73,23 +75,19 @@ public class GridService {
             jsonQuery = "{" +
                                 esSearchAfterClause + "\n" +
                                 esSortClauseWithComma + "\n" +
-                            "       \"track_total_hits\": true,\n" +
-                            "       \"size\": " + pageSize +",\n" +
-                            "       \"query\": {\n" +
-                            "           \"match_all\": {}\n" +
-                            "       }\n" +
+                            "   \"track_total_hits\": true,\n" +
+                            "   \"size\": " + pageSize +",\n" +
+                            "   \"query\": { " +
+                                   queryStringClause + "\n" +
+                              "}\n" +
                             "}";
         }
 
-
-        // Construct an ElasticSearch query
-
-
-        // Make an outgoing ES aggregate call
+        // Execute the search and generate a GetResponsRowsResponseDTO object
         // -- This sets responseDTO.setData() and responseDTo.setTotalMatches()
         GridGetRowsResponseDTO responseDTO  = this.elasticSearchService.runSearchGetRowsResponseDTO(aIndexName, jsonQuery);
 
-        // Set the lastRowInfo
+        // Set the lastRowInfo in the GetResponseRowsDTO object  (so the front-end can pass-it back (if the user requests page 2, page 3, page 4, ...)
         String lastRowInfo = generateLastRowInfoFromData(aGridRequestDTO.getSortModel(), responseDTO.getData());
         responseDTO.setLastRowInfo( lastRowInfo);
 
@@ -105,6 +103,29 @@ public class GridService {
 
         return responseDTO;
     }
+
+    private String generateQueryStringClause(String aRawQuery) {
+        String queryStringClause;
+
+        // Get the cleaned query
+        String cleanedQuery = this.elasticSearchService.cleanupQuery(aRawQuery );
+
+
+        if (StringUtils.isEmpty(cleanedQuery)) {
+            // There is no query.  So, use ElasticSearch's match_all to run a search with no query
+            queryStringClause = "  \"match_all\": {}\n";
+        }
+        else {
+            // There is a query, so return a query_string clause
+            queryStringClause = "  \"query_string\": {\n" +
+                                "    \"query\": \"" + cleanedQuery + "\"\n" +
+                                "     }\n";
+        }
+        
+        return queryStringClause;
+    }
+
+
 
     /**
      * Generate an ElasticSearch Filter clause
@@ -122,8 +143,8 @@ public class GridService {
      *         }
      *       ],
      *
-     * @param aFilterModelsMap
-     * @return
+     * @param aFilterModelsMap holds a map of filter objects
+     * @return String containing a filter clause
      */
     private String generateFilterClause(Map<String, ColumnFilter> aFilterModelsMap) {
         if ((aFilterModelsMap == null) || (aFilterModelsMap.size() == 0)){
@@ -231,20 +252,33 @@ public class GridService {
             String sortFieldName = sortModel.getColId();
             String sortOrder = sortModel.getSort();
 
-            sbSortClause.append(
-                    "{\n" +
-                    "\"" + sortFieldName + "\": {\n" +
-                    "            \"order\": \"" + sortOrder + "\",\n" +
-                    "            \"missing\" : \"_first\"\n" +
-                    "          }\n" +
-                    "        },");
+            if (sortFieldName.equalsIgnoreCase("_score")) {
+                // We are sorting by the _score so do not include the missing: field
+                sbSortClause.append(
+                        "{\n" +
+                                "\"" + sortFieldName + "\": {\n" +
+                                "            \"order\": \"" + sortOrder + "\"\n" +
+                                "          }\n" +
+                                "        },");
+            }
+            else {
+                // We are sorting by a non _score field.  So, include the missing field
+                sbSortClause.append(
+                        "{\n" +
+                                "\"" + sortFieldName + "\": {\n" +
+                                "            \"order\": \"" + sortOrder + "\",\n" +
+                                "            \"missing\" : \"_first\"\n" +
+                                "          }\n" +
+                                "        },");
+            }
+
         }
 
         // Remove the last comma
         sbSortClause.deleteCharAt(sbSortClause.length() - 1);
 
         // Add the closing square bracket and comma to the end
-        sbSortClause.append("],\n");
+        sbSortClause.append("],");
 
         return sbSortClause.toString();
     }

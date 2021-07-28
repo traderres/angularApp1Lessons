@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Service("com.lessons.services.ElasticSearchService")
 public class ElasticSearchService {
@@ -36,6 +37,11 @@ public class ElasticSearchService {
     private final int ES_REQUEST_TIMEOUT_IN_MILLISECS = 90000;
 
     private ObjectMapper objectMapper;
+
+    private final Pattern patMatchDoubleQuote     = Pattern.compile("\"");
+    private final Pattern patMatchAscii1To31or128 = Pattern.compile("[\\u0000-\\u001F\\u0080]");
+    private final Pattern patMatchBackwardSlashMissingReserveChar = Pattern.compile("\\\\([^+!-><)(:/}{*~]|\\Z)");
+
 
     @PostConstruct
     public void init() throws Exception {
@@ -446,4 +452,28 @@ public class ElasticSearchService {
         GridGetRowsResponseDTO responseDTO = new GridGetRowsResponseDTO(listOfMaps, totalMatches);
         return responseDTO;
     }
+
+
+    /**
+     * Clean-up the passed-in raw query with the following rules:
+     *   1) If Double quote is found, then replace it with \"
+     *   2) If ASCII value between 1 and 31 is found or 128, then replace it with a space
+     *   3) If "\" is found without a special reserve chars, then replace it with a space
+     * @param aRawQuery holds the raw query from the front-end
+     * @return cleaned-up query
+     */
+    public String cleanupQuery(String aRawQuery) {
+        // Convert the pattern match of " to \"
+        // NOTE:  Because of Java Regex, you have to use four backward slashes to match a \
+        String sCleanedQuery = this.patMatchDoubleQuote.matcher(aRawQuery).replaceAll("\\\\\"");
+
+        // If ASCII 1-31 or 128 is found, then replace it with a space
+        sCleanedQuery = this.patMatchAscii1To31or128.matcher(sCleanedQuery).replaceAll(" ");
+
+        // If a single backslash is found but the required reserve char is missing -- then replace it with a space
+        sCleanedQuery = this.patMatchBackwardSlashMissingReserveChar.matcher(sCleanedQuery).replaceAll(" ");
+
+        return sCleanedQuery;
+    }
+
 }

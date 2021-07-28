@@ -5,6 +5,7 @@ import com.lessons.models.grid.GridGetRowsResponseDTO;
 import com.lessons.models.grid.SortModel;
 import com.lessons.services.GridService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Controller("com.lessons.controllers.GridController")
@@ -29,9 +30,9 @@ public class GridController {
     /**
      * The AG-Grid calls this REST endpoint to load the grid in server-side mode
      *
-     * @param aAddReportDTO
-     * @return
-     * @throws Exception
+     * @param aGridRequestDTO holds the Request information
+     * @return ResponseEntity that holds a GridGetRowsResponseDTO object
+     * @throws Exception if something bad happens
      */
     @RequestMapping(value = "/api/grid/getRows", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<?> getRows(@RequestBody GridGetRowsRequestDTO aGridRequestDTO) throws Exception {
@@ -48,12 +49,25 @@ public class GridController {
             }
         }
 
+
         if (CollectionUtils.isEmpty( aGridRequestDTO.getSortModel() )) {
-            // The passed-in sort models is empty, so set a default sort of "id / ascending"
-            SortModel defaultSortModel = new SortModel("id", "asc");
-            List<SortModel> sortModelList = Arrays.asList(defaultSortModel);
+            // The passed-in sort models is empty
+            // -- If there is a search query, then sort by score descending
+            // -- If no search query, then sort by id ascending
+            SortModel defaultSortModel;
+            if ( StringUtils.isNotBlank(aGridRequestDTO.getRawSearchQuery() )) {
+                // The user entered a search query.  So, sort by score descending
+                defaultSortModel = new SortModel("_score", "desc");
+            }
+            else {
+                // The user did not enter a search query.  So, sort by the id ascending
+                defaultSortModel = new SortModel("id", "asc");
+            }
+
+            List<SortModel> sortModelList = Collections.singletonList(defaultSortModel);
             aGridRequestDTO.setSortModel(sortModelList);
         }
+
 
         // Use the grid service to get some matches and return an object that has the matches and meta-data about the matches
         GridGetRowsResponseDTO responseDTO = gridService.getPageOfData("reports", aGridRequestDTO);
