@@ -27,6 +27,8 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
 
   public  rawSearchQuery: string = "";
 
+  private overlayNoRowsTemplate = "<span><b>No matches were found</b></span>";
+
   public gridOptions: GridOptions = {
     debug: true,
     suppressCellSelection: true,
@@ -39,6 +41,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
     cacheBlockSize: 50,                                 // Load 50 records at a time with each REST call
     blockLoadDebounceMillis: 100,
     debounceVerticalScrollbar: true,
+    overlayNoRowsTemplate: "<span class='no-matches-found-message'>No matches were found</span>",
 
     onFilterChanged: () => {
       this.clearGridCache();
@@ -94,6 +97,10 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
         this.lastRowInfo = null;
       }
 
+      if (this.totalMatches == 0) {
+        this.gridApi.hideOverlay();
+      }
+
       // Add the additional sort fields to the request object
       let getRowsRequestDTO: GridGetRowsRequestDTO = new GridGetRowsRequestDTO(params.request, this.lastRowInfo, this.rawSearchQuery)
 
@@ -107,6 +114,10 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
 
           // Update total matches on the screen
           this.totalMatches = response.totalMatches;
+
+          if (this.totalMatches == 0) {
+            this.gridApi.showNoRowsOverlay();
+          }
 
           // Load the data into the grid and turn on/off infinite scrolling
           // If lastRow == -1,           then Infinite-Scrolling is turned ON
