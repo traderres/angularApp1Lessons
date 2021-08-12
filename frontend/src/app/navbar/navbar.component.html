@@ -50,6 +50,27 @@
             </div>
           </mat-list-item>
 
+          <!-- Edit Application -->
+          <mat-list-item class="navItem" [routerLink]="'page/apps/edit'" routerLinkActive="active">
+            <a title="Edit Application">Edit Application</a>
+            <div fxFlex fxLayoutAlign="end end">
+              <a [routerLink]="'page/apps/edit'" target="_blank">
+                <i class="fas fa-external-link-alt navItemIcon" title="Open Edit Application in a new window"></i>
+              </a>
+            </div>
+          </mat-list-item>
+
+
+          <!-- Edit Address -->
+          <mat-list-item class="navItem" [routerLink]="'page/address/edit'" routerLinkActive="active">
+            <a title="Play with Dropdowns">Edit Address</a>
+            <div fxFlex fxLayoutAlign="end end">
+              <a [routerLink]="'page/address/edit'" target="_blank">
+                <i class="fas fa-external-link-alt navItemIcon" title="Open Play with Dropdowns in a new window"></i>
+              </a>
+            </div>
+          </mat-list-item>
+
           <!-- Add Report 2 -->
           <mat-list-item class="navItem" [routerLink]="constants.ADD_REPORTS2_ROUTE" routerLinkActive="active"
                          *ngIf="userInfo.pageRoutes.get(constants.ADD_REPORTS2_ROUTE)">
@@ -137,6 +158,17 @@
             <div fxFlex fxLayoutAlign="end end" >
               <a [routerLink]="constants.BIG_REPORT_GRID_VIEW_ROUTE" target="_blank">
                 <i class="fas fa-external-link-alt navItemIcon" title="Open 'Big Reports Grid View' in a new window"></i>
+              </a>
+            </div>
+          </mat-list-item>
+
+
+          <!-- Play with Forms Page -->
+          <mat-list-item class="navItem" [routerLink]="constants.PLAY_WITH_FORMS_ROUTE" routerLinkActive="active">
+            <a title="PDF Viewer">Play with Forms</a>
+            <div fxFlex fxLayoutAlign="end end" >
+              <a [routerLink]="constants.PLAY_WITH_FORMS_ROUTE" target="_blank">
+                <i class="fas fa-external-link-alt navItemIcon" title="Open 'Play with Forms' in a new window"></i>
               </a>
             </div>
           </mat-list-item>

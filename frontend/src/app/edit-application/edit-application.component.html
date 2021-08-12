@@ -1,0 +1,57 @@
+<mat-card>
+
+  <mat-card-title>Edit Application</mat-card-title>
+
+  <mat-card-content>
+
+    <mat-form-field>
+      <mat-label>Application Name</mat-label>
+      <input aria-label="Application Name"  matInput type="text">
+    </mat-form-field>
+
+
+
+    <div style="display: block; margin-top: 10px">
+      <p class="note-style">
+        Is this application for a public or private company?
+      </p>
+
+      <mat-radio-group>
+        <!-- Radio Button 1 -->
+        <mat-radio-button  aria-label="public" value="public" #publicRadioButton>Public</mat-radio-button>
+
+        <!-- Spacer -->
+        <div style="display: inline; margin-left: 40px"></div>
+
+        <!-- Radio Button 2 -->
+        <mat-radio-button  aria-label="private"  value="private" #privateRadioButton>Private</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+
+
+    <div *ngIf="publicRadioButton.checked == true">
+      <!-- User Selected Public -->
+
+      <!-- Stock Exchange Dropdown -->
+      <mat-form-field>
+        <mat-label>Stock Exchange</mat-label>
+
+        <mat-select #stockExchange>
+          <mat-option value=1>NYSE</mat-option>
+          <mat-option value=2>Nasdaq</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+
+  </mat-card-content>
+</mat-card>
+
+
+
+<pre>
+  publicRadioButton.value={{publicRadioButton.value}}
+  publicRadioButton.checked={{publicRadioButton.checked}}
+</pre>

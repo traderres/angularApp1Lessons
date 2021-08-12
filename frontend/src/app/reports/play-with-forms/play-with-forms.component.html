@@ -1,0 +1,41 @@
+<mat-card>
+    <mat-card-title>New User</mat-card-title>
+
+    <mat-card-content>
+
+      <div>
+        <!-- Full Name Textbox -->
+        <mat-form-field>
+            <mat-label>Enter Full Name</mat-label>
+            <input aria-label="Enter Full Name"  matInput type="text" [(ngModel)]="this.fullname">
+        </mat-form-field>
+
+      </div>
+
+      <div style="display: block">
+
+        <mat-checkbox [(ngModel)]="this.isAppNew">Is this application new?</mat-checkbox>
+        <mat-checkbox [(ngModel)]="this.isUserNew">Is this user new?</mat-checkbox>
+
+      </div>
+
+
+
+      <div style="display: block">
+
+        <!-- Reset and Save Buttons -->
+        <button type="button" mat-raised-button (click)="this.resetClicked()">Reset</button>
+        &nbsp;&nbsp;
+        <button type="button" mat-raised-button (click)="this.saveClicked()" color="primary">Save</button>
+        &nbsp;
+        <button type="button" mat-raised-button (click)="this.goToNewUserPage()" color="primary">Go to Add reports</button>
+      </div>
+
+    </mat-card-content>
+</mat-card>
+
+<pre>
+     this.fullname = {{this.fullname}}
+     this.isAppNew = {{this.isAppNew}}
+     this.isUserNew = {{this.isUserNew}}
+ </pre>
