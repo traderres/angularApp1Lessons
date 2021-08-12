@@ -1,4 +1,4 @@
-<div class="page-container">
+<div class="page-container" style="background: inherit">
 
   <div fxFlexFill fxLayout="column" fxLayoutGap="5px">
 
@@ -39,7 +39,10 @@
 
           <!-- Search Box -->
           <input matInput type="text"  #searchBox [(ngModel)]="this.rawSearchQuery" (keyup.enter)="this.runSearch()"
-                 class="searchBox" placeholder="Enter Criteria..." aria-label="search box" />
+                 class="searchBox"
+                 placeholder="Enter Criteria..."
+                 autocomplete="off"
+                 aria-label="search box" />
 
           <!-- Search Icon -->
           <span class="searchBoxIcon" (click)="this.runSearch()">
