@@ -33,13 +33,13 @@
 
 
       <!-- Center of the "button row"  -->
-      <div fxFlex fxLayoutAlign="center center" fxLayout="row" fxLayoutGap="0" style="border: 0px solid black">
+      <div fxFlex fxLayoutAlign="center center" fxLayout="row" fxLayoutGap="0">
 
         <div class="searchBoxWrapper fa-border">
 
           <!-- Search Box -->
-          <input #searchBox matInput type="text" [(ngModel)]="this.rawSearchQuery" (keyup.enter)="this.runSearch()"
-                 id="searchBox" placeholder="Enter Criteria..." aria-label="search box" />
+          <input matInput type="text"  #searchBox [(ngModel)]="this.rawSearchQuery" (keyup.enter)="this.runSearch()"
+                 class="searchBox" placeholder="Enter Criteria..." aria-label="search box" />
 
           <!-- Search Icon -->
           <span class="searchBoxIcon" (click)="this.runSearch()">

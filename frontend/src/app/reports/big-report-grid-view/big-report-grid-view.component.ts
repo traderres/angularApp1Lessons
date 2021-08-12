@@ -29,7 +29,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
 
 
   public gridOptions: GridOptions = {
-    debug: true,
+    debug: false,
     suppressCellSelection: true,
     rowSelection: 'multiple',      // Possible values are 'single' and 'multiple'
     domLayout: 'normal',
@@ -64,9 +64,14 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
     // Clear the grid cache and move the vertical scrollbar to the top
     this.clearGridCache();
 
-    this.gridApi.setFilterModel(null);
-    this.gridApi.setSortModel(null);
+    // Clear all sorting
+    const emptyColumnState = {}
+    this.gridColumnApi.applyColumnState(emptyColumnState)
 
+    // Clear the filters
+    this.gridApi.setFilterModel(null);
+
+    // Clear the search box
     this.rawSearchQuery = "";
 
     // Call onFilterChanged so that the grid starts over
@@ -77,8 +82,13 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
   public runSearch(): void {
     this.clearGridCache();
 
+    // Clear all sorting
+    const emptyColumnState = {}
+    this.gridColumnApi.applyColumnState(emptyColumnState)
+
+    // Clear the filters
     this.gridApi.setFilterModel(null);
-    this.gridApi.setSortModel(null);
+
 
     // Call onFilterChanged so that the grid starts over
     this.gridApi.onFilterChanged();
@@ -113,8 +123,6 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
 
           // Update total matches on the screen
           this.totalMatches = response.totalMatches;
-
-          console.log('searchAfterClause=', this.searchAfterClause, '  totalMatches=', this.totalMatches, '   lastRow=', response.lastRow);
 
           if (this.totalMatches == 0) {
             this.gridApi.showNoRowsOverlay();
@@ -234,16 +242,16 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
     this.gridApi.setServerSideDatasource(this.serverSideDataSource);
   }
 
-
-  public reloadPage(): void {
-
-    this.gridApi.refreshServerSideStore({
-      route: [],    // List of group keys, pointing to the store to refresh
-      purge: true   // if purge==true,  then "Loading" spinner appears,   all rows are destroyed, and one page of data is loaded.  Also, the loading image appears
-                    // if purge==false, then No "Loading" spinner appears, all rows are destroyed and N pages are re-loaded (if there are 5 pages, then 5 REST calls are invoked)
-    });
-
-  }
+  //
+  // public reloadPage(): void {
+  //
+  //   this.gridApi.refreshServerSideStore({
+  //     route: [],    // List of group keys, pointing to the store to refresh
+  //     purge: true   // if purge==true,  then "Loading" spinner appears,   all rows are destroyed, and one page of data is loaded.  Also, the loading image appears
+  //                   // if purge==false, then No "Loading" spinner appears, all rows are destroyed and N pages are re-loaded (if there are 5 pages, then 5 REST calls are invoked)
+  //   });
+  //
+  // }
 
 
 

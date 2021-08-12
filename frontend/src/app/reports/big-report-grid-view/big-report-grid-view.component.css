@@ -18,7 +18,7 @@
 
 
 
-#searchBox {
+.searchBox {
   width: 250px;     /* Set the width of the search box */
   padding: 6px 0 6px 10px;
   background-color: #dcdcdc;   /* light white color */
@@ -28,6 +28,7 @@
   /* Remove the outline that appears when clicking in textbox */
   outline: none;
 }
+
 
 .searchBoxIcon {
   color: black;
