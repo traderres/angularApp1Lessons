@@ -44,11 +44,11 @@ public class GridGetRowsRequestDTO {
     @JsonProperty("sortModel")
     private List<SortModel> sortModel;
 
-    @JsonProperty("lastRowInfo")
-    private String lastRowInfo;
-
     @JsonProperty("rawSearchQuery")
     private String rawSearchQuery;
+
+    @JsonProperty("searchAfterClause")
+    private String searchAfterClause;
 
 
     // ------------------- Getters & Setters -----------------------------
@@ -135,12 +135,12 @@ public class GridGetRowsRequestDTO {
         this.sortModel = sortModel;
     }
 
-    public String getLastRowInfo() {
-        return lastRowInfo;
+    public String getSearchAfterClause() {
+        return searchAfterClause;
     }
 
-    public void setLastRowInfo(String lastRowInfo) {
-        this.lastRowInfo = lastRowInfo;
+    public void setSearchAfterClause(String searchAfterClause) {
+        this.searchAfterClause = searchAfterClause;
     }
 
     public String getRawSearchQuery() {

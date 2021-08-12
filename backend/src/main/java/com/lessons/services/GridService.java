@@ -39,7 +39,7 @@ public class GridService {
         String esSearchAfterClause = "";
         if (aGridRequestDTO.getStartRow() > 0) {
             // Getting the 2nd, 3rd, 4th page....
-            esSearchAfterClause = " \"search_after\": [" + aGridRequestDTO.getLastRowInfo() + "],";
+            esSearchAfterClause = " \"search_after\": [" + aGridRequestDTO.getSearchAfterClause() + "],";
         }
 
         // Construct the *SORT* clause
@@ -72,12 +72,12 @@ public class GridService {
         }
         else {
             // This ES query does *NOT* have a filter
-            jsonQuery = "{" +
+            jsonQuery = "{\n" +
                                 esSearchAfterClause + "\n" +
                                 esSortClauseWithComma + "\n" +
                             "   \"track_total_hits\": true,\n" +
                             "   \"size\": " + pageSize +",\n" +
-                            "   \"query\": { " +
+                            "   \"query\": { \n" +
                                    queryStringClause + "\n" +
                               "}\n" +
                             "}";
@@ -85,11 +85,8 @@ public class GridService {
 
         // Execute the search and generate a GetResponsRowsResponseDTO object
         // -- This sets responseDTO.setData() and responseDTo.setTotalMatches()
-        GridGetRowsResponseDTO responseDTO  = this.elasticSearchService.runSearchGetRowsResponseDTO(aIndexName, jsonQuery);
+        GridGetRowsResponseDTO responseDTO  = this.elasticSearchService.runSearchGetRowsResponseDTO(aIndexName, jsonQuery, aGridRequestDTO.getSortModel() );
 
-        // Set the lastRowInfo in the GetResponseRowsDTO object  (so the front-end can pass-it back (if the user requests page 2, page 3, page 4, ...)
-        String lastRowInfo = generateLastRowInfoFromData(aGridRequestDTO.getSortModel(), responseDTO.getData());
-        responseDTO.setLastRowInfo( lastRowInfo);
 
         // Set the lastRow  (so the ag-grid's infinite scrolling works correctly)
         if (aGridRequestDTO.getEndRow() < responseDTO.getTotalMatches() ) {
@@ -217,35 +214,6 @@ public class GridService {
 
         return sbFilterClause.toString();
     }
-
-
-    private String generateLastRowInfoFromData(List<SortModel> aSortModels, List<Map<String, Object>> aData) {
-        if (CollectionUtils.isEmpty(aData)) {
-            return "";
-        }
-        else if (CollectionUtils.isEmpty(aSortModels)) {
-            return "";
-        }
-
-        // Get the last map
-        Map<String, Object> lastMap = aData.get( aData.size() - 1);
-
-        StringBuilder sbLastRowInfo = new StringBuilder();
-
-        for (SortModel sortModel: aSortModels) {
-            String fieldName = sortModel.getColId();
-            Object fieldValue = lastMap.get(fieldName);
-
-            sbLastRowInfo.append(String.valueOf(fieldValue))
-                         .append(",");
-        }
-
-        // Remove the last comma
-        sbLastRowInfo.deleteCharAt(sbLastRowInfo.length() - 1);
-
-        return sbLastRowInfo.toString();
-    }
-
 
 
 

@@ -1,6 +1,5 @@
 import {ColumnVO} from "ag-grid-community/dist/lib/interfaces/iColumnVO";
 import {IServerSideGetRowsRequest} from "ag-grid-community";
-import {getScrollbarWidth} from "ag-grid-community/dist/lib/utils/browser";
 
 export class GridGetRowsRequestDTO implements IServerSideGetRowsRequest {
   public endRow: number;
@@ -12,11 +11,11 @@ export class GridGetRowsRequestDTO implements IServerSideGetRowsRequest {
   public sortModel: any;
   public startRow: number;
   public valueCols: ColumnVO[];
-
-  public lastRowInfo: string | null;      // Holds information about the last row so ElasticSearch can get page2, page3, ...
+  public searchAfterClause: string | null;      // Holds information about the last row so ElasticSearch can get page2, page3, ...
   public rawSearchQuery: string;
 
-  public constructor(aParams: IServerSideGetRowsRequest, aLastRowInfo: string | null, aRawSearchQuery: string) {
+
+  public constructor(aParams: IServerSideGetRowsRequest, aSearchAfterClause: string | null, aRawSearchQuery: string) {
     this.endRow = aParams.endRow;
     this.filterModel = aParams.filterModel;
     this.groupKeys = aParams.groupKeys;
@@ -26,8 +25,7 @@ export class GridGetRowsRequestDTO implements IServerSideGetRowsRequest {
     this.sortModel = aParams.sortModel;
     this.startRow = aParams.startRow;
     this.valueCols = aParams.valueCols;
-
-    this.lastRowInfo = aLastRowInfo;
+    this.searchAfterClause = aSearchAfterClause;
     this.rawSearchQuery = aRawSearchQuery;
   }
 }

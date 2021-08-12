@@ -22,12 +22,11 @@ import {GridGetRowsRequestDTO} from "../../models/grid-get-rows-request-dto";
 })
 export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  private lastRowInfo: string | null;
+  private searchAfterClause: string | null;
   public  totalMatches: number = 0;
 
   public  rawSearchQuery: string = "";
 
-  private overlayNoRowsTemplate = "<span><b>No matches were found</b></span>";
 
   public gridOptions: GridOptions = {
     debug: true,
@@ -94,7 +93,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
       if (params.request.startRow == 0) {
         // The user is requesting a first page (so we are not getting a 2nd or 3rd page)
         // -- Reset the additional sort fields  (needed for the 2nd, 3rd, 4th pages)
-        this.lastRowInfo = null;
+        this.searchAfterClause = null;
       }
 
       if (this.totalMatches == 0) {
@@ -102,7 +101,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
       }
 
       // Add the additional sort fields to the request object
-      let getRowsRequestDTO: GridGetRowsRequestDTO = new GridGetRowsRequestDTO(params.request, this.lastRowInfo, this.rawSearchQuery)
+      let getRowsRequestDTO: GridGetRowsRequestDTO = new GridGetRowsRequestDTO(params.request, this.searchAfterClause, this.rawSearchQuery)
 
       // Subscribe to this service method to get the data
       this.gridService.getServerSideData(getRowsRequestDTO)
@@ -110,10 +109,12 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
           // REST Call finished successfully
 
           // Save the additional sort fields  (we will use when getting the next page)
-          this.lastRowInfo = response.lastRowInfo;
+          this.searchAfterClause = response.searchAfterClause;
 
           // Update total matches on the screen
           this.totalMatches = response.totalMatches;
+
+          console.log('searchAfterClause=', this.searchAfterClause, '  totalMatches=', this.totalMatches, '   lastRow=', response.lastRow);
 
           if (this.totalMatches == 0) {
             this.gridApi.showNoRowsOverlay();
@@ -234,7 +235,7 @@ export class BigReportGridViewComponent implements OnInit, OnDestroy, AfterViewI
   }
 
 
-  public  reloadPage(): void {
+  public reloadPage(): void {
 
     this.gridApi.refreshServerSideStore({
       route: [],    // List of group keys, pointing to the store to refresh

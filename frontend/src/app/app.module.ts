@@ -66,6 +66,11 @@ import { ThemeChangerMenuComponent } from './theme-changer-menu/theme-changer-me
 import {MatMenuModule} from "@angular/material/menu";
 import {MatRadioModule} from "@angular/material/radio";
 import { BigReportGridViewComponent } from './reports/big-report-grid-view/big-report-grid-view.component';
+import { PlayWithFormsComponent } from './reports/play-with-forms/play-with-forms.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import { EditApplicationComponent } from './edit-application/edit-application.component';
+import { PlayWithDropdownsComponent } from './play-with-dropdowns/play-with-dropdowns.component';
+import {EditAddressComponent} from "./edit-address/edit-address.component";
 
 // Setup the routes.  If no route is found, then take the user to the NotFoundComponent
 const appRoutes: Routes = [
@@ -75,6 +80,8 @@ const appRoutes: Routes = [
   { path: Constants.VIEW_REPORTS_ROUTE,  component: ViewReportsComponent,  canActivate: [PageGuard] },
   { path: Constants.DASHBOARD_ROUTE,    component: DashboardComponent,  canActivate: [PageGuard] },
   { path: Constants.USA_MAP_ROUTE,      component: UsaMapComponent,  canActivate: [PageGuard] },
+  { path: 'page/apps/edit',      component: EditApplicationComponent },
+  { path: 'page/address',      component: EditAddressComponent },
   { path: Constants.CHART_DRILLDOWN_ROUTE,   component: ChartDrillDownComponent,  canActivate: [PageGuard] },
   { path: Constants.LONGVIEW_INTERNAL_NAV_REPORT + ':id',  component: LongViewInternalNavReportComponent ,  canActivate: [PageGuard] },
   { path: Constants.EDIT_REPORT_ROUTE +':id', component: EditReportComponent ,  canActivate: [PageGuard] },
@@ -86,6 +93,7 @@ const appRoutes: Routes = [
   { path: Constants.LONGVIEW_REPORT,     component: LongViewOuterReportComponent,  canActivate: [PageGuard] },
   { path: Constants.REPORT_PDFVIEWER_ROUTE,   component: PdfViewerComponent,  canActivate: [PageGuard] },
   { path: Constants.BIG_REPORT_GRID_VIEW_ROUTE,   component: BigReportGridViewComponent,  canActivate: [PageGuard] },
+  { path: Constants.PLAY_WITH_FORMS_ROUTE,   component: PlayWithFormsComponent },
   { path: Constants.FORBIDDEN_ROUTE,     component: ForbiddenComponent },
   { path: '',                  component: WelcomeComponent},
   { path: '**',                component: NotFoundComponent}
@@ -124,7 +132,11 @@ const appRoutes: Routes = [
     ReportSubmitMarkdownComponent,
     PdfViewerComponent,
     ThemeChangerMenuComponent,
-    BigReportGridViewComponent
+    BigReportGridViewComponent,
+    PlayWithFormsComponent,
+    EditApplicationComponent,
+    PlayWithDropdownsComponent,
+    EditAddressComponent
   ],
   imports: [
     AppRoutingModule,
@@ -142,6 +154,7 @@ const appRoutes: Routes = [
     MatDatepickerModule,
     MatDialogModule,
     DragDropModule,
+    MatCheckboxModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,

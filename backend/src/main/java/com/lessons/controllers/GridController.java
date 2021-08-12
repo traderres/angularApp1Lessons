@@ -40,6 +40,65 @@ public class GridController {
         logger.debug("getRows() started.");
 
         // Change the sort field from "priority" to "priority.sort"  (so the sort is case insensitive -- see the mapping)
+        changeSortFieldToUseElasticFieldsForSorting(aGridRequestDTO);
+
+        // Set Default sorting
+        //  1) If the sorting model is not empty, then do nothing
+        //  2) If the sorting model to empty and rawSearchQuery is empty, then sort by "id" ascending
+        //  3) If the sorting model is empty and rawSearchQuery is not empty, then sort by "_score" descending
+        setDefaultSorting(aGridRequestDTO);
+
+        // Create an array of ES fields to search
+        List<String> esFieldsToSearch = Arrays.asList("id.sort", "description", "display_name.sort", "priority.sort");
+
+        GridGetRowsResponseDTO responseDTO = gridService.getPageOfData("reports", esFieldsToSearch, aGridRequestDTO);
+
+        // Return the responseDTO object and a 200 status code
+        return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(responseDTO);
+    }
+
+
+    /**
+     * Set default sorting
+     *  1) If the sorting model is not empty, then do nothing
+     *  2) If the sorting model to empty and rawSearchQuery is empty, then sort by "id" ascending
+     *  3) If the sorting model is empty and rawSearchQuery is not empty, then sort by "_score" descending
+     *
+     * @param aGridRequestDTO holds information about the grid request
+     */
+    private void setDefaultSorting(GridGetRowsRequestDTO aGridRequestDTO) {
+        if (CollectionUtils.isNotEmpty( aGridRequestDTO.getSortModel() )) {
+            // Sorting model is not empty.  So, we have sort parameters to use
+            return;
+        }
+
+        List<SortModel> sortModelList;
+
+        // The sorting model is empty
+        if (StringUtils.isBlank(aGridRequestDTO.getRawSearchQuery())) {
+            // The sorting model is empty and rawSearchQuery is blank
+            // -- User is *not* running a search.  So, sort by "id" ascending
+            SortModel sortById = new SortModel("id", "asc");
+            sortModelList = Collections.singletonList(sortById);
+        }
+        else {
+            // The sorting mode lis empty and rawSearchQuery is not empty
+            // -- User is running a search.  SO, sort by "_score" descending *AND* by "id"
+            //    NOTE:  When using the search_after techqique to get the next page, we need to sort by _score *AND* id
+            SortModel sortByScore = new SortModel("_score", "desc");
+            SortModel sortById = new SortModel("id", "asc");
+            sortModelList = Arrays.asList(sortByScore, sortById);
+        }
+
+
+        aGridRequestDTO.setSortModel(sortModelList);
+    }
+
+
+    private void changeSortFieldToUseElasticFieldsForSorting(GridGetRowsRequestDTO aGridRequestDTO) {
+
         if (CollectionUtils.isNotEmpty(aGridRequestDTO.getSortModel())) {
             for (SortModel sortModel: aGridRequestDTO.getSortModel() ) {
                 String sortFieldName = sortModel.getColId();
@@ -49,38 +108,7 @@ public class GridController {
                 }
             }
         }
-
-
-        if (CollectionUtils.isEmpty( aGridRequestDTO.getSortModel() )) {
-            // The passed-in sort models is empty
-            // -- If there is a search query, then sort by score descending
-            // -- If no search query, then sort by id ascending
-            SortModel defaultSortModel;
-            if ( StringUtils.isNotBlank(aGridRequestDTO.getRawSearchQuery() )) {
-                // The user entered a search query.  So, sort by score descending
-                defaultSortModel = new SortModel("_score", "desc");
-            }
-            else {
-                // The user did not enter a search query.  So, sort by the id ascending
-                defaultSortModel = new SortModel("id", "asc");
-            }
-
-            List<SortModel> sortModelList = Collections.singletonList(defaultSortModel);
-            aGridRequestDTO.setSortModel(sortModelList);
-        }
-
-
-        // Use the grid service to get some matches and return an object that has the matches and meta-data about the matches
-        List<String> reportFieldsToSearch = Arrays.asList("id.sort", "description", "display_name.sort", "priority.sort");
-
-        GridGetRowsResponseDTO responseDTO = gridService.getPageOfData("reports", reportFieldsToSearch, aGridRequestDTO);
-
-        // Return the responseDTO object and a 200 status code
-        return ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(responseDTO);
     }
-
 
 
 }

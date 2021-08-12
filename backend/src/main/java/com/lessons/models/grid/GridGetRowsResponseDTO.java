@@ -19,15 +19,17 @@ public class GridGetRowsResponseDTO {
     @JsonProperty("secondaryColumnFields")
     private List<String> secondaryColumnFields;
 
-    @JsonProperty("lastRowInfo")
-    private String lastRowInfo;
+    @JsonProperty("searchAfterClause")
+    private String searchAfterClause;
 
     // --------------- Constructor, Getters, and Setters -------------------------------/
 
-    public GridGetRowsResponseDTO(List<Map<String, Object>> data, Integer totalMatches) {
+    public GridGetRowsResponseDTO(List<Map<String, Object>> data, Integer totalMatches, String aSearchAfterClause) {
         this.data = data;
         this.totalMatches = totalMatches;
+        this.searchAfterClause = aSearchAfterClause;
     }
+
 
     public List<Map<String, Object>> getData() {
         return data;
@@ -45,6 +47,14 @@ public class GridGetRowsResponseDTO {
         this.lastRow = lastRow;
     }
 
+    public Integer getTotalMatches() {
+        return totalMatches;
+    }
+
+    public void setTotalMatches(Integer totalMatches) {
+        this.totalMatches = totalMatches;
+    }
+
     public List<String> getSecondaryColumnFields() {
         return secondaryColumnFields;
     }
@@ -53,19 +63,11 @@ public class GridGetRowsResponseDTO {
         this.secondaryColumnFields = secondaryColumnFields;
     }
 
-    public String getLastRowInfo() {
-        return lastRowInfo;
+    public String getSearchAfterClause() {
+        return searchAfterClause;
     }
 
-    public void setLastRowInfo(String lastRowInfo) {
-        this.lastRowInfo = lastRowInfo;
-    }
-
-    public Integer getTotalMatches() {
-        return totalMatches;
-    }
-
-    public void setTotalMatches(Integer totalMatches) {
-        this.totalMatches = totalMatches;
+    public void setSearchAfterClause(String searchAfterClause) {
+        this.searchAfterClause = searchAfterClause;
     }
 }

@@ -7,6 +7,7 @@ import com.lessons.models.AutoCompleteDTO;
 import com.lessons.models.AutoCompleteMatchDTO;
 import com.lessons.models.ErrorsDTO;
 import com.lessons.models.grid.GridGetRowsResponseDTO;
+import com.lessons.models.grid.SortModel;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
 import org.apache.commons.lang3.StringUtils;
@@ -378,7 +379,7 @@ public class ElasticSearchService {
 
 
 
-    public GridGetRowsResponseDTO runSearchGetRowsResponseDTO(String aIndexName, String aJsonBody) throws Exception {
+    public GridGetRowsResponseDTO runSearchGetRowsResponseDTO(String aIndexName, String aJsonBody, List<SortModel> aSortModelList) throws Exception {
         if (StringUtils.isEmpty(aIndexName)) {
             throw new RuntimeException("The passed-in aIndexName is null or empty.");
         }
@@ -411,19 +412,19 @@ public class ElasticSearchService {
         Map<String, Object> mapResponse = objectMapper.readValue(jsonResponse, new TypeReference<Map<String, Object>>() {});
 
         @SuppressWarnings("unchecked")
-        Map<String, Object> outerHits = (Map<String, Object>) mapResponse.get("hits");
-        if (outerHits == null) {
+        Map<String, Object> outerHitsMap = (Map<String, Object>) mapResponse.get("hits");
+        if (outerHitsMap == null) {
             throw new RuntimeException("Error in runAutoComplete():  The outer hits value was not found in the JSON response");
         }
 
         @SuppressWarnings("unchecked")
-        List<Map<String, Object>> innerHits = (List<Map<String, Object>>) outerHits.get("hits");
-        if (innerHits == null) {
+        List<Map<String, Object>> innerHitsListOfMaps = (List<Map<String, Object>>) outerHitsMap.get("hits");
+        if (innerHitsListOfMaps == null) {
             throw new RuntimeException("Error in runAutoComplete():  The inner hits value was not found in the JSON response");
         }
 
-        if (innerHits.size() > 0) {
-            for (Map<String, Object> hit: innerHits) {
+        if (innerHitsListOfMaps.size() > 0) {
+            for (Map<String, Object> hit: innerHitsListOfMaps) {
 
                 // Get the source map (that has all of the results)
                 @SuppressWarnings("unchecked")
@@ -442,16 +443,92 @@ public class ElasticSearchService {
 
         if (listOfMaps.size() > 0) {
             // Get the total matches from the json
-            Map<String, Object> totalInfoMap = (Map<String, Object>) outerHits.get("total");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> totalInfoMap = (Map<String, Object>) outerHitsMap.get("total");
             if ((totalInfoMap != null) && (totalInfoMap.size() > 0)) {
                 totalMatches = (Integer) totalInfoMap.get("value");
             }
         }
 
 
-        GridGetRowsResponseDTO responseDTO = new GridGetRowsResponseDTO(listOfMaps, totalMatches);
+        // Set the searchAfter clause in the GetResponseRowsDTO object
+        // NOTE:  The front-end will pass this back for page 2, page 3, page 4
+        //        so we can run the same ES query and get page 2, page 3, page 4
+       String searchAfterClause = getSearchAfterFromEsResponseMap(aSortModelList, innerHitsListOfMaps);
+
+
+        GridGetRowsResponseDTO responseDTO = new GridGetRowsResponseDTO(listOfMaps, totalMatches, searchAfterClause);
         return responseDTO;
     }
+
+
+    /**
+     * Generate the search_after clause by looking at the last result from the last search
+     *  1. If the list of maps is empty, return an empty string
+     *  2. Loop through the sort model list
+     *     -- Build the search_after by pulling the sorted field name
+     *     -- If the sort field name == "_score", then pull the score
+     * @param aSortModelList holds the list of sort model objects
+     * @param aListOfHitsMaps holds the list of ES maps (that hold the search results)
+     * @return a String that holds the search_after clause
+     */
+    private String getSearchAfterFromEsResponseMap(List<SortModel> aSortModelList, List<Map<String, Object>> aListOfHitsMaps) {
+        if ((aListOfHitsMaps == null) || (aListOfHitsMaps.size() == 0)) {
+            return "";
+        }
+
+        // Get the last map
+        Map<String, Object> lastMap = aListOfHitsMaps.get( aListOfHitsMaps.size() - 1);
+        if (lastMap == null) {
+            return "";
+        }
+
+        // Get the last source map  (it has the search results for the last match)
+        @SuppressWarnings("unchecked")
+        Map<String, Object> lastSourceMap = (Map<String, Object>) lastMap.get("_source");
+        if (lastSourceMap == null) {
+            throw new RuntimeException("Error in getSearchAfterFromEsResponseMap():  The lastSourceMap is null.");
+        }
+
+
+        StringBuilder sbSearchAfterClause = new StringBuilder();
+
+        for (SortModel sortModel: aSortModelList) {
+            String fieldName = sortModel.getColId();
+
+            if (fieldName.equalsIgnoreCase("_score")) {
+                // Get the last score from the lastMap
+                String lastScore = String.valueOf(lastMap.get("_score"));
+
+                sbSearchAfterClause.append(lastScore)
+                        .append(",");
+            }
+            else {
+                // Get the last non-score value from the lastSourceMap
+                Object fieldValue = lastSourceMap.get(fieldName);
+                String fieldValueAsString = String.valueOf(fieldValue);
+
+                if (fieldValue instanceof String) {
+                    // This last field value is a string -- so add quotes around it
+                    sbSearchAfterClause.append("\"")
+                                       .append(fieldValueAsString)
+                                       .append("\",");
+                }
+                else {
+                    // This last field value is not a string
+                    sbSearchAfterClause.append(fieldValueAsString)
+                                       .append(",");
+                }
+            }
+          }
+
+        // Remove the last comma
+        sbSearchAfterClause.deleteCharAt(sbSearchAfterClause.length() - 1);
+
+        return sbSearchAfterClause.toString();
+    }
+
+
 
 
     /**
