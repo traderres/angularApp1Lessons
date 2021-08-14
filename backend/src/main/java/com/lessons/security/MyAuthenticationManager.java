@@ -104,7 +104,6 @@ public class MyAuthenticationManager implements AuthenticationManager {
             logger.info("{} successfully logged-in.", userUID);
 
             // User is about to login
-            // -- This would be the place to add/update a database record indicating that the user logged-in
             Integer userId = this.userService.getOrAddUserRecordsToSystem(userUID);
 
             // Get the user's granted access map
@@ -174,8 +173,7 @@ public class MyAuthenticationManager implements AuthenticationManager {
         grantedRoleAuthorities.add(new SimpleGrantedAuthority("ROLE_USER_FOUND_IN_VALID_LIST_OF_USERS"));
 
         // User is about to login
-        // -- This would be the place to add/update a database record indicating that the user logged-in
-        Integer userId = 25;
+        Integer userId = this.userService.getOrAddUserRecordsToSystem(userUID);
 
         // Get the user's granted access map
         // NOTE:  This holds all authorized routes and UI controls (based on the user's granted roles)

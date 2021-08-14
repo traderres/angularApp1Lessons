@@ -1,6 +1,6 @@
 
 import {Injectable} from '@angular/core';
-import {Observable, Subject} from "rxjs";
+import {BehaviorSubject, Observable, Subject} from "rxjs";
 
 class NavbarState {
   isAppNavbarDisplayed: boolean;
@@ -12,7 +12,7 @@ class NavbarState {
 })
 export class NavbarService  {
 
-  private navbarStateSubject = new Subject<NavbarState>();
+  private navbarStateSubject: BehaviorSubject<NavbarState>;
   private navbarState: NavbarState = new NavbarState();
 
 
@@ -24,6 +24,9 @@ export class NavbarService  {
 
     // The UserNavBar will not be visible on startup
     this.navbarState.isUserNavbarDisplayed = false;
+
+    // Initialize the navbar state subject
+    this.navbarStateSubject = new BehaviorSubject(this.navbarState);
   }
 
 

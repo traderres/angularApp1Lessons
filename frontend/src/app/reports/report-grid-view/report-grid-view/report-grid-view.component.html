@@ -63,6 +63,7 @@
               [gridOptions]="this.gridOptions"
               [frameworkComponents]="this.frameworkComponents"
               (selectionChanged)="this.generateDerivedValuesOnUserSelection()"
+              (firstDataRendered)="this.firstDataRendered()"
               (gridReady)="this.onGridReady($event)">
             </ag-grid-angular>
 

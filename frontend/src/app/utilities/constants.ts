@@ -15,4 +15,7 @@ export enum Constants {
   UPLOAD_REPORT_ROUTE          = "page/report/upload",
   CHART1_ROUTE                 = "page/chart1",
   CHART2_ROUTE                 = "page/chart2",
+
+
+  COLUMN_STATE_PREFERENCE_NAME = "column_state"         // Preference name for column state
 }

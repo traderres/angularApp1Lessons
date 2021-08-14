@@ -9,7 +9,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {BannerService} from "./services/banner.service";
 import {animate, style, transition, trigger} from "@angular/animations";
 import {tap} from "rxjs/operators";
-import {PreferencesDTO} from "./models/preferences-dto";
+import {GetOnePreferenceDTO} from "./models/get-one-preference-dto";
 
 @Component({
   selector: 'app-root',
@@ -41,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   public showBannerOnPage: boolean;
   public disableAnimations: boolean = true;
 
-  public bannerObs: Observable<PreferencesDTO>
+  public bannerObs: Observable<GetOnePreferenceDTO>
 
   constructor(private navbarService: NavbarService,
               private errorService: ErrorService,
@@ -51,24 +51,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   public ngOnInit(): void {
-
-    this.bannerObs = this.bannerService.getLatestValueFromBackend().pipe(
-      tap((aData: PreferencesDTO) => {
-        // The REST call came back with some data
-
-        // Initialize the banner service
-        this.bannerService.initialize(aData.showBanner);
-      })
-    );
-
-
-  this.bannerSubscription =
-      this.bannerService.getStateAsObservable().subscribe( (aShowBanner: boolean) => {
-          // We received a message from the Banner Service
-          // If we receive false, then set the flag to false
-          // If we receive true,  then set the flag to true
-          this.showBannerOnPage = aShowBanner;
-      });
 
     // This app-component will listen for messages from the navbarService
     this.showNavSubscription =
@@ -80,6 +62,39 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isAppNavVisible = navbarState.isAppNavbarDisplayed;
         this.isUserNavVisible = navbarState.isUserNavbarDisplayed;
       });
+
+
+
+
+    this.bannerObs = this.bannerService.getLatestValueFromBackend().pipe(
+      tap((aData: GetOnePreferenceDTO) => {
+        // The REST call came back with some data
+
+        if (aData.value == null) {
+          // This user has *no previous preference*.  So, have show.banner initialize to TRUE (to show the banner)
+          this.bannerService.initialize(true);
+        }
+        else {
+          // This user has a preference.  So, initialize the bannerService with the stored string value
+          let initialShowBannerValue: boolean = true;
+          if (aData.value.toLowerCase() == 'false') {
+            initialShowBannerValue = false;
+          }
+
+          this.bannerService.initialize(initialShowBannerValue);
+        }
+
+        // Now that the banner service is initialized we can listen on it
+        this.bannerSubscription =
+          this.bannerService.getStateAsObservable().subscribe( (aShowBanner: boolean) => {
+            // We received a message from the Banner Service
+            // If we receive false, then set the flag to false
+            // If we receive true,  then set the flag to true
+            this.showBannerOnPage = aShowBanner;
+          });
+
+      })  // end of tap
+    );  // end of pipe
 
 
     this.errorSubscription =

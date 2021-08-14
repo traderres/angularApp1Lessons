@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {environment} from "../../environments/environment";
-import {PreferencesDTO} from "../models/preferences-dto";
-import {HttpClient} from "@angular/common/http";
+import {PreferenceService} from "./preference.service";
+import {GetOnePreferenceDTO} from "../models/get-one-preference-dto";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BannerService {
-  private bannerStateSubject = new BehaviorSubject<boolean>(true);   // Initialize the banner state to true
+  private bannerStateSubject: BehaviorSubject<boolean>;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private preferenceService: PreferenceService) { }
 
 
   public getStateAsObservable(): Observable<boolean> {
@@ -36,29 +35,21 @@ export class BannerService {
     })
   }
 
-  public getLatestValueFromBackend(): Observable<PreferencesDTO> {
-    // Construct the URL for the REST endpoint  (to get all preferences)
-    const restUrl = environment.baseUrl + '/api/preferences/all';
-
-    // NOTE:  The REST call is not invoked you call subscribe() on this observable
-    return this.httpClient.get <PreferencesDTO> (restUrl);
+  public getLatestValueFromBackend(): Observable<GetOnePreferenceDTO> {
+    // invoke the preference service to get the show-banner boolean value
+    return this.preferenceService.getPreferenceValueWithoutPage("show.banner");
   }
 
-  private setLatestValue(aBannerInfo: boolean): Observable<object> {
-    // Construct the URL for the REST endpoint  (to set the banner preference only)
-    const restUrl = environment.baseUrl + '/api/preferences/banner/set/' + aBannerInfo;
-
-    // Return an observable to this POST REST call
-    // -- The 2nd {} is the empty json body sent to the REST call
-    // -- The 3rd {} is the empty map of options
-    return this.httpClient.post(restUrl, {}, {} );
+  private setLatestValue(aBannerInfo: boolean): Observable<string> {
+    // Use the preference service to set the show-banner boolean value
+    return this.preferenceService.setPreferenceValueWithoutPage("show.banner", aBannerInfo);
   }
 
 
   public initialize(aBannerInfo: boolean) {
     // Send out a message that (to anyone listening) with the current value
     // Anyone who listens later, gets this initial message
-    this.bannerStateSubject.next(aBannerInfo);
+    this.bannerStateSubject = new BehaviorSubject<boolean>(aBannerInfo);
   }
 
 

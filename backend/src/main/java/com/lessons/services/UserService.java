@@ -4,12 +4,18 @@ package com.lessons.services;
 import com.lessons.security.UserInfo;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
+
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -22,6 +28,9 @@ public class UserService {
 
     @Resource
     private DataSource dataSource;
+
+    @Resource
+    private DatabaseService databaseService;
 
     /**
      * @return the UserInfo object from Spring-Security
@@ -67,27 +76,105 @@ public class UserService {
     }
 
 
-    public Integer getOrAddUserRecordsToSystem(String aUsername) {
-        JdbcTemplate jt = new JdbcTemplate(this.dataSource);
-        Integer userid = 25;
+    public synchronized Integer getOrAddUserRecordsToSystem(String aUsername) {
+        // This SQL string will check if the id already exists
+        String sql = "select id from users where user_name = ?";
 
-//        // Query the database to see if the id exists
-//        String sql = "select id from users where username=?";
-//        SqlRowSet rs = jt.queryForRowSet(sql, aUsername);
-//
-//        if (rs.next()) {
-//            // This record already exists in the system -- so return it
-//             userid = rs.getInt("id");
-//        }
-//        else {
-//            // This record does not exist -- so add it
-//            sql = "insert into users(id, version, full_name, username, password, email, phone_number, is_locked, is_registered)\n" +
-//                  "values(nextval('seq_table_ids'), 1, 'John Smith', ?, 'secret', null, null, false, true) returning id";
-//
-//            userid = jt.queryForObject(sql, Integer.class, aUsername);
-//        }
-//
-        return userid;
+        JdbcTemplate jt = new JdbcTemplate(this.dataSource);
+
+        SqlRowSet rs = jt.queryForRowSet(sql, aUsername);
+
+        Integer userId;
+
+        if (rs.next()) {
+            // The username exists in the database
+            // Updating the last login date
+            userId = rs.getInt("id");
+
+            updateLastLoginDate(userId);
+        }
+        else {
+            // The username does not exist in the database
+            // Inserting a new users record
+            userId = insertUsersRecord(aUsername);
+        }
+
+        return userId;
+    }
+
+    private Integer insertUsersRecord(String aUsername) {
+        TransactionTemplate tt = new TransactionTemplate();
+        tt.setTransactionManager(new DataSourceTransactionManager(dataSource));
+
+        // This transaction will throw a TransactionTimedOutException after 60 seconds (causing the transaction to rollback)
+        tt.setTimeout(60);
+
+
+        // Tell the tt object that this method returns a String
+        Integer returnedUserId = tt.execute(new TransactionCallback<Integer>()
+        {
+
+            @Override
+            public Integer doInTransaction(TransactionStatus aStatus)
+            {
+                // All database calls in this block are part of a SQL Transaction
+
+                // Get the next unique id
+                Integer userId = databaseService.getNextId();
+
+                // Construct the SQL to get these columns of data
+                String sql = "insert into users (id, user_name, full_name, is_locked, last_login_date)\n" +
+                             "values (:userId,  :userName, :fullName, false, now())";
+
+                Map<String, Object> paramMap = new HashMap<>();
+                paramMap.put("userId", userId);
+                paramMap.put("userName", aUsername);
+                paramMap.put("fullName", aUsername);
+
+                NamedParameterJdbcTemplate np = new NamedParameterJdbcTemplate(dataSource);
+
+                // Executing SQL to insert the new user into the users table
+                int totalRowsInserted = np.update(sql, paramMap);
+
+                if (totalRowsInserted != 1) {
+                    throw new RuntimeException("Error in insertUsersRecord(). I expected to insert 1 record but I actually inserted " + totalRowsInserted);
+                }
+
+                return userId;
+            }
+        });
+
+        return returnedUserId;
+    }
+
+    private void updateLastLoginDate(Integer aUserId) {
+        TransactionTemplate tt = new TransactionTemplate();
+        tt.setTransactionManager(new DataSourceTransactionManager(dataSource));
+
+        // This transaction will throw a TransactionTimedOutException after 60 seconds (causing the transaction to rollback)
+        tt.setTimeout(60);
+
+        tt.execute(new TransactionCallbackWithoutResult()
+        {
+            protected void doInTransactionWithoutResult(TransactionStatus aStatus) {
+                // All database calls in this block are part of a SQL Transaction
+
+                // Construct the SQL to set the last login date
+                String sql = "update users set last_login_date = now() where id = :userId";
+
+                Map<String, Object> paramMap = new HashMap<>();
+                paramMap.put("userId", aUserId);
+
+                NamedParameterJdbcTemplate np = new NamedParameterJdbcTemplate(dataSource);
+
+                // Executing SQL to update the users record
+                int totalRowsUpdated = np.update(sql, paramMap);
+
+                if (totalRowsUpdated != 1) {
+                    throw new RuntimeException("Error in updateLastLoginDate(). I expected to update 1 record but I actually updated " + totalRowsUpdated);
+                }
+            }
+        });
     }
 
 
